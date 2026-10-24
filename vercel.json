@@ -57,7 +57,7 @@
       ]
     },
     {
-      "source": "/app/(.*)\\.part-[a-z]+",
+      "source": "/app/(.*).part-(.*)",
       "headers": [
         {
           "key": "Content-Type",
