@@ -1,0 +1,13 @@
+# Vercel CLI
+.vercel
+
+# Local preview / tooling
+node_modules/
+.DS_Store
+
+# Update-script temporary directories
+.photocraft-stage.*
+.photocraft-old.*
+
+# Downloaded release archives
+*.zip
