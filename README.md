@@ -13,6 +13,7 @@ database, or build step. Vercel only has to serve the files in `public/`.
 |---|---|
 | `public/` | Generated static site from the upstream web release. Do not edit by hand. |
 | `update-photocraft.sh` | Downloads the latest (or a pinned) web release into `public/`. |
+| `cron-update.sh` | Pulls, updates, commits, and pushes automatically (for cron). |
 | `.photocraft-version` | Release tag, asset name, checksum, and update time last pulled. |
 | `vercel.json` | Tells Vercel to serve `public/` and sets the required cache/MIME headers. |
 
@@ -56,6 +57,18 @@ git push
 
 Every push to the production branch redeploys automatically. To update PhotoCraft later, run
 `./update-photocraft.sh`, commit, and push.
+
+## Automated updates (cron)
+
+`cron-update.sh` pulls `origin`, checks for a new PhotoCraft release, commits the result, and
+pushes only when something changed. Configure an `origin` remote and git identity first, then
+install it with `crontab -e` (adjust the path; this runs daily at 04:00):
+
+```cron
+0 4 * * * /home/yli/deploy-photocraftweb/cron-update.sh >> /home/yli/photocraft-update.log 2>&1
+```
+
+Each push triggers a new Vercel deployment automatically.
 
 ### Option B — Vercel CLI
 
