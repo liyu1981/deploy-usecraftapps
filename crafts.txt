@@ -1,15 +1,15 @@
-# slug display_name description
-# One craft app per line. Lines starting with # are comments.
-photocraft PhotoCraft "Image editor"
-vectorcraft VectorCraft "Vector illustration"
-filmcraft FilmCraft "Video editor"
-lightcraft LightCraft "Photo library & raw developer"
-pdfcraft PdfCraft "PDF workbench"
-effectcraft EffectCraft "Motion graphics & VFX"
-designcraft DesignCraft "Page layout & publishing"
-figcraft FigCraft "Interface design"
-wordcraft WordCraft "Word processing"
-soundcraft SoundCraft "Digital audio workstation"
-deckcraft DeckCraft "Presentations & slide shows"
-cadcraft CADCraft "Computer-aided design & drafting"
-gridcraft GridCraft "Spreadsheets & data analysis"
+# slug display_name "short" "long" status
+# status: early (Early alpha) or dev (In development)
+photocraft PhotoCraft "Image editor" "The open-source image editor you already know how to use." early
+vectorcraft VectorCraft "Vector illustration" "Fast, open-source vector illustration, reimagined in pure Rust." dev
+filmcraft FilmCraft "Video editor" "Professional, open-source video editing, rebuilt from scratch in Rust." dev
+lightcraft LightCraft "Photo library & raw developer" "An open-source photo library and raw developer that runs on your machine." dev
+pdfcraft PdfCraft "PDF workbench" "The open-source PDF workbench: read, organize, combine, split and secure." early
+effectcraft EffectCraft "Motion graphics & VFX" "Open-source motion graphics and visual effects, built in pure Rust." dev
+designcraft DesignCraft "Page layout & publishing" "Open-source page layout and publishing, rebuilt in pure Rust." dev
+figcraft FigCraft "Interface design" "Open-source interface design and prototyping, rebuilt in pure Rust." early
+wordcraft WordCraft "Word processing" "Fast, open-source word processing, rebuilt in pure Rust." dev
+soundcraft SoundCraft "Digital audio workstation" "Professional audio recording, editing and mixing in pure Rust." dev
+deckcraft DeckCraft "Presentations & slide shows" "Build and deliver dynamic slide presentations, in pure Rust." dev
+cadcraft CADCraft "Computer-aided design & drafting" "Fast, open-source computer-aided design and drafting in pure Rust." dev
+gridcraft GridCraft "Spreadsheets & data analysis" "Fast, open-source spreadsheets and data analysis, rebuilt in pure Rust." dev

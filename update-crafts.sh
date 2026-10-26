@@ -39,25 +39,41 @@ fi
 SLUGS=()
 NAMES=()
 DESCS=()
+SHORTS=()
+LONGS=()
+STATUSES=()
 while IFS= read -r line; do
   # strip comments
   line="${line%%#*}"
   # trim
   line="$(printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
   [[ -z "$line" ]] && continue
-  read -r slug name desc <<<"$line"
-  # desc may contain spaces inside quotes; re-parse robustly with eval-free approach:
-  # Re-read the original (non-comment) trimmed line via a small parser.
+  slug="${line%% *}"
+  rest0="${line#* }"
+  name="${rest0%% *}"
+  rest="${rest0#* }"
+  rest="${rest# }"
   SLUGS+=("$slug")
   NAMES+=("$name")
-  # description is the rest after the second field, with surrounding quotes removed
-  rest="${line#* }"
-  rest="${rest#* }"
-  rest="${rest# }"
-  rest="${rest% }"
-  rest="${rest#\"}"
-  rest="${rest%\"}"
-  DESCS+=("$rest")
+  # first quoted: short category
+  tmp="${rest#\"}"
+  short="${tmp%%\"*}"
+  tmp="${tmp#*\"}"
+  tmp="${tmp# }"
+  # second quoted: long description
+  long="$tmp"
+  if [[ "$tmp" == \"* ]]; then
+    tmp="${tmp#\"}"
+    long="${tmp%%\"*}"
+    tmp="${tmp#*\"}"
+    tmp="${tmp# }"
+  fi
+  status="${tmp%% *}"
+  [[ -z "$status" ]] && status="dev"
+  SHORTS+=("$short")
+  LONGS+=("$long")
+  DESCS+=("$short")
+  STATUSES+=("$status")
 done < "$CONFIG_FILE"
 
 [[ ${#SLUGS[@]} -gt 0 ]] || die "no apps found in $CONFIG_FILE"
@@ -195,6 +211,22 @@ for i in "${!SLUGS[@]}"; do
     rm -f "$STAGE_PUBLIC/icons/$slug.webp"
   fi
 
+  # Download hero thumbnail (best effort). FilmCraft uses color.webp upstream.
+  mkdir -p "$STAGE_PUBLIC/images/apps/$slug"
+  hero_ok=false
+  for hero_name in hero.webp color.webp; do
+    if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/images/apps/$slug/hero.webp" \
+        "https://getartcraft.com/images/apps/$slug/$hero_name" 2>/dev/null; then
+      hero_ok=true
+      break
+    fi
+  done
+  if ! $hero_ok; then
+    warn "could not download hero image for $slug"
+    rm -f "$STAGE_PUBLIC/images/apps/$slug/hero.webp"
+    rmdir "$STAGE_PUBLIC/images/apps/$slug" 2>/dev/null || true
+  fi
+
   META_LINES+=("$slug=$TAG sha256=$SHA256")
   rm -f "$STAGE_TMP/$ASSET" "$STAGE_TMP/SHA256SUMS.txt"
 done
@@ -209,51 +241,144 @@ INDEX="$STAGE_PUBLIC/index.html"
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Craft Apps</title>
+  <title>Crafting Apps: open-source creative tools</title>
   <style>
-    :root { color-scheme: dark; }
+    :root { color-scheme: light; }
     * { box-sizing: border-box; }
     body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: #1a1a1a; color: #e6e6e6; }
-    header { padding: 48px 24px 24px; text-align: center; }
-    header h1 { margin: 0 0 8px; font-size: 2rem; }
-    header p { margin: 0; color: #9a9a9a; max-width: 640px; margin-inline: auto; line-height: 1.5; }
-    main { max-width: 1200px; margin: 0 auto; padding: 24px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-    .tile { display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 12px;
-      background: #262626; color: #e6e6e6; text-decoration: none; border: 1px solid #333;
-      transition: transform .12s ease, border-color .12s ease, background .12s ease; }
-    .tile:hover { transform: translateY(-2px); border-color: #5a5a5a; background: #2d2d2d; }
-    .tile img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; }
-    .tile .icon-fallback { width: 48px; height: 48px; border-radius: 10px; display: flex;
-      align-items: center; justify-content: center; background: #3a3a3a; font-weight: 700; font-size: 1.2rem; }
-    .tile h2 { margin: 0; font-size: 1.1rem; }
-    .tile p { margin: 0; color: #9a9a9a; font-size: .9rem; line-height: 1.4; }
-    footer { text-align: center; padding: 32px 24px; color: #666; font-size: .85rem; }
+      background: #f2f1ee; color: #0b0b0c; }
+    a { color: inherit; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 64px 0; }
+    .label { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase; color: #6b6b6b; }
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; letter-spacing: -.03em;
+      margin: 16px 0; font-weight: 600; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.1; letter-spacing: -.02em;
+      margin: 8px 0 0; font-weight: 600; }
+    .lead { max-width: 640px; color: #4a4a4a; line-height: 1.5; margin: 12px 0 24px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
+      border: 1px solid #0b0b0c; font-family: ui-monospace, monospace; font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase; text-decoration: none; }
+    .btn:hover { background: #0b0b0c; color: #f2f1ee; }
+    .btn.ghost { border-color: #b8b8b8; color: #0b0b0c; }
+    .btn.ghost:hover { background: #0b0b0c; color: #f2f1ee; border-color: #0b0b0c; }
+
+    /* Section 01 top icon grid */
+    .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      gap: 12px; margin-top: 32px; }
+    .icon-tile { display: flex; flex-direction: column; align-items: center; gap: 8px;
+      text-decoration: none; padding: 12px 8px; border: 1px solid transparent; }
+    .icon-tile:hover { border-color: #0b0b0c; background: #fff; }
+    .icon-tile img { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; }
+    .icon-tile .fallback { width: 56px; height: 56px; border-radius: 12px; display: flex;
+      align-items: center; justify-content: center; background: #0b0b0c; color: #f2f1ee;
+      font-weight: 700; font-size: 1.4rem; }
+    .icon-tile span { font-size: 12px; color: #4a4a4a; }
+
+    /* Section 02 lineup */
+    .lineup { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 32px; }
+    @media (min-width: 900px) { .lineup { grid-template-columns: repeat(2, 1fr); } }
+    .card { background: #fff; border: 1px solid #dcdcdc; display: flex; flex-direction: column; }
+    .card-head { display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px; border-bottom: 1px solid #dcdcdc; }
+    .card-num { font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700;
+      background: #0b0b0c; color: #f2f1ee; padding: 2px 8px; }
+    .card-cat { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .1em;
+      text-transform: uppercase; color: #6b6b6b; }
+    .card-hero { aspect-ratio: 16/10; overflow: hidden; background: #e8e8e8; }
+    .card-hero a { display: block; height: 100%; }
+    .card-hero img { width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .4s ease; }
+    .card:hover .card-hero img { transform: scale(1.03); }
+    .card-body { padding: 0 20px 20px; flex: 1; display: flex; flex-direction: column; }
+    .card-icon { width: 72px; height: 72px; border-radius: 14px; margin-top: -36px;
+      box-shadow: 0 6px 14px rgba(0,0,0,.2); background: #fff; object-fit: cover; }
+    .card-icon-link { display: inline-block; }
+    .card-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -.02em; margin: 12px 0 6px; }
+    .card-desc { color: #4a4a4a; line-height: 1.5; margin: 0 0 12px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+    .badge { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .1em;
+      text-transform: uppercase; padding: 2px 8px; border: 1px solid #dcdcdc; color: #4a4a4a; }
+    .badge.status { border-color: #0b0b0c; color: #0b0b0c; }
+    .launch { margin-top: auto; font-family: ui-monospace, monospace; font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px; color: #0b0b0c; }
+    .launch:hover { text-decoration: underline; }
+
+    footer { border-top: 1px solid #dcdcdc; padding: 32px 24px; text-align: center;
+      color: #6b6b6b; font-size: 13px; }
+    footer a { color: #0b0b0c; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Craft Apps</h1>
-    <p>Open-source creative tools from ArtCraft, running in your browser. Pick a craft to launch it.</p>
-  </header>
-  <main>
-    <div class="grid">
+  <div class="wrap">
+    <section>
+      <p class="label">01 Crafting Apps</p>
+      <h1>Thirteen apps. One craft.</h1>
+      <p class="lead">Image editing, vector illustration, video, photography, PDFs, motion graphics,
+        page layout, interface design, word processing, audio, presentations, CAD and spreadsheets.
+        Native, open-source apps, built in Rust and free to use. This page launches the web builds.</p>
+      <div>
+        <a class="btn ghost" href="https://discord.gg/artcraft" target="_blank" rel="noopener">Join Discord</a>
+        <a class="btn ghost" href="https://github.com/storytold" target="_blank" rel="noopener" style="margin-left:8px;">Browse on GitHub</a>
+      </div>
+      <div class="icons">
+HTML
+  for i in "${!SLUGS[@]}"; do
+    slug="${SLUGS[$i]}"
+    name="${NAMES[$i]}"
+    printf '        <a class="icon-tile" href="./%s/">\n' "$slug"
+    printf '          <img src="./icons/%s.webp" alt="%s" onerror="this.outerHTML='\''<div class=&quot;fallback&quot;>%s</div>'\''">\n' "$slug" "$name" "${name:0:1}"
+    printf '          <span>%s</span>\n' "$name"
+    printf '        </a>\n'
+  done
+  cat <<'HTML'
+      </div>
+    </section>
+
+    <section>
+      <p class="label">02 The lineup</p>
+      <h2>Pick a craft to explore</h2>
+      <div class="lineup">
 HTML
   for i in "${!SLUGS[@]}"; do
     slug="${SLUGS[$i]}"
     name="${NAMES[$i]}"
     desc="${DESCS[$i]}"
-    printf '      <a class="tile" href="./%s/">\n' "$slug"
-    printf '        <img src="./icons/%s.webp" alt="" onerror="this.outerHTML='\''<div class=&quot;icon-fallback&quot;>%s</div>'\''">\n' "$slug" "${name:0:1}"
-    printf '        <h2>%s</h2>\n' "$name"
-    printf '        <p>%s</p>\n' "$desc"
-    printf '      </a>\n'
+    status_code="${STATUSES[$i]}"
+    if [[ "$status_code" == "early" ]]; then status_label="Early alpha"; else status_label="In development"; fi
+    num=$(printf '%02d' $((i+1)))
+    printf '        <article class="card">\n'
+    printf '          <div class="card-head"><span class="card-num">%s</span><span class="card-cat">%s</span></div>\n' "$num" "$desc"
+    printf '          <div class="card-hero"><a href="./%s/" aria-label="Launch %s">' "$slug" "$name"
+    if [[ -f "$STAGE_PUBLIC/images/apps/$slug/hero.webp" ]]; then
+      printf '<img src="./images/apps/%s/hero.webp" alt="%s" loading="lazy">' "$slug" "$name"
+    else
+      printf '<div style="width:100%%;height:100%%;background:#e8e8e8;"></div>'
+    fi
+    printf '</a></div>\n'
+    printf '          <div class="card-body">\n'
+    printf '            <a class="card-icon-link" href="./%s/"><img class="card-icon" src="./icons/%s.webp" alt="%s" onerror="this.style.display='\''none'\''"></a>\n' "$slug" "$slug" "$name"
+    printf '            <h3 class="card-title">%s</h3>\n' "$name"
+    # app description from upstream; reuse crafts desc as short desc already category; add generic
+    long="${LONGS[$i]}"
+    printf '            <p class="card-desc">%s</p>\n' "$long"
+    printf '            <div class="badges"><span class="badge status">%s</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>\n' "$status_label"
+    printf '            <a class="launch" href="./%s/">Launch %s →</a>\n' "$slug" "$name"
+    printf '          </div>\n'
+    printf '        </article>\n'
   done
   cat <<'HTML'
-    </div>
-  </main>
-  <footer>Craft Apps web builds, auto-updated from GitHub releases.</footer>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    Craft Apps web builds, auto-updated from GitHub releases.
+    &nbsp;·&nbsp;
+    <a href="https://github.com/liyu1981/deploy-photocraftweb" target="_blank" rel="noopener">github.com/liyu1981/deploy-photocraftweb</a>
+  </footer>
 </body>
 </html>
 HTML
