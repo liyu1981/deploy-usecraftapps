@@ -5,291 +5,301 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Crafting Apps: open-source creative tools</title>
   <style>
-    :root { color-scheme: light; }
+    :root {
+      --bg:#f2f1ee; --bg-raised:#faf9f7; --bg-sunken:#e9e8e4;
+      --ink:#101014; --ink-strong:#000; --muted:#1010149e; --faint:#1010146b;
+      --line:#10101429; --line-strong:#10101466; --accent:#2d81ff; --accent-ink:#1659c4;
+      --invert-bg:#101014; --invert-fg:#f2f1ee;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#121316; --bg-raised:#101014; --bg-sunken:#060607;
+        --ink:#f2f1ee; --ink-strong:#fff; --muted:#f2f1ee99; --faint:#f2f1ee61;
+        --line:#f2f1ee26; --line-strong:#f2f1ee66; --accent:#2d81ff; --accent-ink:#74aaff;
+        --invert-bg:#fff; --invert-fg:#0b0b0c;
+        color-scheme: dark;
+      }
+    }
     * { box-sizing: border-box; }
     body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: #f2f1ee; color: #0b0b0c; }
-    a { color: inherit; }
+      background: var(--bg); color: var(--ink); }
+    a { color: inherit; text-decoration: none; }
     .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 64px 0; }
-    .label { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px;
-      letter-spacing: .12em; text-transform: uppercase; color: #6b6b6b; }
-    h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; letter-spacing: -.03em;
-      margin: 16px 0; font-weight: 600; }
-    h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.1; letter-spacing: -.02em;
-      margin: 8px 0 0; font-weight: 600; }
-    .lead { max-width: 640px; color: #4a4a4a; line-height: 1.5; margin: 12px 0 24px; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px;
-      border: 1px solid #0b0b0c; font-family: ui-monospace, monospace; font-size: 11px;
-      letter-spacing: .12em; text-transform: uppercase; text-decoration: none; }
-    .btn:hover { background: #0b0b0c; color: #f2f1ee; }
-    .btn.ghost { border-color: #b8b8b8; color: #0b0b0c; }
-    .btn.ghost:hover { background: #0b0b0c; color: #f2f1ee; border-color: #0b0b0c; }
 
-    /* Section 01 top icon grid */
-    .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-      gap: 12px; margin-top: 32px; }
-    .icon-tile { display: flex; flex-direction: column; align-items: center; gap: 8px;
-      text-decoration: none; padding: 12px 8px; border: 1px solid transparent; }
-    .icon-tile:hover { border-color: #0b0b0c; background: #fff; }
-    .icon-tile img { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; }
+    /* Section 01 */
+    .s1 { padding: 56px 0; border-bottom: 1px solid var(--line); }
+    .s1-row { display: block; }
+    @media (min-width: 1280px) { .s1-row { display: flex; align-items: center; justify-content: space-between; gap: 48px; } }
+    .s1-text { min-width: 0; }
+    .eyebrow { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+    .eyebrow .num { color: var(--faint); }
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.02; letter-spacing: -.035em;
+      margin: 16px 0; font-weight: 500; color: var(--ink-strong); }
+    h1 .accent { color: var(--accent-ink); white-space: nowrap; }
+    .lead { max-width: 560px; color: var(--muted); line-height: 1.5; margin: 16px 0 24px; font-size: 1.05rem; }
+    .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 20px;
+      border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink);
+      font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .12em;
+      text-transform: uppercase; }
+    .btn:hover { border-color: var(--ink); }
+    .btn.primary { background: var(--invert-bg); color: var(--invert-fg); border-color: var(--invert-bg); }
+
+    .icon-grid { margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px 8px; }
+    @media (min-width: 640px) { .icon-grid { grid-template-columns: repeat(7, 1fr); gap: 12px 16px; } }
+    @media (min-width: 1280px) { .icon-grid { margin-top: 0; width: 480px; flex-shrink: 0;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 20px; } }
+    .icon-tile { display: flex; flex-direction: column; align-items: center; gap: 6px;
+      width: 72px; }
+    .icon-tile img { width: 56px; height: 56px; border-radius: 12px; object-fit: cover;
+      box-shadow: 0 6px 14px rgba(0,0,0,.2); transition: transform .25s ease; }
+    .icon-tile:hover img { transform: translateY(-4px); }
     .icon-tile .fallback { width: 56px; height: 56px; border-radius: 12px; display: flex;
-      align-items: center; justify-content: center; background: #0b0b0c; color: #f2f1ee;
-      font-weight: 700; font-size: 1.4rem; }
-    .icon-tile span { font-size: 12px; color: #4a4a4a; }
+      align-items: center; justify-content: center; background: var(--invert-bg);
+      color: var(--invert-fg); font-weight: 700; font-size: 1.3rem; }
+    .icon-tile span { font-size: 11px; color: var(--muted); }
 
-    /* Section 02 lineup */
-    .lineup { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 32px; }
-    @media (min-width: 900px) { .lineup { grid-template-columns: repeat(2, 1fr); } }
-    .card { background: #fff; border: 1px solid #dcdcdc; display: flex; flex-direction: column; }
+    /* Section 02 */
+    .sticky-bar { position: sticky; top: 0; z-index: 30; border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line); background: var(--bg); backdrop-filter: blur(8px); }
+    .sticky-inner { display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 24px; max-width: 1280px; margin: 0 auto; }
+    .sticky-title { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted); }
+    .sticky-title .num { color: var(--faint); margin-right: 8px; }
+    .sticky-sub { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--faint); display: none; }
+    @media (min-width: 640px) { .sticky-sub { display: block; } }
+
+    .lineup { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--line); }
+    @media (min-width: 640px) { .lineup { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1280px) { .lineup { grid-template-columns: repeat(4, 1fr); } }
+
+    .card { background: var(--bg); display: flex; flex-direction: column; min-height: 100%; }
     .card-head { display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 20px; border-bottom: 1px solid #dcdcdc; }
+      gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--line); }
     .card-num { font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700;
-      background: #0b0b0c; color: #f2f1ee; padding: 2px 8px; }
+      background: var(--accent-ink); color: var(--invert-fg); padding: 2px 8px; }
+    @media (prefers-color-scheme: dark) { .card-num { color: #000; } }
     .card-cat { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .1em;
-      text-transform: uppercase; color: #6b6b6b; }
-    .card-hero { aspect-ratio: 16/10; overflow: hidden; background: #e8e8e8; }
-    .card-hero a { display: block; height: 100%; }
+      text-transform: uppercase; color: var(--faint); white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; }
+    .card-hero { aspect-ratio: 16/10; overflow: hidden; background: var(--bg-sunken); position: relative; }
     .card-hero img { width: 100%; height: 100%; object-fit: cover; display: block;
-      transition: transform .4s ease; }
+      transition: transform .5s ease; }
     .card:hover .card-hero img { transform: scale(1.03); }
     .card-body { padding: 0 20px 20px; flex: 1; display: flex; flex-direction: column; }
     .card-icon { width: 72px; height: 72px; border-radius: 14px; margin-top: -36px;
-      box-shadow: 0 6px 14px rgba(0,0,0,.2); background: #fff; object-fit: cover; }
-    .card-icon-link { display: inline-block; }
-    .card-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -.02em; margin: 12px 0 6px; }
-    .card-desc { color: #4a4a4a; line-height: 1.5; margin: 0 0 12px; }
+      box-shadow: 0 6px 14px rgba(0,0,0,.28); background: var(--bg-raised); object-fit: cover;
+      border: 1px solid var(--line); }
+    .card-title { font-size: 1.6rem; font-weight: 500; letter-spacing: -.02em; margin: 14px 0 6px;
+      color: var(--ink-strong); }
+    .card-desc { color: var(--muted); line-height: 1.5; margin: 0 0 12px; font-size: .95rem; }
     .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
     .badge { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .1em;
-      text-transform: uppercase; padding: 2px 8px; border: 1px solid #dcdcdc; color: #4a4a4a; }
-    .badge.status { border-color: #0b0b0c; color: #0b0b0c; }
+      text-transform: uppercase; padding: 2px 8px; border: 1px solid var(--line); color: var(--muted); }
+    .badge.status { border-color: var(--line-strong); color: var(--ink); }
     .launch { margin-top: auto; font-family: ui-monospace, monospace; font-size: 11px;
-      letter-spacing: .12em; text-transform: uppercase; text-decoration: none;
-      display: inline-flex; align-items: center; gap: 6px; color: #0b0b0c; }
-    .launch:hover { text-decoration: underline; }
+      letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+      display: inline-flex; align-items: center; gap: 6px; }
+    .card:hover .launch { color: var(--ink); }
 
-    footer { border-top: 1px solid #dcdcdc; padding: 32px 24px; text-align: center;
-      color: #6b6b6b; font-size: 13px; }
-    footer a { color: #0b0b0c; }
+    footer { border-top: 1px solid var(--line); padding: 32px 24px; text-align: center;
+      color: var(--faint); font-size: 13px; }
+    footer a { color: var(--ink); }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <section>
-      <p class="label">01 Crafting Apps</p>
-      <h1>Thirteen apps. One craft.</h1>
-      <p class="lead">Image editing, vector illustration, video, photography, PDFs, motion graphics,
-        page layout, interface design, word processing, audio, presentations, CAD and spreadsheets.
-        Native, open-source apps, built in Rust and free to use. This page launches the web builds.</p>
-      <div>
-        <a class="btn ghost" href="https://discord.gg/artcraft" target="_blank" rel="noopener">Join Discord</a>
-        <a class="btn ghost" href="https://github.com/storytold" target="_blank" rel="noopener" style="margin-left:8px;">Browse on GitHub</a>
+  <section class="s1">
+    <div class="wrap">
+      <div class="s1-row">
+        <div class="s1-text">
+          <p class="eyebrow"><span class="num">01</span> Crafting Apps</p>
+          <h1>Thirteen apps. <span class="accent">One craft.</span></h1>
+          <p class="lead">Image editing, vector illustration, video, photography, PDFs, motion graphics,
+            page layout, interface design, word processing, audio, presentations, CAD and spreadsheets.
+            Native, open-source apps from the ArtCraft team, built in Rust and free to use.
+            This page launches the web builds.</p>
+          <div class="btns">
+            <a class="btn" href="https://discord.gg/artcraft" target="_blank" rel="noopener">Join Discord</a>
+            <a class="btn" href="https://github.com/storytold" target="_blank" rel="noopener">Browse on GitHub</a>
+          </div>
+        </div>
+        <div class="icon-grid">
+          <a class="icon-tile" href="./photocraft/"><img src="./icons/photocraft.webp" alt="PhotoCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>P</div>'"><span>PhotoCraft</span></a>
+          <a class="icon-tile" href="./vectorcraft/"><img src="./icons/vectorcraft.webp" alt="VectorCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>V</div>'"><span>VectorCraft</span></a>
+          <a class="icon-tile" href="./filmcraft/"><img src="./icons/filmcraft.webp" alt="FilmCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>F</div>'"><span>FilmCraft</span></a>
+          <a class="icon-tile" href="./lightcraft/"><img src="./icons/lightcraft.webp" alt="LightCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>L</div>'"><span>LightCraft</span></a>
+          <a class="icon-tile" href="./pdfcraft/"><img src="./icons/pdfcraft.webp" alt="PdfCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>P</div>'"><span>PdfCraft</span></a>
+          <a class="icon-tile" href="./effectcraft/"><img src="./icons/effectcraft.webp" alt="EffectCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>E</div>'"><span>EffectCraft</span></a>
+          <a class="icon-tile" href="./designcraft/"><img src="./icons/designcraft.webp" alt="DesignCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>D</div>'"><span>DesignCraft</span></a>
+          <a class="icon-tile" href="./figcraft/"><img src="./icons/figcraft.webp" alt="FigCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>F</div>'"><span>FigCraft</span></a>
+          <a class="icon-tile" href="./wordcraft/"><img src="./icons/wordcraft.webp" alt="WordCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>W</div>'"><span>WordCraft</span></a>
+          <a class="icon-tile" href="./soundcraft/"><img src="./icons/soundcraft.webp" alt="SoundCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>S</div>'"><span>SoundCraft</span></a>
+          <a class="icon-tile" href="./deckcraft/"><img src="./icons/deckcraft.webp" alt="DeckCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>D</div>'"><span>DeckCraft</span></a>
+          <a class="icon-tile" href="./cadcraft/"><img src="./icons/cadcraft.webp" alt="CADCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>C</div>'"><span>CADCraft</span></a>
+          <a class="icon-tile" href="./gridcraft/"><img src="./icons/gridcraft.webp" alt="GridCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>G</div>'"><span>GridCraft</span></a>
+        </div>
       </div>
-      <div class="icons">
-        <a class="icon-tile" href="./photocraft/">
-          <img src="./icons/photocraft.webp" alt="PhotoCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>P</div>'">
-          <span>PhotoCraft</span>
-        </a>
-        <a class="icon-tile" href="./vectorcraft/">
-          <img src="./icons/vectorcraft.webp" alt="VectorCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>V</div>'">
-          <span>VectorCraft</span>
-        </a>
-        <a class="icon-tile" href="./filmcraft/">
-          <img src="./icons/filmcraft.webp" alt="FilmCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>F</div>'">
-          <span>FilmCraft</span>
-        </a>
-        <a class="icon-tile" href="./lightcraft/">
-          <img src="./icons/lightcraft.webp" alt="LightCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>L</div>'">
-          <span>LightCraft</span>
-        </a>
-        <a class="icon-tile" href="./pdfcraft/">
-          <img src="./icons/pdfcraft.webp" alt="PdfCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>P</div>'">
-          <span>PdfCraft</span>
-        </a>
-        <a class="icon-tile" href="./effectcraft/">
-          <img src="./icons/effectcraft.webp" alt="EffectCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>E</div>'">
-          <span>EffectCraft</span>
-        </a>
-        <a class="icon-tile" href="./designcraft/">
-          <img src="./icons/designcraft.webp" alt="DesignCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>D</div>'">
-          <span>DesignCraft</span>
-        </a>
-        <a class="icon-tile" href="./figcraft/">
-          <img src="./icons/figcraft.webp" alt="FigCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>F</div>'">
-          <span>FigCraft</span>
-        </a>
-        <a class="icon-tile" href="./wordcraft/">
-          <img src="./icons/wordcraft.webp" alt="WordCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>W</div>'">
-          <span>WordCraft</span>
-        </a>
-        <a class="icon-tile" href="./soundcraft/">
-          <img src="./icons/soundcraft.webp" alt="SoundCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>S</div>'">
-          <span>SoundCraft</span>
-        </a>
-        <a class="icon-tile" href="./deckcraft/">
-          <img src="./icons/deckcraft.webp" alt="DeckCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>D</div>'">
-          <span>DeckCraft</span>
-        </a>
-        <a class="icon-tile" href="./cadcraft/">
-          <img src="./icons/cadcraft.webp" alt="CADCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>C</div>'">
-          <span>CADCraft</span>
-        </a>
-        <a class="icon-tile" href="./gridcraft/">
-          <img src="./icons/gridcraft.webp" alt="GridCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>G</div>'">
-          <span>GridCraft</span>
-        </a>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <p class="label">02 The lineup</p>
-      <h2>Pick a craft to explore</h2>
-      <div class="lineup">
-        <article class="card">
-          <div class="card-head"><span class="card-num">01</span><span class="card-cat">Image editor</span></div>
-          <div class="card-hero"><a href="./photocraft/" aria-label="Launch PhotoCraft"><img src="./images/apps/photocraft/hero.webp" alt="PhotoCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./photocraft/"><img class="card-icon" src="./icons/photocraft.webp" alt="PhotoCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">PhotoCraft</h3>
-            <p class="card-desc">The open-source image editor you already know how to use.</p>
-            <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./photocraft/">Launch PhotoCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">02</span><span class="card-cat">Vector illustration</span></div>
-          <div class="card-hero"><a href="./vectorcraft/" aria-label="Launch VectorCraft"><img src="./images/apps/vectorcraft/hero.webp" alt="VectorCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./vectorcraft/"><img class="card-icon" src="./icons/vectorcraft.webp" alt="VectorCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">VectorCraft</h3>
-            <p class="card-desc">Fast, open-source vector illustration, reimagined in pure Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./vectorcraft/">Launch VectorCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">03</span><span class="card-cat">Video editor</span></div>
-          <div class="card-hero"><a href="./filmcraft/" aria-label="Launch FilmCraft"><img src="./images/apps/filmcraft/hero.webp" alt="FilmCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./filmcraft/"><img class="card-icon" src="./icons/filmcraft.webp" alt="FilmCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">FilmCraft</h3>
-            <p class="card-desc">Professional, open-source video editing, rebuilt from scratch in Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./filmcraft/">Launch FilmCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">04</span><span class="card-cat">Photo library & raw developer</span></div>
-          <div class="card-hero"><a href="./lightcraft/" aria-label="Launch LightCraft"><img src="./images/apps/lightcraft/hero.webp" alt="LightCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./lightcraft/"><img class="card-icon" src="./icons/lightcraft.webp" alt="LightCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">LightCraft</h3>
-            <p class="card-desc">An open-source photo library and raw developer that runs on your machine.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./lightcraft/">Launch LightCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">05</span><span class="card-cat">PDF workbench</span></div>
-          <div class="card-hero"><a href="./pdfcraft/" aria-label="Launch PdfCraft"><img src="./images/apps/pdfcraft/hero.webp" alt="PdfCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./pdfcraft/"><img class="card-icon" src="./icons/pdfcraft.webp" alt="PdfCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">PdfCraft</h3>
-            <p class="card-desc">The open-source PDF workbench: read, organize, combine, split and secure.</p>
-            <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./pdfcraft/">Launch PdfCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">06</span><span class="card-cat">Motion graphics & VFX</span></div>
-          <div class="card-hero"><a href="./effectcraft/" aria-label="Launch EffectCraft"><img src="./images/apps/effectcraft/hero.webp" alt="EffectCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./effectcraft/"><img class="card-icon" src="./icons/effectcraft.webp" alt="EffectCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">EffectCraft</h3>
-            <p class="card-desc">Open-source motion graphics and visual effects, built in pure Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./effectcraft/">Launch EffectCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">07</span><span class="card-cat">Page layout & publishing</span></div>
-          <div class="card-hero"><a href="./designcraft/" aria-label="Launch DesignCraft"><img src="./images/apps/designcraft/hero.webp" alt="DesignCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./designcraft/"><img class="card-icon" src="./icons/designcraft.webp" alt="DesignCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">DesignCraft</h3>
-            <p class="card-desc">Open-source page layout and publishing, rebuilt in pure Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./designcraft/">Launch DesignCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">08</span><span class="card-cat">Interface design</span></div>
-          <div class="card-hero"><a href="./figcraft/" aria-label="Launch FigCraft"><img src="./images/apps/figcraft/hero.webp" alt="FigCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./figcraft/"><img class="card-icon" src="./icons/figcraft.webp" alt="FigCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">FigCraft</h3>
-            <p class="card-desc">Open-source interface design and prototyping, rebuilt in pure Rust.</p>
-            <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./figcraft/">Launch FigCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">09</span><span class="card-cat">Word processing</span></div>
-          <div class="card-hero"><a href="./wordcraft/" aria-label="Launch WordCraft"><img src="./images/apps/wordcraft/hero.webp" alt="WordCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./wordcraft/"><img class="card-icon" src="./icons/wordcraft.webp" alt="WordCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">WordCraft</h3>
-            <p class="card-desc">Fast, open-source word processing, rebuilt in pure Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./wordcraft/">Launch WordCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">10</span><span class="card-cat">Digital audio workstation</span></div>
-          <div class="card-hero"><a href="./soundcraft/" aria-label="Launch SoundCraft"><img src="./images/apps/soundcraft/hero.webp" alt="SoundCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./soundcraft/"><img class="card-icon" src="./icons/soundcraft.webp" alt="SoundCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">SoundCraft</h3>
-            <p class="card-desc">Professional audio recording, editing and mixing in pure Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./soundcraft/">Launch SoundCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">11</span><span class="card-cat">Presentations & slide shows</span></div>
-          <div class="card-hero"><a href="./deckcraft/" aria-label="Launch DeckCraft"><img src="./images/apps/deckcraft/hero.webp" alt="DeckCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./deckcraft/"><img class="card-icon" src="./icons/deckcraft.webp" alt="DeckCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">DeckCraft</h3>
-            <p class="card-desc">Build and deliver dynamic slide presentations, in pure Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./deckcraft/">Launch DeckCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">12</span><span class="card-cat">Computer-aided design & drafting</span></div>
-          <div class="card-hero"><a href="./cadcraft/" aria-label="Launch CADCraft"><img src="./images/apps/cadcraft/hero.webp" alt="CADCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./cadcraft/"><img class="card-icon" src="./icons/cadcraft.webp" alt="CADCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">CADCraft</h3>
-            <p class="card-desc">Fast, open-source computer-aided design and drafting in pure Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./cadcraft/">Launch CADCraft →</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-head"><span class="card-num">13</span><span class="card-cat">Spreadsheets & data analysis</span></div>
-          <div class="card-hero"><a href="./gridcraft/" aria-label="Launch GridCraft"><img src="./images/apps/gridcraft/hero.webp" alt="GridCraft" loading="lazy"></a></div>
-          <div class="card-body">
-            <a class="card-icon-link" href="./gridcraft/"><img class="card-icon" src="./icons/gridcraft.webp" alt="GridCraft" onerror="this.style.display='none'"></a>
-            <h3 class="card-title">GridCraft</h3>
-            <p class="card-desc">Fast, open-source spreadsheets and data analysis, rebuilt in pure Rust.</p>
-            <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
-            <a class="launch" href="./gridcraft/">Launch GridCraft →</a>
-          </div>
-        </article>
-      </div>
-    </section>
+  <div class="sticky-bar">
+    <div class="sticky-inner">
+      <p class="sticky-title"><span class="num">02</span> / The lineup</p>
+      <p class="sticky-sub">Pick a craft to explore</p>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-top:0;padding-bottom:48px;">
+    <div class="lineup">
+      <a class="card" href="./photocraft/">
+        <div class="card-head"><span class="card-num">01</span><span class="card-cat">Image editor</span></div>
+        <div class="card-hero"><img src="./images/apps/photocraft/hero.webp" alt="PhotoCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/photocraft.webp" alt="PhotoCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">PhotoCraft</h3>
+          <p class="card-desc">The open-source image editor you already know how to use.</p>
+          <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch PhotoCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./vectorcraft/">
+        <div class="card-head"><span class="card-num">02</span><span class="card-cat">Vector illustration</span></div>
+        <div class="card-hero"><img src="./images/apps/vectorcraft/hero.webp" alt="VectorCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/vectorcraft.webp" alt="VectorCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">VectorCraft</h3>
+          <p class="card-desc">Fast, open-source vector illustration, reimagined in pure Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch VectorCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./filmcraft/">
+        <div class="card-head"><span class="card-num">03</span><span class="card-cat">Video editor</span></div>
+        <div class="card-hero"><img src="./images/apps/filmcraft/hero.webp" alt="FilmCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/filmcraft.webp" alt="FilmCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">FilmCraft</h3>
+          <p class="card-desc">Professional, open-source video editing, rebuilt from scratch in Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch FilmCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./lightcraft/">
+        <div class="card-head"><span class="card-num">04</span><span class="card-cat">Photo library & raw developer</span></div>
+        <div class="card-hero"><img src="./images/apps/lightcraft/hero.webp" alt="LightCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/lightcraft.webp" alt="LightCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">LightCraft</h3>
+          <p class="card-desc">An open-source photo library and raw developer that runs on your machine.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch LightCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./pdfcraft/">
+        <div class="card-head"><span class="card-num">05</span><span class="card-cat">PDF workbench</span></div>
+        <div class="card-hero"><img src="./images/apps/pdfcraft/hero.webp" alt="PdfCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/pdfcraft.webp" alt="PdfCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">PdfCraft</h3>
+          <p class="card-desc">The open-source PDF workbench: read, organize, combine, split and secure.</p>
+          <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch PdfCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./effectcraft/">
+        <div class="card-head"><span class="card-num">06</span><span class="card-cat">Motion graphics & VFX</span></div>
+        <div class="card-hero"><img src="./images/apps/effectcraft/hero.webp" alt="EffectCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/effectcraft.webp" alt="EffectCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">EffectCraft</h3>
+          <p class="card-desc">Open-source motion graphics and visual effects, built in pure Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch EffectCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./designcraft/">
+        <div class="card-head"><span class="card-num">07</span><span class="card-cat">Page layout & publishing</span></div>
+        <div class="card-hero"><img src="./images/apps/designcraft/hero.webp" alt="DesignCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/designcraft.webp" alt="DesignCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">DesignCraft</h3>
+          <p class="card-desc">Open-source page layout and publishing, rebuilt in pure Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch DesignCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./figcraft/">
+        <div class="card-head"><span class="card-num">08</span><span class="card-cat">Interface design</span></div>
+        <div class="card-hero"><img src="./images/apps/figcraft/hero.webp" alt="FigCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/figcraft.webp" alt="FigCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">FigCraft</h3>
+          <p class="card-desc">Open-source interface design and prototyping, rebuilt in pure Rust.</p>
+          <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch FigCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./wordcraft/">
+        <div class="card-head"><span class="card-num">09</span><span class="card-cat">Word processing</span></div>
+        <div class="card-hero"><img src="./images/apps/wordcraft/hero.webp" alt="WordCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/wordcraft.webp" alt="WordCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">WordCraft</h3>
+          <p class="card-desc">Fast, open-source word processing, rebuilt in pure Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch WordCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./soundcraft/">
+        <div class="card-head"><span class="card-num">10</span><span class="card-cat">Digital audio workstation</span></div>
+        <div class="card-hero"><img src="./images/apps/soundcraft/hero.webp" alt="SoundCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/soundcraft.webp" alt="SoundCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">SoundCraft</h3>
+          <p class="card-desc">Professional audio recording, editing and mixing in pure Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch SoundCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./deckcraft/">
+        <div class="card-head"><span class="card-num">11</span><span class="card-cat">Presentations & slide shows</span></div>
+        <div class="card-hero"><img src="./images/apps/deckcraft/hero.webp" alt="DeckCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/deckcraft.webp" alt="DeckCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">DeckCraft</h3>
+          <p class="card-desc">Build and deliver dynamic slide presentations, in pure Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch DeckCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./cadcraft/">
+        <div class="card-head"><span class="card-num">12</span><span class="card-cat">Computer-aided design & drafting</span></div>
+        <div class="card-hero"><img src="./images/apps/cadcraft/hero.webp" alt="CADCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/cadcraft.webp" alt="CADCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">CADCraft</h3>
+          <p class="card-desc">Fast, open-source computer-aided design and drafting in pure Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch CADCraft →</span>
+        </div>
+      </a>
+      <a class="card" href="./gridcraft/">
+        <div class="card-head"><span class="card-num">13</span><span class="card-cat">Spreadsheets & data analysis</span></div>
+        <div class="card-hero"><img src="./images/apps/gridcraft/hero.webp" alt="GridCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/gridcraft.webp" alt="GridCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">GridCraft</h3>
+          <p class="card-desc">Fast, open-source spreadsheets and data analysis, rebuilt in pure Rust.</p>
+          <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
+          <span class="launch">Launch GridCraft →</span>
+        </div>
+      </a>
+    </div>
   </div>
 
   <footer>
