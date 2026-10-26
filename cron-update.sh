@@ -70,16 +70,13 @@ if [[ -z "$(git status --porcelain --untracked-files=no)" ]]; then
   exit 0
 fi
 
-TAG="$(sed -n 's/^tag=//p' "$VERSION_FILE" | head -n 1)"
-TAG="${TAG:-unknown}"
-
-git add -A -- public .photocraft-version
+git add -A -- public .craft-versions
 if git diff --cached --quiet; then
   log "Already up to date; nothing to commit."
   exit 0
 fi
 
-log "Committing PhotoCraft $TAG"
+log "Committing Craft apps update"
 git commit -m "Update Craft apps web"
 
 log "Pushing to origin/$BRANCH"
