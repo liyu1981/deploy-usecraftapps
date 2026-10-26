@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="VectorCraft">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="theme-color" content="#262626">
+  <title>VectorCraft</title>
+  
+<script type="module">
+import init, * as bindings from './vectorcraft-web-98b60c6dd6d6b89f.js';
+const wasm = await init({ module_or_path: './vectorcraft-web-98b60c6dd6d6b89f_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  <style>
+    /* iPad: no page scroll, bounce, pinch zoom, text selection or callout; the app takes the gestures. */
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #262626;
+      overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+    /* Inside the safe areas (notch, home indicator) of a full-screen app. */
+    #vectorcraft_canvas { position: absolute; top: env(safe-area-inset-top, 0); right: env(safe-area-inset-right, 0);
+      bottom: env(safe-area-inset-bottom, 0); left: env(safe-area-inset-left, 0);
+      width: calc(100% - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+      height: calc(100% - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+      display: block; touch-action: none; }
+    #vectorcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
+  </style>
+<link rel="modulepreload" href="./vectorcraft-web-98b60c6dd6d6b89f.js" crossorigin="anonymous" integrity="sha384-rTIuf8ZogetG4GrkldH/LKIKMeLPSBWqHSoI5SIWYthRWF3R2IfNQ9FnRFtkkdQB"><link rel="preload" href="./vectorcraft-web-98b60c6dd6d6b89f_bg.wasm" crossorigin="anonymous" integrity="sha384-cE/r0mzKoHNx7k51aTiZIbbIEwW5JQqogT+tM0Fn0TlJTRf6SuwHOZ8Gxx+4h0T9" as="fetch" type="application/wasm"></head>
+<body>
+  <canvas id="vectorcraft_canvas"></canvas>
+  <div id="vectorcraft_loading">Loading VectorCraft&hellip;</div>
+</body>
+</html>

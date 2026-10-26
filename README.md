@@ -1,44 +1,46 @@
-# PhotoCraft Web — Vercel deployment
+# Craft Apps — Vercel deployment
 
-A static, self-hosted copy of the [PhotoCraft](https://github.com/storytold/photocraft)
-browser editor, kept up to date from the official GitHub releases and ready to deploy on
-[Vercel](https://vercel.com/).
+A static, self-hosted copy of the web builds of the [Craft Apps](https://getartcraft.com/apps)
+suite (PhotoCraft, VectorCraft, LightCraft, …), kept up to date from the official GitHub
+releases and ready to deploy on [Vercel](https://vercel.com/).
 
-PhotoCraft's web build runs entirely in the browser (WebAssembly), so there is no backend,
-database, or build step. Vercel only has to serve the files in `public/`.
+Each craft app's web build runs entirely in the browser (WebAssembly), so there is no
+backend, database, or build step. Vercel only has to serve the files in `public/`. The
+landing page at `/` links to each app under its own subfolder (e.g. `/photocraft/`).
 
 ## Repository layout
 
 | Path | Purpose |
 |---|---|
-| `public/` | Generated static site from the upstream web release. Do not edit by hand. |
-| `update-photocraft.sh` | Downloads the latest (or a pinned) web release into `public/`. |
+| `public/` | Generated static site from the upstream web releases. Do not edit by hand. |
+| `crafts.txt` | List of craft apps (slug, display name, description) to deploy. |
+| `update-crafts.sh` | Downloads the latest (or a pinned) web release for every app into `public/`. |
 | `cron-update.sh` | Pulls, updates, commits, and pushes automatically (for cron). |
-| `.photocraft-version` | Release tag, asset name, checksum, and update time last pulled. |
+| `.craft-versions` | Release tag and checksum last pulled for each app. |
 | `vercel.json` | Tells Vercel to serve `public/` and sets the required cache/MIME headers. |
 
-## Update to the latest release
+## Update to the latest releases
 
 Requirements: `bash`, `curl`, `unzip`, and `sha256sum` (or `shasum`).
 
 ```sh
-./update-photocraft.sh            # latest upstream release
-./update-photocraft.sh v0.15.1    # pin a specific release
+./update-crafts.sh                       # latest upstream releases
+./update-crafts.sh photocraft v0.16.0    # pin one app to a specific release
 ```
 
 The script:
 
-1. Resolves the latest release tag from GitHub (or uses the tag you pass).
-2. Downloads `photocraft-web-<version>.zip`.
+1. Resolves the latest release tag for each app from GitHub (or uses the tag you pass).
+2. Downloads `<app>-web-<version>.zip`.
 3. Verifies it against the release's `SHA256SUMS.txt`.
-4. Atomically replaces `public/` with the extracted site.
-5. Writes `.photocraft-version`.
+4. Rebuilds `public/` with one subfolder per app plus a landing page.
+5. Writes `.craft-versions`.
 
 Review and commit the result:
 
 ```sh
-git add public .photocraft-version
-git commit -m "Update PhotoCraft web"
+git add public .craft-versions crafts.txt
+git commit -m "Update Craft apps web"
 git push
 ```
 
@@ -55,17 +57,17 @@ git push
    - **Install Command:** leave empty
 4. Click **Deploy**.
 
-Every push to the production branch redeploys automatically. To update PhotoCraft later, run
-`./update-photocraft.sh`, commit, and push.
+Every push to the production branch redeploys automatically. To update the Craft apps later,
+run `./update-crafts.sh`, commit, and push.
 
 ## Automated updates (cron)
 
-`cron-update.sh` pulls `origin`, checks for a new PhotoCraft release, commits the result, and
+`cron-update.sh` pulls `origin`, checks for new Craft releases, commits the result, and
 pushes only when something changed. Configure an `origin` remote and git identity first, then
 install it with `crontab -e` (adjust the path; this runs daily at 04:00):
 
 ```cron
-0 4 * * * /home/yli/deploy-photocraftweb/cron-update.sh >> /home/yli/photocraft-update.log 2>&1
+0 4 * * * /home/yli/deploy-photocraftweb/cron-update.sh >> /home/yli/craft-update.log 2>&1
 ```
 
 Each push triggers a new Vercel deployment automatically.
@@ -81,14 +83,13 @@ vercel --prod   # production deployment
 ### Notes
 
 - `vercel.json` sets long-lived immutable caching for hashed assets and `no-cache` for
-  `index.html`, `app/photocraft-web.js`, and `app/parts.txt`. Keep those headers if you
-  customize the config.
+  entry files such as `index.html`. Keep those headers if you customize the config.
 - The site must be served over HTTPS for WebGPU and clipboard access; Vercel provides HTTPS
-  automatically. Over plain HTTP the editor falls back to WebGL2.
+  automatically. Over plain HTTP the editors fall back to WebGL2.
 - No SPA rewrite/fallback is configured on purpose: missing files should return a real 404.
-- The upstream release also includes `_headers`, `.htaccess`, `README.md`, and `HOSTING.md`.
-  They are copied into `public/` for reference and for portability to other hosts; Vercel
-  ignores `_headers` and `.htaccess`.
+- The upstream releases also include `_headers`, `.htaccess`, `README.md`, and `HOSTING.md`.
+  They are copied into each app's subfolder for reference and portability; Vercel ignores
+  `_headers` and `.htaccess`.
 
 ## Local preview
 
@@ -99,6 +100,6 @@ python3 -m http.server 8765 --directory public
 
 ## Upstream
 
-- Source and releases: <https://github.com/storytold/photocraft>
-- Web hosting details: `public/HOSTING.md`
-- Licenses: `public/LICENSE-MIT`, `public/LICENSE-APACHE`
+- Source and releases: <https://github.com/storytold>
+- App catalog: <https://getartcraft.com/apps>
+- Licenses: `public/<app>/LICENSE-MIT`, `public/<app>/LICENSE-APACHE`

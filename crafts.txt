@@ -1,0 +1,15 @@
+# slug display_name description
+# One craft app per line. Lines starting with # are comments.
+photocraft PhotoCraft "Image editor"
+vectorcraft VectorCraft "Vector illustration"
+filmcraft FilmCraft "Video editor"
+lightcraft LightCraft "Photo library & raw developer"
+pdfcraft PdfCraft "PDF workbench"
+effectcraft EffectCraft "Motion graphics & VFX"
+designcraft DesignCraft "Page layout & publishing"
+figcraft FigCraft "Interface design"
+wordcraft WordCraft "Word processing"
+soundcraft SoundCraft "Digital audio workstation"
+deckcraft DeckCraft "Presentations & slide shows"
+cadcraft CADCraft "Computer-aided design & drafting"
+gridcraft GridCraft "Spreadsheets & data analysis"

@@ -39,7 +39,7 @@
       ]
     },
     {
-      "source": "/app/photocraft-web.js",
+      "source": "/(.*)/index.html",
       "headers": [
         {
           "key": "Cache-Control",
@@ -48,7 +48,7 @@
       ]
     },
     {
-      "source": "/app/parts.txt",
+      "source": "/(.*)/app/(.*)-web.js",
       "headers": [
         {
           "key": "Cache-Control",
@@ -57,7 +57,16 @@
       ]
     },
     {
-      "source": "/app/(.*).part-(.*)",
+      "source": "/(.*)/app/parts.txt",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)/app/(.*)\\.part-(.*)",
       "headers": [
         {
           "key": "Content-Type",
@@ -70,7 +79,7 @@
       ]
     },
     {
-      "source": "/photocraft-web-boot-(.*)",
+      "source": "/(.*)-web-boot-(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -79,7 +88,7 @@
       ]
     },
     {
-      "source": "/fonts/manifest.txt",
+      "source": "/(.*)/fonts/manifest.txt",
       "headers": [
         {
           "key": "Cache-Control",

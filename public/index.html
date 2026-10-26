@@ -2,40 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>PhotoCraft</title>
-  
-<script type="module">
-import init, * as bindings from './photocraft-web-boot-26446d01b24367d7.js';
-const wasm = await init({ module_or_path: './photocraft-web-boot-26446d01b24367d7_bg.wasm' });
-
-
-window.wasmBindings = bindings;
-
-
-dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
-
-</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Craft Apps</title>
   <style>
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #262626; }
-    #photocraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-    #photocraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 0 16px; text-align: center; color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
-    #photocraft_loading p { margin: 0 0 8px; max-width: 420px; line-height: 1.5; }
-    #photocraft_loading a { color: #e0e0e0; pointer-events: auto; }
-    /* The app removes this element once it runs. If the WebAssembly never downloads or doesn't match
-       this page, no Rust runs to say so, so the page itself shows what to do after a while. */
-    #photocraft_stalled { color: #8c8c8c; visibility: hidden; animation: photocraft-stalled 0s 20s forwards; }
-    @keyframes photocraft-stalled { to { visibility: visible; } }
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: #1a1a1a; color: #e6e6e6; }
+    header { padding: 48px 24px 24px; text-align: center; }
+    header h1 { margin: 0 0 8px; font-size: 2rem; }
+    header p { margin: 0; color: #9a9a9a; max-width: 640px; margin-inline: auto; line-height: 1.5; }
+    main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .tile { display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 12px;
+      background: #262626; color: #e6e6e6; text-decoration: none; border: 1px solid #333;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease; }
+    .tile:hover { transform: translateY(-2px); border-color: #5a5a5a; background: #2d2d2d; }
+    .tile img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; }
+    .tile .icon-fallback { width: 48px; height: 48px; border-radius: 10px; display: flex;
+      align-items: center; justify-content: center; background: #3a3a3a; font-weight: 700; font-size: 1.2rem; }
+    .tile h2 { margin: 0; font-size: 1.1rem; }
+    .tile p { margin: 0; color: #9a9a9a; font-size: .9rem; line-height: 1.4; }
+    footer { text-align: center; padding: 32px 24px; color: #666; font-size: .85rem; }
   </style>
-<link rel="modulepreload" href="./photocraft-web-boot-26446d01b24367d7.js" crossorigin="anonymous" integrity="sha384-bKNnM95MRur848JPCyB/pG9dfkBVcH3w1J1C+AW0Hy0Ygn7rngPZZAzEyEDKlqaC"><link rel="preload" href="./photocraft-web-boot-26446d01b24367d7_bg.wasm" crossorigin="anonymous" integrity="sha384-BxN71AMCpagQ2yPY2ZFYrsdGH1EUDfmpzDgMgG6Ph4MguQVL7wALe0AC7mRcHT7a" as="fetch" type="application/wasm"></head>
+</head>
 <body>
-  <canvas id="photocraft_canvas"></canvas>
-  <div id="photocraft_loading">
-    <p>Loading PhotoCraft&hellip;</p>
-    <p id="photocraft_stalled">This is taking longer than usual. If PhotoCraft doesn't start, its files may have failed to
-      download or come from a different version of this page. <a href="">Reload</a> to try again; the browser
-      console lists what failed.</p>
-  </div>
+  <header>
+    <h1>Craft Apps</h1>
+    <p>Open-source creative tools from ArtCraft, running in your browser. Pick a craft to launch it.</p>
+  </header>
+  <main>
+    <div class="grid">
+      <a class="tile" href="./photocraft/">
+        <img src="./icons/photocraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>P</div>'">
+        <h2>PhotoCraft</h2>
+        <p>Image editor</p>
+      </a>
+      <a class="tile" href="./vectorcraft/">
+        <img src="./icons/vectorcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>V</div>'">
+        <h2>VectorCraft</h2>
+        <p>Vector illustration</p>
+      </a>
+      <a class="tile" href="./filmcraft/">
+        <img src="./icons/filmcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>F</div>'">
+        <h2>FilmCraft</h2>
+        <p>Video editor</p>
+      </a>
+      <a class="tile" href="./lightcraft/">
+        <img src="./icons/lightcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>L</div>'">
+        <h2>LightCraft</h2>
+        <p>Photo library & raw developer</p>
+      </a>
+      <a class="tile" href="./pdfcraft/">
+        <img src="./icons/pdfcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>P</div>'">
+        <h2>PdfCraft</h2>
+        <p>PDF workbench</p>
+      </a>
+      <a class="tile" href="./effectcraft/">
+        <img src="./icons/effectcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>E</div>'">
+        <h2>EffectCraft</h2>
+        <p>Motion graphics & VFX</p>
+      </a>
+      <a class="tile" href="./designcraft/">
+        <img src="./icons/designcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>D</div>'">
+        <h2>DesignCraft</h2>
+        <p>Page layout & publishing</p>
+      </a>
+      <a class="tile" href="./figcraft/">
+        <img src="./icons/figcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>F</div>'">
+        <h2>FigCraft</h2>
+        <p>Interface design</p>
+      </a>
+      <a class="tile" href="./wordcraft/">
+        <img src="./icons/wordcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>W</div>'">
+        <h2>WordCraft</h2>
+        <p>Word processing</p>
+      </a>
+      <a class="tile" href="./soundcraft/">
+        <img src="./icons/soundcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>S</div>'">
+        <h2>SoundCraft</h2>
+        <p>Digital audio workstation</p>
+      </a>
+      <a class="tile" href="./deckcraft/">
+        <img src="./icons/deckcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>D</div>'">
+        <h2>DeckCraft</h2>
+        <p>Presentations & slide shows</p>
+      </a>
+      <a class="tile" href="./cadcraft/">
+        <img src="./icons/cadcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>C</div>'">
+        <h2>CADCraft</h2>
+        <p>Computer-aided design & drafting</p>
+      </a>
+      <a class="tile" href="./gridcraft/">
+        <img src="./icons/gridcraft.webp" alt="" onerror="this.outerHTML='<div class=&quot;icon-fallback&quot;>G</div>'">
+        <h2>GridCraft</h2>
+        <p>Spreadsheets & data analysis</p>
+      </a>
+    </div>
+  </main>
+  <footer>Craft Apps web builds, auto-updated from GitHub releases.</footer>
 </body>
 </html>

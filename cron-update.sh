@@ -13,7 +13,7 @@
 set -Eeuo pipefail
 
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-VERSION_FILE="$ROOT_DIR/.photocraft-version"
+VERSION_FILE="$ROOT_DIR/.craft-versions"
 cd "$ROOT_DIR"
 
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"; }
@@ -32,7 +32,7 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1 || die "$ROOT_DIR is not a g
 git config user.name >/dev/null 2>&1 || die "git user.name is not configured"
 git config user.email >/dev/null 2>&1 || die "git user.email is not configured"
 git remote get-url origin >/dev/null 2>&1 || die "git remote 'origin' is not configured"
-[[ -x "$ROOT_DIR/update-photocraft.sh" ]] || die "update-photocraft.sh is missing or not executable"
+[[ -x "$ROOT_DIR/update-crafts.sh" ]] || die "update-crafts.sh is missing or not executable"
 
 BRANCH="$(git symbolic-ref --quiet --short HEAD)" || die "HEAD is detached; check out a branch"
 [[ -n "$BRANCH" ]] || die "could not determine the current branch"
@@ -56,8 +56,8 @@ read_meta() {
 }
 OLD_META="$(read_meta)"
 
-log "Checking for a new PhotoCraft release"
-"$ROOT_DIR/update-photocraft.sh"
+log "Checking for new Craft releases"
+"$ROOT_DIR/update-crafts.sh"
 
 # The update script always refreshes the "updated" timestamp. If the release
 # metadata is unchanged, restore the old file so cron does not commit daily.
@@ -80,7 +80,7 @@ if git diff --cached --quiet; then
 fi
 
 log "Committing PhotoCraft $TAG"
-git commit -m "Update PhotoCraft web to $TAG"
+git commit -m "Update Craft apps web"
 
 log "Pushing to origin/$BRANCH"
 if ! git push origin "$BRANCH"; then
@@ -89,4 +89,4 @@ if ! git push origin "$BRANCH"; then
   git push origin "$BRANCH"
 fi
 
-log "Update complete: PhotoCraft $TAG pushed to origin/$BRANCH"
+log "Update complete: Craft apps pushed to origin/$BRANCH"

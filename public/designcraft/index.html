@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DesignCraft</title>
+  
+<script type="module">
+import init, * as bindings from './designcraft-web-cde38bce80cd31cc.js';
+const wasm = await init({ module_or_path: './designcraft-web-cde38bce80cd31cc_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #262626; }
+    #designcraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+    #designcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
+  </style>
+<link rel="modulepreload" href="./designcraft-web-cde38bce80cd31cc.js" crossorigin="anonymous" integrity="sha384-Ratgt//DXVEnbIl3A8l2QCYjVj3k9d4hJPYjY+Y0fOLjFSUc+NW/GVYVttbCddmz"><link rel="preload" href="./designcraft-web-cde38bce80cd31cc_bg.wasm" crossorigin="anonymous" integrity="sha384-MxrcDwsg82FhmOvLRKp6+uFATL2rYNajxeQjEqFV7c9xcp05/6RBvgy2SISAEwX8" as="fetch" type="application/wasm"></head>
+<body>
+  <canvas id="designcraft_canvas"></canvas>
+  <div id="designcraft_loading">Loading DesignCraft&hellip;</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CADCraft</title>
+  
+<script type="module">
+import init, * as bindings from './cadcraft-web-7bafe71856542993.js';
+const wasm = await init({ module_or_path: './cadcraft-web-7bafe71856542993_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #22282f; }
+    #cadcraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    #cadcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
+  </style>
+<link rel="modulepreload" href="./cadcraft-web-7bafe71856542993.js" crossorigin="anonymous" integrity="sha384-q/4gj+ZEU3GyZD4u1WkFYDQDHksr4/P53yNnHbp7fgNG7W+P/SvUYIec9tWcgRAl"><link rel="preload" href="./cadcraft-web-7bafe71856542993_bg.wasm" crossorigin="anonymous" integrity="sha384-bZ9BCMYvUBczKA4qv2G+NO7jpVns23x0u7atPS8ecbOgkl2NSo5PfTopH3PZ9mIO" as="fetch" type="application/wasm"></head>
+<body>
+  <canvas id="cadcraft_canvas"></canvas>
+  <div id="cadcraft_loading">Loading CADCraft&hellip;</div>
+</body>
+</html>

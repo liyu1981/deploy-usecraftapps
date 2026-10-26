@@ -11,3 +11,7 @@ node_modules/
 
 # Downloaded release archives
 *.zip
+
+# Update-script temporary files
+.crafts-old.*
+.craft-versions.tmp

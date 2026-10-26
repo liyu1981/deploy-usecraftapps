@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>FigCraft</title>
+  
+<script type="module">
+import init, * as bindings from './figcraft-web-35be6ae751d59892.js';
+const wasm = await init({ module_or_path: './figcraft-web-35be6ae751d59892_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #f5f5f5; }
+    #figcraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    #figcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #6b6b6b; font: 14px system-ui, sans-serif; pointer-events: none; }
+    @media (prefers-color-scheme: dark) {
+      html, body { background: #2c2c2c; }
+      #figcraft_loading { color: #b8b8b8; }
+    }
+  </style>
+<link rel="modulepreload" href="./figcraft-web-35be6ae751d59892.js" crossorigin="anonymous" integrity="sha384-q/+oX9wtZGD8++Mu5QRd421WYKsIHG2a0w/b8p3UjqmtD+EJqgJ1IyNZtCZQb1VX"><link rel="preload" href="./figcraft-web-35be6ae751d59892_bg.wasm" crossorigin="anonymous" integrity="sha384-Rwn4PlUXJFWA6uQxSluesi5YD2RKOEpCqWMl7uMeD/2tRAPA+BgfkC56XotCKqMM" as="fetch" type="application/wasm"></head>
+<body>
+  <canvas id="figcraft_canvas"></canvas>
+  <div id="figcraft_loading">Loading FigCraft&hellip;</div>
+</body>
+</html>
