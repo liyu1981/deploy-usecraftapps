@@ -20,7 +20,7 @@ log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33mwarning:\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 
-for cmd in curl unzip find cp mv rm mkdir grep sed python3; do
+for cmd in curl unzip find cp mv rm mkdir grep sed python3 patch; do
   command -v "$cmd" >/dev/null 2>&1 || die "required command not found: $cmd"
 done
 
@@ -97,6 +97,7 @@ DESCS=()
 SHORTS=()
 LONGS=()
 STATUSES=()
+TAGS=()
 while IFS= read -r line; do
   line="${line%%#*}"
   line="$(printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
@@ -238,6 +239,27 @@ for i in "${!SLUGS[@]}"; do
   mkdir -p "$DEST"
   cp -a "$SRC_DIR/." "$DEST/"
 
+  # Apply per-app patches (PWA icons, manifest, index.html tweaks) so they
+  # survive regeneration from upstream releases.
+  PATCH_DIR="$ROOT_DIR/patches/$slug"
+  if [[ -d "$PATCH_DIR" ]]; then
+    for pf in "$PATCH_DIR"/*; do
+      [[ -e "$pf" ]] || continue
+      case "$(basename "$pf")" in
+        *.patch) ;;
+        *) cp -a "$pf" "$DEST/" ;;
+      esac
+    done
+    for pf in "$PATCH_DIR"/*.patch; do
+      [[ -e "$pf" ]] || continue
+      if (cd "$DEST" && patch -p3 --forward --no-backup-if-mismatch < "$pf" >/dev/null 2>&1); then
+        :
+      else
+        warn "could not apply patch $pf for $slug"
+      fi
+    done
+  fi
+
   if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.webp" \
       "https://getartcraft.com/images/apps/$slug/icon.webp" 2>/dev/null; then
     :
@@ -262,6 +284,7 @@ for i in "${!SLUGS[@]}"; do
   fi
 
   META_LINES+=("$slug=$TAG sha256=$SHA256")
+  TAGS+=("$TAG")
   rm -f "$STAGE_TMP/$ASSET" "$STAGE_TMP/SHA256SUMS.txt"
 done
 
@@ -479,6 +502,7 @@ HTML
     cat="${DESCS[$i]}"
     long="${LONGS[$i]}"
     status_code="${STATUSES[$i]}"
+    tag="${TAGS[$i]}"
     if [[ "$status_code" == "early" ]]; then status_label="Early alpha"; else status_label="In development"; fi
     num=$(printf '%02d' $((i+1)))
     printf '      <a class="card" href="./%s/">\n' "$slug"
@@ -490,7 +514,7 @@ HTML
     printf '</div>\n'
     printf '        <div class="card-body">\n'
     printf '          <img class="card-icon" src="./icons/%s.webp" alt="%s" onerror="this.style.display='\''none'\''">\n' "$slug" "$name"
-    printf '          <h3 class="card-title">%s <span class="card-version">%s</span></h3>\n' "$name" "$TAG"
+    printf '          <h3 class="card-title">%s <span class="card-version">%s</span></h3>\n' "$name" "$tag"
     printf '          <p class="card-desc">%s</p>\n' "$long"
     printf '          <div class="badges"><span class="badge status">%s</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>\n' "$status_label"
     printf '          <span class="launch">Launch %s →</span>\n' "$name"

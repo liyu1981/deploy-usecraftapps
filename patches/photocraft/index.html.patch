@@ -1,0 +1,15 @@
+diff --git a/public/photocraft/index.html b/public/photocraft/index.html
+index 6b52457..5083f7b 100644
+--- a/public/photocraft/index.html
++++ b/public/photocraft/index.html
+@@ -4,6 +4,10 @@
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+   <title>PhotoCraft</title>
++
++<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
++<link rel="apple-touch-icon" href="icon-192.png">
++<link rel="manifest" href="manifest.json">
+   
+ <script type="module">
+ import init, * as bindings from './photocraft-web-boot-e4e0960659fc7450.js';

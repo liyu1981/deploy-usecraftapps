@@ -1,0 +1,15 @@
+diff --git a/public/cadcraft/index.html b/public/cadcraft/index.html
+index bcb65d8..ae085c8 100644
+--- a/public/cadcraft/index.html
++++ b/public/cadcraft/index.html
+@@ -4,6 +4,10 @@
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>CADCraft</title>
++
++<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
++<link rel="apple-touch-icon" href="icon-192.png">
++<link rel="manifest" href="manifest.json">
+   
+ <script type="module">
+ import init, * as bindings from './cadcraft-web-7bafe71856542993.js';

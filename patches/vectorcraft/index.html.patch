@@ -1,0 +1,15 @@
+diff --git a/public/vectorcraft/index.html b/public/vectorcraft/index.html
+index 7b2f3c1..9b1d560 100644
+--- a/public/vectorcraft/index.html
++++ b/public/vectorcraft/index.html
+@@ -9,6 +9,10 @@
+   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+   <meta name="theme-color" content="#262626">
+   <title>VectorCraft</title>
++
++<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
++<link rel="apple-touch-icon" href="icon-192.png">
++<link rel="manifest" href="manifest.json">
+   
+ <script type="module">
+ import init, * as bindings from './vectorcraft-web-98b60c6dd6d6b89f.js';

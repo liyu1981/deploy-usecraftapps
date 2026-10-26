@@ -1,0 +1,16 @@
+diff --git a/public/pdfcraft/index.html b/public/pdfcraft/index.html
+index 6abf16a..9bd5fe5 100644
+--- a/public/pdfcraft/index.html
++++ b/public/pdfcraft/index.html
+@@ -4,6 +4,11 @@
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <title>PdfCraft</title>
++
++<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
++<link rel="apple-touch-icon" href="icon-192.png">
++<link rel="manifest" href="manifest.json">
++    
+     
+ <script type="module">
+ import init, * as bindings from './pdfcraft-web-81b252c29472c32d.js';

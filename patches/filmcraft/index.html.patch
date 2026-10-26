@@ -1,0 +1,16 @@
+diff --git a/public/filmcraft/index.html b/public/filmcraft/index.html
+index e13bb6e..909477d 100644
+--- a/public/filmcraft/index.html
++++ b/public/filmcraft/index.html
+@@ -5,6 +5,11 @@
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="color-scheme" content="dark">
+   <title>FilmCraft</title>
++
++<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
++<link rel="apple-touch-icon" href="icon-192.png">
++<link rel="manifest" href="manifest.json">
++  
+   <link rel="icon" href="favicon.png" type="image/png">
+   <style>
+     html, body { margin: 0; height: 100%; overflow: hidden; background: #1b1c1f; }
