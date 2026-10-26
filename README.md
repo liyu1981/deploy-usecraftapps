@@ -6,7 +6,7 @@
 
 A static, self-hosted copy of the web builds of the [Craft Apps](https://getartcraft.com/apps)
 suite (PhotoCraft, VectorCraft, LightCraft, …), kept up to date from the official GitHub
-releases and ready to deploy on [Vercel](https://vercel.com/).
+releases and ready to self host or deploy on cloud (Vercel, Netlify, Cloudflare Pages, …).
 
 Each craft app's web build runs entirely in the browser (WebAssembly), so there is no
 backend, database, or build step. Vercel only has to serve the files in `public/`. The
@@ -16,12 +16,9 @@ landing page at `/` links to each app under its own subfolder (e.g. `/photocraft
 
 - [Repository layout](#repository-layout)
 - [Update to the latest releases](#update-to-the-latest-releases)
-- [Deploy on Vercel](#deploy-on-vercel)
+- [Self-hosting](#self-hosting)
+- [Self deploy](#self-deploy)
 - [Automated updates (cron)](#automated-updates-cron)
-- [Deploy on Netlify](#deploy-on-netlify)
-- [Deploy on Cloudflare Pages](#deploy-on-cloudflare-pages)
-- [Local preview](#local-preview)
-- [Self-hosting (Apache, nginx, …)](#self-hosting-apache-nginx-)
 - [License](#license)
 - [Upstream](#upstream)
 
@@ -63,9 +60,74 @@ git commit -m "Update Craft apps web"
 git push
 ```
 
-## Deploy on Vercel
+## Self-hosting
 
-### Option A — Vercel dashboard (recommended)
+Large binaries are stored with [Git LFS](https://git-lfs.com). After cloning, materialise
+them and serve the resulting `public/` folder:
+
+```sh
+git clone https://github.com/liyu1981/deploy-usecraftapps.git
+cd deploy-usecraftapps
+./prepare-public.sh          # pulls LFS objects into public/
+```
+
+`public/` is now a complete static site. Point any HTTP server at it.
+
+### Host with Apache or nginx
+
+Use `public/` as the document root. The per-app `.htaccess` files shipped in each
+subfolder handle MIME types and caching; make sure `AllowOverride` is enabled:
+
+```apache
+<VirtualHost *:80>
+    DocumentRoot /path/to/deploy-usecraftapps/public
+    <Directory /path/to/deploy-usecraftapps/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
+
+For nginx, serve the folder statically and set the WebAssembly MIME type (nginx may not
+include it by default):
+
+```nginx
+server {
+    listen 80;
+    root /path/to/deploy-usecraftapps/public;
+    location / {
+        try_files $uri $uri/ =404;
+    }
+    location ~* \.wasm$ {
+        types { application/wasm wasm; }
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+}
+```
+
+### Host with python3 or php
+
+For a quick local or small self-hosted server:
+
+```sh
+./dev.sh          # serves public/ on http://0.0.0.0:8765/
+./dev.sh 8080     # custom port
+```
+
+or directly:
+
+```sh
+python3 -m http.server 8765 --directory public
+php -S 0.0.0.0:8765 -t public
+```
+
+No build step is required; the site runs entirely in the browser.
+
+## Self deploy
+
+### Vercel
+
+#### Option A — Vercel dashboard (recommended)
 
 1. Push this repository to GitHub/GitLab/Bitbucket.
 2. In Vercel, choose **Add New → Project** and import the repository.
@@ -85,6 +147,48 @@ remaining pointers.
 Every push to the production branch redeploys automatically. To update the Craft apps later,
 run `./update-crafts.sh`, commit, and push.
 
+#### Option B — Vercel CLI
+
+The Vercel CLI uploads your local working tree, so materialise the LFS assets first:
+
+```sh
+./prepare-public.sh
+npm i -g vercel
+vercel          # preview deployment
+vercel --prod   # production deployment
+```
+
+#### Notes
+
+- `vercel.json` sets long-lived immutable caching for hashed assets and `no-cache` for
+  entry files such as `index.html`. Keep those headers if you customize the config.
+- The site must be served over HTTPS for WebGPU and clipboard access; Vercel provides HTTPS
+  automatically. Over plain HTTP the editors fall back to WebGL2.
+- No SPA rewrite/fallback is configured on purpose: missing files should return a real 404.
+- The upstream releases also include `_headers`, `.htaccess`, `README.md`, and `HOSTING.md`.
+  They are copied into each app's subfolder for reference and portability; Vercel ignores
+  `_headers` and `.htaccess`.
+
+### Netlify
+
+Use the included `netlify.toml`:
+
+- **Build command:** `bash prepare-public.sh`
+- **Publish directory:** `public`
+- Set `GIT_LFS_ENABLED=true` in the Netlify site settings (it must be set in the UI,
+  not only in `netlify.toml`, so it is available before clone). `prepare-public.sh`
+  also pulls LFS objects as a fallback.
+
+### Cloudflare Pages
+
+Use the included `wrangler.toml`:
+
+- **Build command:** `bash prepare-public.sh`
+- **Build output directory:** `public`
+- `prepare-public.sh` installs `git-lfs` if it is missing and materializes the LFS
+  assets. Cloudflare Pages has a 25 MB per-file limit; files above that are served
+  through Git LFS pointers and may require an LFS client worker for direct serving.
+
 ## Automated updates (cron)
 
 `cron-update.sh` pulls `origin`, checks for new Craft releases, commits the result, and
@@ -96,110 +200,6 @@ install it with `crontab -e` (adjust the path; this runs daily at 04:00):
 ```
 
 Each push triggers a new Vercel deployment automatically.
-
-### Option B — Vercel CLI
-
-The Vercel CLI uploads your local working tree, so materialise the LFS assets first:
-
-```sh
-./prepare-public.sh
-npm i -g vercel
-vercel          # preview deployment
-vercel --prod   # production deployment
-```
-
-### Notes
-
-- `vercel.json` sets long-lived immutable caching for hashed assets and `no-cache` for
-  entry files such as `index.html`. Keep those headers if you customize the config.
-- The site must be served over HTTPS for WebGPU and clipboard access; Vercel provides HTTPS
-  automatically. Over plain HTTP the editors fall back to WebGL2.
-- No SPA rewrite/fallback is configured on purpose: missing files should return a real 404.
-- The upstream releases also include `_headers`, `.htaccess`, `README.md`, and `HOSTING.md`.
-  They are copied into each app's subfolder for reference and portability; Vercel ignores
-  `_headers` and `.htaccess`.
-
-## Deploy on Netlify
-
-Use the included `netlify.toml`:
-
-- **Build command:** `bash prepare-public.sh`
-- **Publish directory:** `public`
-- Set `GIT_LFS_ENABLED=true` in the Netlify site settings (it must be set in the UI,
-  not only in `netlify.toml`, so it is available before clone). `prepare-public.sh`
-  also pulls LFS objects as a fallback.
-
-## Deploy on Cloudflare Pages
-
-Use the included `wrangler.toml`:
-
-- **Build command:** `bash prepare-public.sh`
-- **Build output directory:** `public`
-- `prepare-public.sh` installs `git-lfs` if it is missing and materializes the LFS
-  assets. Cloudflare Pages has a 25 MB per-file limit; files above that are served
-  through Git LFS pointers and may require an LFS client worker for direct serving.
-
-## Local preview
-
-```sh
-./dev.sh          # serves public/ on http://0.0.0.0:8765/
-./dev.sh 8080     # custom port
-```
-
-or directly:
-
-```sh
-python3 -m http.server 8765 --directory public
-```
-
-## Self-hosting (Apache, nginx, …)
-
-Large binaries are stored with [Git LFS](https://git-lfs.com). After cloning, materialise
-them and serve the resulting `public/` folder:
-
-```sh
-git clone https://github.com/liyu1981/deploy-photocraftweb.git
-cd deploy-photocraftweb
-./prepare-public.sh          # pulls LFS objects into public/
-```
-
-`public/` is now a complete static site. Point any HTTP server at it.
-
-### Apache
-
-Use `public/` as the document root. The per-app `.htaccess` files shipped in each
-subfolder handle MIME types and caching; make sure `AllowOverride` is enabled:
-
-```apache
-<VirtualHost *:80>
-    DocumentRoot /path/to/deploy-photocraftweb/public
-    <Directory /path/to/deploy-photocraftweb/public>
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
-
-### nginx
-
-Serve the folder statically and set the WebAssembly MIME type (nginx may not include it
-by default):
-
-```nginx
-server {
-    listen 80;
-    root /path/to/deploy-photocraftweb/public;
-    location / {
-        try_files $uri $uri/ =404;
-    }
-    location ~* \.wasm$ {
-        types { application/wasm wasm; }
-        add_header Cache-Control "public, max-age=31536000, immutable";
-    }
-}
-```
-
-No build step is required; the site runs entirely in the browser.
 
 ## License
 
