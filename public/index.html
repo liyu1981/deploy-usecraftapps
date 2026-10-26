@@ -13,7 +13,7 @@
       color-scheme: light;
     }
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme]) {
         --bg:#121316; --bg-raised:#101014; --bg-sunken:#060607;
         --ink:#f2f1ee; --ink-strong:#fff; --muted:#f2f1ee99; --faint:#f2f1ee61;
         --line:#f2f1ee26; --line-strong:#f2f1ee66; --accent:#2d81ff; --accent-ink:#74aaff;
@@ -21,10 +21,31 @@
         color-scheme: dark;
       }
     }
+    :root[data-theme="dark"] {
+      --bg:#121316; --bg-raised:#101014; --bg-sunken:#060607;
+      --ink:#f2f1ee; --ink-strong:#fff; --muted:#f2f1ee99; --faint:#f2f1ee61;
+      --line:#f2f1ee26; --line-strong:#f2f1ee66; --accent:#2d81ff; --accent-ink:#74aaff;
+      --invert-bg:#fff; --invert-fg:#0b0b0c;
+      color-scheme: dark;
+    }
+    :root[data-theme="light"] {
+      color-scheme: light;
+    }
     * { box-sizing: border-box; }
     body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       background: var(--bg); color: var(--ink); }
     a { color: inherit; text-decoration: none; }
+    .site-header { border-bottom: 1px solid var(--line); background: var(--bg);
+      position: sticky; top: 0; z-index: 50; }
+    .site-header-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px;
+      height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .site-title { font-weight: 600; letter-spacing: -.02em; color: var(--ink-strong);
+      font-size: 1.05rem; }
+    .theme-btn { display: inline-flex; align-items: center; gap: 6px; height: 32px;
+      padding: 0 12px; border: 1px solid var(--line-strong); background: var(--bg);
+      color: var(--ink); font-family: ui-monospace, monospace; font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+    .theme-btn:hover { border-color: var(--ink); }
     .frame { max-width: 1280px; margin: 0 auto; border-left: 1px solid var(--line);
       border-right: 1px solid var(--line); position: relative; }
     .inner { padding: 0 24px; }
@@ -127,6 +148,12 @@
   </style>
 </head>
 <body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <span class="site-title">Craft Apps</span>
+      <button id="theme-toggle" class="theme-btn" type="button" aria-label="Toggle theme">Theme</button>
+    </div>
+  </header>
   <div class="frame">
     <div class="top-rule"></div>
     <span class="tick tick-half" style="top:-5px;left:-6px;"></span>
@@ -331,5 +358,28 @@
     <a href="https://github.com/liyu1981/deploy-photocraftweb" target="_blank" rel="noopener">github.com/liyu1981/deploy-photocraftweb</a>
   </footer>
   </div>
+  <script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+    function isDark() {
+      var t = root.getAttribute('data-theme');
+      if (t === 'dark') return true;
+      if (t === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    function sync() { btn.textContent = isDark() ? 'Light' : 'Dark'; }
+    btn.addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      sync();
+    });
+    sync();
+  })();
+  </script>
 </body>
 </html>
