@@ -45,6 +45,10 @@ if [[ -z "$REMOTE_URL" ]]; then
   REMOTE_URL="https://github.com/liyu1981/deploy-usecraftapps.git"
 fi
 
+# Ensure LFS smudge/clean filters are configured in this checkout (Vercel
+# build images ship the binary but may not have run `git lfs install`).
+git lfs install --local >/dev/null 2>&1 || git lfs install >/dev/null 2>&1 || true
+
 git lfs pull "$REMOTE_URL"
 
 # Make sure no LFS pointer files are left behind in the served folder.
