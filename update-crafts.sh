@@ -73,6 +73,17 @@ done < "$CONFIG_FILE"
 
 [[ ${#SLUGS[@]} -gt 0 ]] || die "no apps found in $CONFIG_FILE"
 
+# Detect apps listed on getartcraft.com/apps that are not yet in crafts.txt.
+if REMOTE_APPS="$(curl -fsSL https://getartcraft.com/apps 2>/dev/null)"; then
+  while IFS= read -r remote_slug; do
+    [[ -z "$remote_slug" ]] && continue
+    if ! grep -q "^${remote_slug} " "$CONFIG_FILE" 2>/dev/null; then
+      warn "New app detected on getartcraft.com/apps: ${remote_slug} (add it to crafts.txt)"
+    fi
+  done < <(printf '%s\n' "$REMOTE_APPS" \
+    | grep -oE '/apps/[a-z0-9-]+' | sed 's#^/apps/##' | sort -u)
+fi
+
 app_index() {
   local target="$1" i
   for i in "${!SLUGS[@]}"; do
