@@ -30,7 +30,27 @@ if [[ ! -d public ]]; then
 fi
 
 echo "Pulling Git LFS assets into ./public ..."
-git lfs pull
+
+# Vercel (and other CI) checkouts may be detached or lack a usable "origin"
+# remote, so do not rely on `git lfs pull`'s default remote. Fetch the LFS
+# objects from an explicit URL/branch instead.
+BRANCH="${VERCEL_GIT_COMMIT_REF:-$(git symbolic-ref --quiet --short HEAD 2>/dev/null || true)}"
+[[ -n "$BRANCH" ]] || BRANCH="main"
+
+REMOTE_URL="$(git config --get remote.origin.url 2>/dev/null || true)"
+if [[ -z "$REMOTE_URL" && -n "${VERCEL_GIT_REPO_OWNER:-}" && -n "${VERCEL_GIT_REPO_SLUG:-}" ]]; then
+  REMOTE_URL="https://github.com/${VERCEL_GIT_REPO_OWNER}/${VERCEL_GIT_REPO_SLUG}.git"
+fi
+# Convert SSH URLs to HTTPS so anonymous fetch works in CI.
+if [[ "$REMOTE_URL" == git@github.com:* ]]; then
+  REMOTE_URL="https://github.com/${REMOTE_URL#git@github.com:}"
+fi
+if [[ -z "$REMOTE_URL" ]]; then
+  REMOTE_URL="https://github.com/liyu1981/deploy-usecraftapps.git"
+fi
+
+git lfs fetch "$REMOTE_URL" "$BRANCH"
+git lfs checkout
 
 # Make sure no LFS pointer files are left behind in the served folder.
 POINTERS="$(grep -rl 'version https://git-lfs.github.com/spec/v1' public 2>/dev/null || true)"
