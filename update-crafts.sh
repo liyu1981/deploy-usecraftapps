@@ -481,6 +481,41 @@ HTML
 HTML
 } > "$INDEX"
 
+# Generate _headers for Netlify/Cloudflare Pages.
+HEADERS_FILE="$STAGE_PUBLIC/_headers"
+cat > "$HEADERS_FILE" <<'HEADERS'
+/*
+  X-Content-Type-Options: nosniff
+
+/*.wasm
+  Content-Type: application/wasm
+
+/
+  Cache-Control: no-cache
+
+/index.html
+  Cache-Control: no-cache
+
+/*/index.html
+  Cache-Control: no-cache
+
+/*/app/*-web.js
+  Cache-Control: no-cache
+
+/*/app/parts.txt
+  Cache-Control: no-cache
+
+/*/app/*.part-*
+  Content-Type: application/octet-stream
+  Cache-Control: public, max-age=31536000, immutable
+
+/*-web-boot-*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*/fonts/manifest.txt
+  Cache-Control: no-cache
+HEADERS
+
 # Write version metadata.
 printf '%s\n' "${META_LINES[@]}" > "$VERSIONS_FILE.tmp"
 
