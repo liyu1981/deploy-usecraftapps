@@ -108,15 +108,52 @@ python3 -m http.server 8765 --directory public
 
 ## Self-hosting (Apache, nginx, …)
 
-Large binaries are stored with [Git LFS](https://git-lfs.com). After cloning, run:
+Large binaries are stored with [Git LFS](https://git-lfs.com). After cloning, materialise
+them and serve the resulting `public/` folder:
 
 ```sh
-./prepare-public.sh   # pulls LFS objects into public/
+git clone https://github.com/liyu1981/deploy-photocraftweb.git
+cd deploy-photocraftweb
+./prepare-public.sh          # pulls LFS objects into public/
 ```
 
-Then point your web server's document root at `public/`. The upstream releases already
-include per-app `.htaccess` files for Apache; for nginx, serve the files statically and
-ensure `.wasm` is sent as `application/wasm`.
+`public/` is now a complete static site. Point any HTTP server at it.
+
+### Apache
+
+Use `public/` as the document root. The per-app `.htaccess` files shipped in each
+subfolder handle MIME types and caching; make sure `AllowOverride` is enabled:
+
+```apache
+<VirtualHost *:80>
+    DocumentRoot /path/to/deploy-photocraftweb/public
+    <Directory /path/to/deploy-photocraftweb/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
+
+### nginx
+
+Serve the folder statically and set the WebAssembly MIME type (nginx may not include it
+by default):
+
+```nginx
+server {
+    listen 80;
+    root /path/to/deploy-photocraftweb/public;
+    location / {
+        try_files $uri $uri/ =404;
+    }
+    location ~* \.wasm$ {
+        types { application/wasm wasm; }
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+}
+```
+
+No build step is required; the site runs entirely in the browser.
 
 ## Upstream
 
