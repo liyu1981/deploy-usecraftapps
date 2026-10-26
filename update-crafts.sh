@@ -253,7 +253,8 @@ INDEX="$STAGE_PUBLIC/index.html"
     .site-header { border-bottom: 1px solid var(--line); background: var(--bg);
       position: sticky; top: 0; z-index: 50; }
     .site-header-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px;
-      height: 56px; display: flex; align-items: center; justify-content: space-between; }
+      height: 56px; display: flex; align-items: center; justify-content: space-between;
+      border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
     .site-title { font-weight: 600; letter-spacing: -.02em; color: var(--ink-strong);
       font-size: 1.05rem; }
     .theme-btn { display: inline-flex; align-items: center; gap: 6px; height: 32px;
@@ -402,8 +403,8 @@ HTML
   </section>
 
   <div class="sticky-bar">
-    <span class="tick tick-half" style="bottom:-5px;left:-6px;"></span>
-    <span class="tick tick-half" style="bottom:-5px;right:-6px;"></span>
+    <span class="tick tick-half" style="top:-5px;left:-6px;"></span>
+    <span class="tick tick-half" style="top:-5px;right:-6px;"></span>
     <div class="sticky-inner">
       <p class="sticky-title"><span class="num">02</span> / The lineup</p>
       <p class="sticky-sub">Pick a craft to explore</p>
