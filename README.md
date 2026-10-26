@@ -150,11 +150,12 @@ Use the included `netlify.toml`:
 
 Use the included `wrangler.toml`:
 
-- **Build command:** `bash prepare-public.sh`
-- **Build output directory:** `public`
-- `prepare-public.sh` installs `git-lfs` if it is missing and materializes the LFS
-  assets. Cloudflare Pages has a 25 MB per-file limit; files above that are served
-  through Git LFS pointers and may require an LFS client worker for direct serving.
+- **Build command:** `bash prepare-cloudflare.sh`
+- **Build output directory:** `workspace/public`
+- `prepare-cloudflare.sh` materializes the LFS assets, copies them into the
+  gitignored `workspace/public/` folder, splits any `*_bg.wasm` above 20 MB into
+  chunks, and installs a client-side stitching bootstrap. This keeps every file
+  under Cloudflare Pages' 25 MB per-file limit without using R2 or Functions.
 
 ## Repository layout
 

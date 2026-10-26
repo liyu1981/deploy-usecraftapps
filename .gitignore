@@ -15,3 +15,6 @@ node_modules/
 # Update-script temporary files
 .crafts-old.*
 .craft-versions.tmp
+
+# Cloudflare Pages prepared output (derived, not committed)
+workspace/
