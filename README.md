@@ -106,6 +106,26 @@ vercel --prod   # production deployment
   They are copied into each app's subfolder for reference and portability; Vercel ignores
   `_headers` and `.htaccess`.
 
+## Deploy on Netlify
+
+Use the included `netlify.toml`:
+
+- **Build command:** `bash prepare-public.sh`
+- **Publish directory:** `public`
+- Set `GIT_LFS_ENABLED=true` in the Netlify site settings (it must be set in the UI,
+  not only in `netlify.toml`, so it is available before clone). `prepare-public.sh`
+  also pulls LFS objects as a fallback.
+
+## Deploy on Cloudflare Pages
+
+Use the included `wrangler.toml`:
+
+- **Build command:** `bash prepare-public.sh`
+- **Build output directory:** `public`
+- `prepare-public.sh` installs `git-lfs` if it is missing and materializes the LFS
+  assets. Cloudflare Pages has a 25 MB per-file limit; files above that are served
+  through Git LFS pointers and may require an LFS client worker for direct serving.
+
 ## Local preview
 
 ```sh

@@ -19,7 +19,18 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 if ! command -v git-lfs >/dev/null 2>&1; then
-  echo "error: git-lfs is required but was not found." >&2
+  echo "git-lfs not found; attempting to install it for this build environment..." >&2
+  if command -v apt-get >/dev/null 2>&1; then
+    apt-get update >/dev/null 2>&1 || true
+    apt-get install -y git-lfs >/dev/null 2>&1 || true
+  elif command -v apk >/dev/null 2>&1; then
+    apk add --no-cache git-lfs >/dev/null 2>&1 || true
+  elif command -v yum >/dev/null 2>&1; then
+    yum install -y git-lfs >/dev/null 2>&1 || true
+  fi
+fi
+if ! command -v git-lfs >/dev/null 2>&1; then
+  echo "error: git-lfs is required but could not be installed." >&2
   echo "Install it (https://git-lfs.com) and re-run this script." >&2
   exit 1
 fi

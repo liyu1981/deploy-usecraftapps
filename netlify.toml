@@ -2,6 +2,11 @@
   command = "bash prepare-public.sh"
   publish = "public"
 
+[build.environment]
+  GIT_LFS_ENABLED = "true"
+  # Needed before clone on Netlify; also set this in the site UI for it to take effect.
+  GIT_LFS_FETCH_INCLUDE = "*"
+
 [[headers]]
   for = "/*"
   [headers.values]

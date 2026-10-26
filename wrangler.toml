@@ -1,3 +1,8 @@
 name = "use-craft-apps"
 pages_build_output_dir = "public"
 compatibility_date = "2026-10-26"
+
+# Cloudflare Pages build settings (set in dashboard or via Wrangler):
+#   Build command: bash prepare-public.sh
+#   Build output directory: public
+# prepare-public.sh installs git-lfs when needed and materializes LFS assets.
