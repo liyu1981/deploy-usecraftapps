@@ -269,13 +269,17 @@ INDEX="$STAGE_PUBLIC/index.html"
       display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 20px; } }
     .icon-tile { display: flex; flex-direction: column; align-items: center; gap: 6px;
       width: 72px; }
+    @media (min-width: 640px) { .icon-tile { width: 80px; } }
     .icon-tile img { width: 56px; height: 56px; border-radius: 12px; object-fit: cover;
       box-shadow: 0 6px 14px rgba(0,0,0,.2); transition: transform .25s ease; }
+    @media (min-width: 640px) { .icon-tile img { width: 80px; height: 80px; } }
     .icon-tile:hover img { transform: translateY(-4px); }
     .icon-tile .fallback { width: 56px; height: 56px; border-radius: 12px; display: flex;
       align-items: center; justify-content: center; background: var(--invert-bg);
       color: var(--invert-fg); font-weight: 700; font-size: 1.3rem; }
-    .icon-tile span { font-size: 11px; color: var(--muted); }
+    @media (min-width: 640px) { .icon-tile .fallback { width: 80px; height: 80px; } }
+    .icon-tile span { font-size: 12px; font-weight: 500; color: var(--muted); }
+    .icon-tile:hover span { color: var(--accent-ink); }
 
     /* Section 02 */
     .sticky-bar { position: sticky; top: 0; z-index: 30; border-top: 1px solid var(--line);
@@ -302,7 +306,8 @@ INDEX="$STAGE_PUBLIC/index.html"
     .card-cat { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .1em;
       text-transform: uppercase; color: var(--faint); white-space: nowrap; overflow: hidden;
       text-overflow: ellipsis; }
-    .card-hero { aspect-ratio: 16/10; overflow: hidden; background: var(--bg-sunken); position: relative; }
+    .card-hero { aspect-ratio: 16/10; overflow: hidden; background: var(--bg-sunken); position: relative; z-index: 1; }
+    .card-icon { position: relative; z-index: 2; }
     .card-hero img { width: 100%; height: 100%; object-fit: cover; display: block;
       transition: transform .5s ease; }
     .card:hover .card-hero img { transform: scale(1.03); }
@@ -397,6 +402,7 @@ HTML
   <footer>
     Craft Apps web builds, auto-updated from GitHub releases.
     &nbsp;·&nbsp;
+    Deployed with
     <a href="https://github.com/liyu1981/deploy-photocraftweb" target="_blank" rel="noopener">github.com/liyu1981/deploy-photocraftweb</a>
   </footer>
 </body>
