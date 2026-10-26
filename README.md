@@ -54,10 +54,16 @@ git push
 2. In Vercel, choose **Add New → Project** and import the repository.
 3. Configure:
    - **Framework Preset:** Other
-   - **Build Command:** leave empty
+   - **Build Command:** `bash prepare-public.sh` (also set in `vercel.json`)
    - **Output Directory:** `public` (also set in `vercel.json`)
    - **Install Command:** leave empty
 4. Click **Deploy**.
+
+`prepare-public.sh` runs during the build and pulls the Git LFS assets (WebAssembly and
+large part files) into `public/`, so the deployed site serves the real binaries instead
+of LFS pointer files. If you prefer, you can also enable **Git LFS** in the project's
+**Settings → Git**; the build command remains a safe fallback that materialises any
+remaining pointers.
 
 Every push to the production branch redeploys automatically. To update the Craft apps later,
 run `./update-crafts.sh`, commit, and push.
@@ -76,7 +82,10 @@ Each push triggers a new Vercel deployment automatically.
 
 ### Option B — Vercel CLI
 
+The Vercel CLI uploads your local working tree, so materialise the LFS assets first:
+
 ```sh
+./prepare-public.sh
 npm i -g vercel
 vercel          # preview deployment
 vercel --prod   # production deployment
