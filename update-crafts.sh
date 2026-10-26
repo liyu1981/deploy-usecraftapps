@@ -240,7 +240,16 @@ INDEX="$STAGE_PUBLIC/index.html"
     body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       background: var(--bg); color: var(--ink); }
     a { color: inherit; text-decoration: none; }
-    .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .frame { max-width: 1280px; margin: 0 auto; border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line); position: relative; }
+    .inner { padding: 0 24px; }
+    .top-rule { position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: var(--line); z-index: 20; }
+    .tick { pointer-events: none; width: 11px; height: 11px; position: absolute; }
+    .tick:before, .tick:after { content: ""; background: var(--line-strong); position: absolute; }
+    .tick:before { width: 1px; top: 0; bottom: 0; left: 5px; }
+    .tick.tick-half:before { top: 5px; }
+    .tick:after { height: 1px; top: 5px; left: 0; right: 0; }
 
     /* Section 01 */
     .s1 { padding: 56px 0; border-bottom: 1px solid var(--line); }
@@ -333,8 +342,12 @@ INDEX="$STAGE_PUBLIC/index.html"
   </style>
 </head>
 <body>
+  <div class="frame">
+    <div class="top-rule"></div>
+    <span class="tick tick-half" style="top:-5px;left:-6px;"></span>
+    <span class="tick tick-half" style="top:-5px;right:-6px;"></span>
   <section class="s1">
-    <div class="wrap">
+    <div class="inner">
       <div class="s1-row">
         <div class="s1-text">
           <p class="eyebrow"><span class="num">01</span> Crafting Apps</p>
@@ -368,7 +381,7 @@ HTML
     </div>
   </div>
 
-  <div class="wrap" style="padding-top:0;padding-bottom:48px;">
+  <div class="inner" style="padding-top:0;padding-bottom:48px;">
     <div class="lineup">
 HTML
   for i in "${!SLUGS[@]}"; do
@@ -405,6 +418,7 @@ HTML
     Deployed with
     <a href="https://github.com/liyu1981/deploy-photocraftweb" target="_blank" rel="noopener">github.com/liyu1981/deploy-photocraftweb</a>
   </footer>
+  </div>
 </body>
 </html>
 HTML
