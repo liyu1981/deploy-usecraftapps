@@ -20,11 +20,67 @@ log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33mwarning:\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 
-for cmd in curl unzip find cp mv rm mkdir grep sed; do
+for cmd in curl unzip find cp mv rm mkdir grep sed python3; do
   command -v "$cmd" >/dev/null 2>&1 || die "required command not found: $cmd"
 done
 
 [[ -f "$CONFIG_FILE" ]] || die "missing app list: $CONFIG_FILE"
+
+# Auto-add any new apps published on getartcraft.com/apps to crafts.txt.
+if command -v python3 >/dev/null 2>&1; then
+  python3 - "$CONFIG_FILE" <<'PY'
+import html, re, sys, urllib.request
+config_path = sys.argv[1]
+try:
+    with open(config_path) as f:
+        existing = f.read()
+except OSError:
+    existing = ""
+existing_slugs = set()
+for line in existing.splitlines():
+    line = line.split("#", 1)[0].strip()
+    if line:
+        existing_slugs.add(line.split()[0])
+
+try:
+    with urllib.request.urlopen("https://getartcraft.com/apps", timeout=30) as r:
+        index_html = r.read().decode("utf-8", "replace")
+except Exception as e:
+    print(f"warning: could not fetch app index: {e}", file=sys.stderr)
+    sys.exit(0)
+
+remote_slugs = sorted(set(re.findall(r'href="/apps/([a-z0-9-]+)"', index_html)))
+added = False
+for slug in remote_slugs:
+    if slug in existing_slugs:
+        continue
+    try:
+        with urllib.request.urlopen(f"https://getartcraft.com/apps/{slug}", timeout=30) as r:
+            page = html.unescape(r.read().decode("utf-8", "replace"))
+    except Exception as e:
+        print(f"warning: could not fetch app page for {slug}: {e}", file=sys.stderr)
+        continue
+    title_m = re.search(r"<title>([^:]+):\s*(.+?)</title>", page)
+    name = title_m.group(1).strip() if title_m else slug.capitalize()
+    raw_long = title_m.group(2).strip() if title_m else f"Open-source {slug}, rebuilt in pure Rust."
+    raw_long = raw_long.split(" — ")[0].strip()
+    long = raw_long if raw_long.endswith(".") else raw_long + "."
+    meta_m = re.search(r"<p[^>]*>\s*([^<]+?)\s*·\s*(Early alpha|In development)\s*</p>", page)
+    short = meta_m.group(1).strip() if meta_m else slug
+    status_text = meta_m.group(2) if meta_m else "In development"
+    status = "early" if status_text == "Early alpha" else "dev"
+    long = long.replace('"', "'")
+    short = short.replace('"', "'")
+    name = name.replace('"', "'")
+    with open(config_path, "a") as f:
+        f.write(f'{slug} {name} "{short}" "{long}" {status}\n')
+    existing_slugs.add(slug)
+    added = True
+    print(f"Auto-added new app to crafts.txt: {slug} ({name})")
+if not added and not remote_slugs:
+    pass
+PY
+fi
 
 PIN_APP="${1:-}"
 PIN_TAG="${2:-}"
@@ -73,16 +129,6 @@ done < "$CONFIG_FILE"
 
 [[ ${#SLUGS[@]} -gt 0 ]] || die "no apps found in $CONFIG_FILE"
 
-# Detect apps listed on getartcraft.com/apps that are not yet in crafts.txt.
-if REMOTE_APPS="$(curl -fsSL https://getartcraft.com/apps 2>/dev/null)"; then
-  while IFS= read -r remote_slug; do
-    [[ -z "$remote_slug" ]] && continue
-    if ! grep -q "^${remote_slug} " "$CONFIG_FILE" 2>/dev/null; then
-      warn "New app detected on getartcraft.com/apps: ${remote_slug} (add it to crafts.txt)"
-    fi
-  done < <(printf '%s\n' "$REMOTE_APPS" \
-    | grep -oE '/apps/[a-z0-9-]+' | sed 's#^/apps/##' | sort -u)
-fi
 
 app_index() {
   local target="$1" i
