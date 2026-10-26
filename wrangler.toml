@@ -1,4 +1,5 @@
 name = "use-craft-apps"
+pages_build_output_dir = "workspace/public"
 compatibility_date = "2026-10-26"
 
 # Cloudflare Pages build settings (set in dashboard or via Wrangler):
@@ -6,7 +7,3 @@ compatibility_date = "2026-10-26"
 #   Build output directory: workspace/public
 # prepare-cloudflare.sh materializes LFS assets, splits oversized WASM, and
 # installs the client-side stitching bootstrap.
-
-# Cloudflare Workers static assets (used when deploying with `wrangler deploy`):
-[assets]
-directory = "./workspace/public"
