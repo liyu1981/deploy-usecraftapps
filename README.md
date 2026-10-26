@@ -18,6 +18,7 @@ landing page at `/` links to each app under its own subfolder (e.g. `/photocraft
 | `cron-update.sh` | Pulls, updates, commits, and pushes automatically (for cron). |
 | `.craft-versions` | Release tag and checksum last pulled for each app. |
 | `vercel.json` | Tells Vercel to serve `public/` and sets the required cache/MIME headers. |
+| `dev.sh` | Local preview server (`./dev.sh [port]`, binds 0.0.0.0). |
 
 ## Update to the latest releases
 
@@ -94,8 +95,14 @@ vercel --prod   # production deployment
 ## Local preview
 
 ```sh
+./dev.sh          # serves public/ on http://0.0.0.0:8765/
+./dev.sh 8080     # custom port
+```
+
+or directly:
+
+```sh
 python3 -m http.server 8765 --directory public
-# open http://localhost:8765/
 ```
 
 ## Upstream
