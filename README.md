@@ -14,51 +14,18 @@ landing page at `/` links to each app under its own subfolder (e.g. `/photocraft
 
 ## Contents
 
+- [Self-hosting](#self-hosting)
+  - [Host with Apache or nginx](#host-with-apache-or-nginx)
+  - [Host with python3 or php](#host-with-python3-or-php)
+- [Self deploy](#self-deploy)
+  - [Vercel](#vercel)
+  - [Netlify](#netlify)
+  - [Cloudflare Pages](#cloudflare-pages)
 - [Repository layout](#repository-layout)
 - [Update to the latest releases](#update-to-the-latest-releases)
-- [Self-hosting](#self-hosting)
-- [Self deploy](#self-deploy)
 - [Automated updates (cron)](#automated-updates-cron)
 - [License](#license)
 - [Upstream](#upstream)
-
-## Repository layout
-
-| Path | Purpose |
-|---|---|
-| `public/` | Generated static site from the upstream web releases. Do not edit by hand. |
-| `crafts.txt` | List of craft apps (slug, display name, description) to deploy. |
-| `update-crafts.sh` | Downloads the latest (or a pinned) web release for every app into `public/`. |
-| `cron-update.sh` | Pulls, updates, commits, and pushes automatically (for cron). |
-| `.craft-versions` | Release tag and checksum last pulled for each app. |
-| `vercel.json` | Tells Vercel to serve `public/` and sets the required cache/MIME headers. |
-| `dev.sh` | Local preview server (`./dev.sh [port]`, binds 0.0.0.0). |
-| `prepare-public.sh` | Materialise Git LFS assets in `public/` for self-hosting. |
-
-## Update to the latest releases
-
-Requirements: `bash`, `curl`, `unzip`, and `sha256sum` (or `shasum`).
-
-```sh
-./update-crafts.sh                       # latest upstream releases
-./update-crafts.sh photocraft v0.16.0    # pin one app to a specific release
-```
-
-The script:
-
-1. Resolves the latest release tag for each app from GitHub (or uses the tag you pass).
-2. Downloads `<app>-web-<version>.zip`.
-3. Verifies it against the release's `SHA256SUMS.txt`.
-4. Rebuilds `public/` with one subfolder per app plus a landing page.
-5. Writes `.craft-versions`.
-
-Review and commit the result:
-
-```sh
-git add public .craft-versions crafts.txt
-git commit -m "Update Craft apps web"
-git push
-```
 
 ## Self-hosting
 
@@ -188,6 +155,44 @@ Use the included `wrangler.toml`:
 - `prepare-public.sh` installs `git-lfs` if it is missing and materializes the LFS
   assets. Cloudflare Pages has a 25 MB per-file limit; files above that are served
   through Git LFS pointers and may require an LFS client worker for direct serving.
+
+## Repository layout
+
+| Path | Purpose |
+|---|---|
+| `public/` | Generated static site from the upstream web releases. Do not edit by hand. |
+| `crafts.txt` | List of craft apps (slug, display name, description) to deploy. |
+| `update-crafts.sh` | Downloads the latest (or a pinned) web release for every app into `public/`. |
+| `cron-update.sh` | Pulls, updates, commits, and pushes automatically (for cron). |
+| `.craft-versions` | Release tag and checksum last pulled for each app. |
+| `vercel.json` | Tells Vercel to serve `public/` and sets the required cache/MIME headers. |
+| `dev.sh` | Local preview server (`./dev.sh [port]`, binds 0.0.0.0). |
+| `prepare-public.sh` | Materialise Git LFS assets in `public/` for self-hosting. |
+
+## Update to the latest releases
+
+Requirements: `bash`, `curl`, `unzip`, and `sha256sum` (or `shasum`).
+
+```sh
+./update-crafts.sh                       # latest upstream releases
+./update-crafts.sh photocraft v0.16.0    # pin one app to a specific release
+```
+
+The script:
+
+1. Resolves the latest release tag for each app from GitHub (or uses the tag you pass).
+2. Downloads `<app>-web-<version>.zip`.
+3. Verifies it against the release's `SHA256SUMS.txt`.
+4. Rebuilds `public/` with one subfolder per app plus a landing page.
+5. Writes `.craft-versions`.
+
+Review and commit the result:
+
+```sh
+git add public .craft-versions crafts.txt
+git commit -m "Update Craft apps web"
+git push
+```
 
 ## Automated updates (cron)
 
