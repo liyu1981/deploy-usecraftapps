@@ -92,6 +92,35 @@ No build step is required; the site runs entirely in the browser.
 
 ## Self deploy
 
+### Cloudflare Pages (recommended for free tier)
+
+Use the included `wrangler.toml`:
+
+- **Build command:** `bash prepare-cloudflare.sh`
+- **Build output directory:** `workspace/public`
+- `prepare-cloudflare.sh` materializes the LFS assets, copies them into the
+  gitignored `workspace/public/` folder, splits any `*_bg.wasm` above 20 MB into
+  chunks of at most 20 MB, and installs a small client-side bootstrap
+  (`stitch-bootstrap.js`). The bootstrap fetches the chunks sequentially and
+  stitches them back into one `ArrayBuffer` before `WebAssembly` instantiation.
+- This keeps every file under Cloudflare Pages' 25 MB per-file limit, avoids R2
+  and Functions, and stays within the free tier with no per-request operation
+  caps. Split chunks are immutable (their names carry the WASM content hash);
+  manifests and the bootstrap are served with `no-cache`.
+
+#### How the splitting/stitching works
+
+1. **Build time:** oversized `*_bg.wasm` files are split with
+   `split -b 20971520` into `foo_bg.wasm.000`, `.001`, … and a
+   `foo_bg.wasm.manifest` lists the chunks.
+2. **Runtime:** the bootstrap overrides `fetch`; when the app requests
+   `foo_bg.wasm`, it fetches the manifest, downloads the chunks sequentially,
+   concatenates them, and returns a `Response` with
+   `Content-Type: application/wasm`. Existing loaders (`init`,
+   `compileStreaming`, custom URL loaders) work unchanged.
+3. `photocraft` keeps its native parts scheme, which is already
+   Cloudflare-safe.
+
 ### Vercel
 
 #### Option A — Vercel dashboard (recommended)
@@ -135,6 +164,9 @@ vercel --prod   # production deployment
 - The upstream releases also include `_headers`, `.htaccess`, `README.md`, and `HOSTING.md`.
   They are copied into each app's subfolder for reference and portability; Vercel ignores
   `_headers` and `.htaccess`.
+- **Storage/egress caution:** the site ships large WebAssembly binaries. Reduce the number
+  of retained deployments in your Vercel project settings to save deployment storage, and
+  monitor bandwidth/egress usage, since each visitor downloads these large assets.
 
 ### Netlify
 
@@ -145,17 +177,8 @@ Use the included `netlify.toml`:
 - Set `GIT_LFS_ENABLED=true` in the Netlify site settings (it must be set in the UI,
   not only in `netlify.toml`, so it is available before clone). `prepare-public.sh`
   also pulls LFS objects as a fallback.
-
-### Cloudflare Pages
-
-Use the included `wrangler.toml`:
-
-- **Build command:** `bash prepare-cloudflare.sh`
-- **Build output directory:** `workspace/public`
-- `prepare-cloudflare.sh` materializes the LFS assets, copies them into the
-  gitignored `workspace/public/` folder, splits any `*_bg.wasm` above 20 MB into
-  chunks, and installs a client-side stitching bootstrap. This keeps every file
-  under Cloudflare Pages' 25 MB per-file limit without using R2 or Functions.
+- **Storage/egress caution:** the site ships large WebAssembly binaries. Reduce retained
+  deploy history to save storage and monitor bandwidth/egress usage.
 
 ## Repository layout
 
