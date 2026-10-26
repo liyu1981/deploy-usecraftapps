@@ -1,5 +1,4 @@
-# Craft Apps — Vercel deployment
-
+# Use Craft Apps: self deploy or host craft web apps
 A static, self-hosted copy of the web builds of the [Craft Apps](https://getartcraft.com/apps)
 suite (PhotoCraft, VectorCraft, LightCraft, …), kept up to date from the official GitHub
 releases and ready to deploy on [Vercel](https://vercel.com/).
