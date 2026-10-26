@@ -1,4 +1,9 @@
 # Use Craft Apps: self deploy or host craft web apps
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/liyu1981/deploy-usecraftapps/main/preview-thumbnail.png" alt="Use Craft Apps preview" />
+</p>
+
 A static, self-hosted copy of the web builds of the [Craft Apps](https://getartcraft.com/apps)
 suite (PhotoCraft, VectorCraft, LightCraft, …), kept up to date from the official GitHub
 releases and ready to deploy on [Vercel](https://vercel.com/).
@@ -162,6 +167,12 @@ server {
 ```
 
 No build step is required; the site runs entirely in the browser.
+
+## License
+
+Each Craft app keeps its upstream license; see `public/<app>/LICENSE-MIT` and
+`public/<app>/LICENSE-APACHE`. This repository (landing page, scripts, and
+configuration) is licensed under the [MIT License](LICENSE).
 
 ## Upstream
 
