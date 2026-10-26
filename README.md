@@ -12,6 +12,19 @@ Each craft app's web build runs entirely in the browser (WebAssembly), so there 
 backend, database, or build step. Vercel only has to serve the files in `public/`. The
 landing page at `/` links to each app under its own subfolder (e.g. `/photocraft/`).
 
+## Contents
+
+- [Repository layout](#repository-layout)
+- [Update to the latest releases](#update-to-the-latest-releases)
+- [Deploy on Vercel](#deploy-on-vercel)
+- [Automated updates (cron)](#automated-updates-cron)
+- [Deploy on Netlify](#deploy-on-netlify)
+- [Deploy on Cloudflare Pages](#deploy-on-cloudflare-pages)
+- [Local preview](#local-preview)
+- [Self-hosting (Apache, nginx, …)](#self-hosting-apache-nginx-)
+- [License](#license)
+- [Upstream](#upstream)
+
 ## Repository layout
 
 | Path | Purpose |
