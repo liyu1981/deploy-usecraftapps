@@ -366,7 +366,7 @@ INDEX="$STAGE_PUBLIC/index.html"
 <body>
   <header class="site-header">
     <div class="site-header-inner">
-      <span class="site-title">Craft Apps</span>
+      <span class="site-title">Use Craft Apps</span>
       <button id="theme-toggle" class="theme-btn" type="button" aria-label="Toggle theme">Theme</button>
     </div>
   </header>
