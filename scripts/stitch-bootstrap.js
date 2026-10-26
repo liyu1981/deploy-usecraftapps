@@ -35,44 +35,56 @@
       return originalFetch(input, init);
     }
 
-    const manifestText = await manifestResponse.text();
+    let manifestText;
+    try {
+      manifestText = await manifestResponse.text();
+    } catch (e) {
+      return originalFetch(input, init);
+    }
+
     const chunkNames = manifestText
       .split(/\s+/)
       .map((s) => s.trim())
       .filter(Boolean);
 
-    if (chunkNames.length === 0) {
+    // Guard against hosts that answer missing manifests with an HTML page.
+    const validChunks = chunkNames.every((name) => /_bg\.wasm\.\d{3}$/.test(name));
+    if (chunkNames.length === 0 || !validChunks) {
       return originalFetch(input, init);
     }
 
-    // Sequential fetch keeps peak memory lower than Promise.all.
-    const buffers = [];
-    for (const name of chunkNames) {
-      const chunkUrl = new URL(name, manifestUrl);
-      const response = await originalFetch(chunkUrl);
-      if (!response.ok) {
-        throw new Error(
-          "Failed to fetch WASM chunk: " + chunkUrl.href + " (" + response.status + ")"
-        );
+    try {
+      // Sequential fetch keeps peak memory lower than Promise.all.
+      const buffers = [];
+      for (const name of chunkNames) {
+        const chunkUrl = new URL(name, manifestUrl);
+        const response = await originalFetch(chunkUrl);
+        if (!response.ok) {
+          throw new Error(
+            "Failed to fetch WASM chunk: " + chunkUrl.href + " (" + response.status + ")"
+          );
+        }
+        buffers.push(await response.arrayBuffer());
       }
-      buffers.push(await response.arrayBuffer());
-    }
 
-    const totalLength = buffers.reduce((acc, buf) => acc + buf.byteLength, 0);
-    const combined = new Uint8Array(totalLength);
-    let offset = 0;
-    for (const buf of buffers) {
-      combined.set(new Uint8Array(buf), offset);
-      offset += buf.byteLength;
-    }
+      const totalLength = buffers.reduce((acc, buf) => acc + buf.byteLength, 0);
+      const combined = new Uint8Array(totalLength);
+      let offset = 0;
+      for (const buf of buffers) {
+        combined.set(new Uint8Array(buf), offset);
+        offset += buf.byteLength;
+      }
 
-    return new Response(combined.buffer, {
-      status: 200,
-      statusText: "OK",
-      headers: {
-        "Content-Type": "application/wasm",
-        "Content-Length": String(totalLength),
-      },
-    });
+      return new Response(combined.buffer, {
+        status: 200,
+        statusText: "OK",
+        headers: {
+          "Content-Type": "application/wasm",
+          "Content-Length": String(totalLength),
+        },
+      });
+    } catch (e) {
+      return originalFetch(input, init);
+    }
   };
 })();
