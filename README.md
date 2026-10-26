@@ -19,6 +19,7 @@ landing page at `/` links to each app under its own subfolder (e.g. `/photocraft
 | `.craft-versions` | Release tag and checksum last pulled for each app. |
 | `vercel.json` | Tells Vercel to serve `public/` and sets the required cache/MIME headers. |
 | `dev.sh` | Local preview server (`./dev.sh [port]`, binds 0.0.0.0). |
+| `prepare-public.sh` | Materialise Git LFS assets in `public/` for self-hosting. |
 
 ## Update to the latest releases
 
@@ -104,6 +105,18 @@ or directly:
 ```sh
 python3 -m http.server 8765 --directory public
 ```
+
+## Self-hosting (Apache, nginx, …)
+
+Large binaries are stored with [Git LFS](https://git-lfs.com). After cloning, run:
+
+```sh
+./prepare-public.sh   # pulls LFS objects into public/
+```
+
+Then point your web server's document root at `public/`. The upstream releases already
+include per-app `.htaccess` files for Apache; for nginx, serve the files statically and
+ensure `.wasm` is sent as `application/wasm`.
 
 ## Upstream
 
