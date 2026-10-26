@@ -133,6 +133,8 @@
       border: 1px solid var(--line); }
     .card-title { font-size: 1.6rem; font-weight: 500; letter-spacing: -.02em; margin: 14px 0 6px;
       color: var(--ink-strong); }
+    .card-version { font-family: ui-monospace, monospace; font-size: .85rem; font-weight: 400;
+      letter-spacing: 0; color: var(--faint); margin-left: 6px; vertical-align: middle; }
     .card-desc { color: var(--muted); line-height: 1.5; margin: 0 0 12px; font-size: .95rem; }
     .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
     .badge { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .1em;
@@ -209,7 +211,7 @@
         <div class="card-hero"><img src="./images/apps/photocraft/hero.webp" alt="PhotoCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/photocraft.webp" alt="PhotoCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">PhotoCraft</h3>
+          <h3 class="card-title">PhotoCraft <span class="card-version">v0.16.0</span></h3>
           <p class="card-desc">The open-source image editor you already know how to use.</p>
           <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch PhotoCraft →</span>
@@ -220,7 +222,7 @@
         <div class="card-hero"><img src="./images/apps/vectorcraft/hero.webp" alt="VectorCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/vectorcraft.webp" alt="VectorCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">VectorCraft</h3>
+          <h3 class="card-title">VectorCraft <span class="card-version">v0.17.0</span></h3>
           <p class="card-desc">Fast, open-source vector illustration, reimagined in pure Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch VectorCraft →</span>
@@ -231,7 +233,7 @@
         <div class="card-hero"><img src="./images/apps/filmcraft/hero.webp" alt="FilmCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/filmcraft.webp" alt="FilmCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">FilmCraft</h3>
+          <h3 class="card-title">FilmCraft <span class="card-version">v0.13.0</span></h3>
           <p class="card-desc">Professional, open-source video editing, rebuilt from scratch in Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch FilmCraft →</span>
@@ -242,7 +244,7 @@
         <div class="card-hero"><img src="./images/apps/lightcraft/hero.webp" alt="LightCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/lightcraft.webp" alt="LightCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">LightCraft</h3>
+          <h3 class="card-title">LightCraft <span class="card-version">v0.14.0</span></h3>
           <p class="card-desc">An open-source photo library and raw developer that runs on your machine.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch LightCraft →</span>
@@ -253,7 +255,7 @@
         <div class="card-hero"><img src="./images/apps/pdfcraft/hero.webp" alt="PdfCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/pdfcraft.webp" alt="PdfCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">PdfCraft</h3>
+          <h3 class="card-title">PdfCraft <span class="card-version">v0.14.0</span></h3>
           <p class="card-desc">The open-source PDF workbench: read, organize, combine, split and secure.</p>
           <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch PdfCraft →</span>
@@ -264,7 +266,7 @@
         <div class="card-hero"><img src="./images/apps/effectcraft/hero.webp" alt="EffectCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/effectcraft.webp" alt="EffectCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">EffectCraft</h3>
+          <h3 class="card-title">EffectCraft <span class="card-version">v0.17.0</span></h3>
           <p class="card-desc">Open-source motion graphics and visual effects, built in pure Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch EffectCraft →</span>
@@ -275,7 +277,7 @@
         <div class="card-hero"><img src="./images/apps/designcraft/hero.webp" alt="DesignCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/designcraft.webp" alt="DesignCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">DesignCraft</h3>
+          <h3 class="card-title">DesignCraft <span class="card-version">v0.13.0</span></h3>
           <p class="card-desc">Open-source page layout and publishing, rebuilt in pure Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch DesignCraft →</span>
@@ -286,7 +288,7 @@
         <div class="card-hero"><img src="./images/apps/figcraft/hero.webp" alt="FigCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/figcraft.webp" alt="FigCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">FigCraft</h3>
+          <h3 class="card-title">FigCraft <span class="card-version">v0.11.2</span></h3>
           <p class="card-desc">Open-source interface design and prototyping, rebuilt in pure Rust.</p>
           <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch FigCraft →</span>
@@ -297,7 +299,7 @@
         <div class="card-hero"><img src="./images/apps/wordcraft/hero.webp" alt="WordCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/wordcraft.webp" alt="WordCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">WordCraft</h3>
+          <h3 class="card-title">WordCraft <span class="card-version">v0.11.0</span></h3>
           <p class="card-desc">Fast, open-source word processing, rebuilt in pure Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch WordCraft →</span>
@@ -308,7 +310,7 @@
         <div class="card-hero"><img src="./images/apps/soundcraft/hero.webp" alt="SoundCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/soundcraft.webp" alt="SoundCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">SoundCraft</h3>
+          <h3 class="card-title">SoundCraft <span class="card-version">v0.13.1</span></h3>
           <p class="card-desc">Professional audio recording, editing and mixing in pure Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch SoundCraft →</span>
@@ -319,7 +321,7 @@
         <div class="card-hero"><img src="./images/apps/deckcraft/hero.webp" alt="DeckCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/deckcraft.webp" alt="DeckCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">DeckCraft</h3>
+          <h3 class="card-title">DeckCraft <span class="card-version">v0.11.1</span></h3>
           <p class="card-desc">Build and deliver dynamic slide presentations, in pure Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch DeckCraft →</span>
@@ -330,7 +332,7 @@
         <div class="card-hero"><img src="./images/apps/cadcraft/hero.webp" alt="CADCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/cadcraft.webp" alt="CADCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">CADCraft</h3>
+          <h3 class="card-title">CADCraft <span class="card-version">v0.13.0</span></h3>
           <p class="card-desc">Fast, open-source computer-aided design and drafting in pure Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch CADCraft →</span>
@@ -341,7 +343,7 @@
         <div class="card-hero"><img src="./images/apps/gridcraft/hero.webp" alt="GridCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/gridcraft.webp" alt="GridCraft" onerror="this.style.display='none'">
-          <h3 class="card-title">GridCraft</h3>
+          <h3 class="card-title">GridCraft <span class="card-version">v0.12.1</span></h3>
           <p class="card-desc">Fast, open-source spreadsheets and data analysis, rebuilt in pure Rust.</p>
           <div class="badges"><span class="badge status">In development</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>
           <span class="launch">Launch GridCraft →</span>

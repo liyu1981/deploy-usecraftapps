@@ -348,6 +348,8 @@ INDEX="$STAGE_PUBLIC/index.html"
       border: 1px solid var(--line); }
     .card-title { font-size: 1.6rem; font-weight: 500; letter-spacing: -.02em; margin: 14px 0 6px;
       color: var(--ink-strong); }
+    .card-version { font-family: ui-monospace, monospace; font-size: .85rem; font-weight: 400;
+      letter-spacing: 0; color: var(--faint); margin-left: 6px; vertical-align: middle; }
     .card-desc { color: var(--muted); line-height: 1.5; margin: 0 0 12px; font-size: .95rem; }
     .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
     .badge { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .1em;
@@ -431,7 +433,7 @@ HTML
     printf '</div>\n'
     printf '        <div class="card-body">\n'
     printf '          <img class="card-icon" src="./icons/%s.webp" alt="%s" onerror="this.style.display='\''none'\''">\n' "$slug" "$name"
-    printf '          <h3 class="card-title">%s</h3>\n' "$name"
+    printf '          <h3 class="card-title">%s <span class="card-version">%s</span></h3>\n' "$name" "$TAG"
     printf '          <p class="card-desc">%s</p>\n' "$long"
     printf '          <div class="badges"><span class="badge status">%s</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>\n' "$status_label"
     printf '          <span class="launch">Launch %s →</span>\n' "$name"
