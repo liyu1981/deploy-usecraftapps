@@ -15,7 +15,10 @@ ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_FILE="$ROOT_DIR/crafts.txt"
 PUBLIC_DIR="$ROOT_DIR/public"
 VERSIONS_FILE="$ROOT_DIR/.craft-versions"
-
+OLD_VERSIONS=""
+if [[ -f "$VERSIONS_FILE" ]]; then
+  OLD_VERSIONS="$(cat "$VERSIONS_FILE")"
+fi
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33mwarning:\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
@@ -621,6 +624,35 @@ if [[ -n "$OLD_DIR" ]]; then
   rm -rf "$OLD_DIR"
 fi
 OLD_DIR=""
+
+NEW_VERSIONS="$(cat "$VERSIONS_FILE")"
+BUMPED=false
+if [[ "$OLD_VERSIONS" != "$NEW_VERSIONS" ]]; then
+  BUMPED=true
+fi
+
+RELEASE_TAG=""
+if $BUMPED; then
+  RELEASE_TAG="v$(sha256sum "$VERSIONS_FILE" | awk '{print $1}' | cut -c1-12)"
+  log "Craft app version(s) changed; release tag: $RELEASE_TAG"
+  if git -C "$ROOT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    if git -C "$ROOT_DIR" remote get-url origin >/dev/null 2>&1; then
+      ( cd "$ROOT_DIR" && \
+        git add -A -- public .craft-versions crafts.txt 2>/dev/null || true; \
+        if ! git diff --cached --quiet 2>/dev/null; then \
+          git commit -m "Update Craft apps web" >/dev/null 2>&1 || true; \
+        fi; \
+        git tag -a "$RELEASE_TAG" -m "Craft apps update" >/dev/null 2>&1 || true; \
+        git push origin HEAD >/dev/null 2>&1 || true; \
+        git push origin "$RELEASE_TAG" >/dev/null 2>&1 || true )
+      log "Tagged and pushed release $RELEASE_TAG"
+    else
+      warn "no git origin remote; create and push the tag manually: git tag $RELEASE_TAG && git push origin $RELEASE_TAG"
+    fi
+  else
+    warn "not a git repository; create and push the tag manually: git tag $RELEASE_TAG && git push origin $RELEASE_TAG"
+  fi
+fi
 
 log "All Craft apps are now in public/"
 log "Recorded release details in .craft-versions"

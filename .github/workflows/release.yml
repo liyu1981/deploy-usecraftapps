@@ -1,0 +1,47 @@
+name: Create Release
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate release notes
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          lines = pathlib.Path('.craft-versions').read_text().splitlines()
+          rows = []
+          for line in lines:
+              if not line.strip():
+                  continue
+              parts = line.split()
+              slug, version = parts[0].split('=', 1)
+              sha = parts[1].split('=', 1)[1] if len(parts) > 1 else ''
+              rows.append((slug, version, sha))
+          body = "## Craft app versions\n\n"
+          body += "| App | Version | SHA-256 |\n"
+          body += "|---|---|---|\n"
+          for slug, version, sha in rows:
+              body += f"| {slug} | {version} | `{sha}` |\n"
+          body += "\n## Docker image\n\n"
+          body += "```sh\n"
+          body += "docker pull ghcr.io/${{ github.repository }}:${{ github.ref_name }}\n"
+          body += "docker run --rm -p 8080:80 ghcr.io/${{ github.repository }}:${{ github.ref_name }}\n"
+          body += "```\n"
+          pathlib.Path('RELEASE_NOTES.md').write_text(body)
+          PY
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          tag_name: ${{ github.ref_name }}

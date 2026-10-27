@@ -97,7 +97,30 @@ No build step is required; the site runs entirely in the browser.
 
 ### Host with Docker
 
-Materialise the LFS assets first, then build and run the included image:
+Pre-built images are published to the GitHub Container Registry whenever a
+release is tagged (see `.github/workflows/docker-publish.yml` and
+`.github/workflows/release.yml`). Each release tag is `v<hash>` and matches the
+Craft app versions recorded in `.craft-versions`.
+
+Pull and run the latest release:
+
+```sh
+docker pull ghcr.io/liyu1981/deploy-usecraftapps:latest
+docker run --rm -p 8080:80 ghcr.io/liyu1981/deploy-usecraftapps:latest
+```
+
+Or pin a specific release tag:
+
+```sh
+docker pull ghcr.io/liyu1981/deploy-usecraftapps:v<hash>
+docker run --rm -p 8080:80 ghcr.io/liyu1981/deploy-usecraftapps:v<hash>
+```
+
+Release notes list the exact Craft app versions and SHA-256 checksums shipped in
+that image. See the repository's **Releases** page for details.
+
+To build the image yourself, materialise the LFS assets first, then build and run
+the included image:
 
 ```sh
 ./prepare-public.sh
