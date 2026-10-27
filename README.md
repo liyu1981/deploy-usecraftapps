@@ -17,6 +17,7 @@ landing page at `/` links to each app under its own subfolder (e.g. `/photocraft
 - [Self-hosting](#self-hosting)
   - [Host with Apache or nginx](#host-with-apache-or-nginx)
   - [Host with python3 or php](#host-with-python3-or-php)
+  - [Host with Docker](#host-with-docker)
 - [Self deploy](#self-deploy)
   - [Cloudflare Pages](#cloudflare-pages-recommended-for-free-tier)
   - [Vercel](#vercel)
@@ -89,6 +90,31 @@ php -S 0.0.0.0:8765 -t public
 ```
 
 No build step is required; the site runs entirely in the browser.
+
+### Host with Docker
+
+Materialise the LFS assets first, then build and run the included image:
+
+```sh
+./prepare-public.sh
+docker build -t use-craft-apps .
+docker run --rm -p 8080:80 use-craft-apps
+```
+
+Open http://localhost:8080/. The image uses nginx on Alpine and serves `public/`
+with the WebAssembly MIME type and sensible cache headers.
+
+To deploy the container elsewhere, push it to a registry and run it on any
+container host (Docker Compose, Kubernetes, a VPS, etc.):
+
+```sh
+docker tag use-craft-apps registry.example.com/use-craft-apps:latest
+docker push registry.example.com/use-craft-apps:latest
+```
+
+The container listens on port 80 and needs no environment variables. Put an
+HTTPS reverse proxy or load balancer in front of it for WebGPU/clipboard
+support.
 
 ## Self deploy
 
