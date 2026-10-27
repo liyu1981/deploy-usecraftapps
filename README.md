@@ -4,6 +4,10 @@
   <img src="https://raw.githubusercontent.com/liyu1981/deploy-usecraftapps/main/preview-thumbnail.png" alt="Use Craft Apps preview" />
 </p>
 
+<p align="center">
+  <b>Try it out live:</b> <a href="https://usecraftapps.liyu1981.xyz">https://usecraftapps.liyu1981.xyz</a> — a hosted preview of the Craft Apps suite, no install required.
+</p>
+
 A static, self-hosted copy of the web builds of the [Craft Apps](https://getartcraft.com/apps)
 suite (PhotoCraft, VectorCraft, LightCraft, …), kept up to date from the official GitHub
 releases and ready to self host or deploy on cloud (Vercel, Netlify, Cloudflare Pages, …).
@@ -120,6 +124,8 @@ support.
 
 ### Cloudflare Pages (recommended for free tier)
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/liyu1981/deploy-usecraftapps)
+
 Use the included `wrangler.toml`:
 
 - **Build command:** `bash prepare-cloudflare.sh`
@@ -148,6 +154,8 @@ Use the included `wrangler.toml`:
    Cloudflare-safe.
 
 ### Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fliyu1981%2Fdeploy-usecraftapps)
 
 #### Option A — Vercel dashboard (recommended)
 
@@ -195,6 +203,8 @@ vercel --prod   # production deployment
   monitor bandwidth/egress usage, since each visitor downloads these large assets.
 
 ### Netlify
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/liyu1981/deploy-usecraftapps)
 
 Use the included `netlify.toml`:
 
