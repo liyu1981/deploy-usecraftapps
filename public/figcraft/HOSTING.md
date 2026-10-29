@@ -37,7 +37,7 @@ Measured on the 0.1.0 build (`trunk build --release`; gzip `-9`, Brotli quality 
 
 Per-file upload limits: Cloudflare Pages and Workers static assets reject any file over
 **25 MiB** (26,214,400 bytes). `packaging/web/package.sh` fails the build if the wasm ever grows
-past 24 MiB, so a release can't ship a file a common host refuses.
+past 25 MiB minus 512 KiB (25,690,112 bytes), so a release can't ship a file a common host refuses.
 
 ## Any path works
 
