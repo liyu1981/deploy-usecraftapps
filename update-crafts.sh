@@ -12,6 +12,14 @@
 set -Eeuo pipefail
 
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+app_owner() {
+  case "$1" in
+    solidcraft) printf '%s' "tangency-labs" ;;
+    *) printf '%s' "storytold" ;;
+  esac
+}
+
 CONFIG_FILE="$ROOT_DIR/crafts.txt"
 PUBLIC_DIR="$ROOT_DIR/public"
 VERSIONS_FILE="$ROOT_DIR/.craft-versions"
@@ -158,9 +166,11 @@ trap cleanup EXIT
 
 resolve_tag() {
   local slug="$1"
+  local owner
+  owner="$(app_owner "$slug")"
   local latest_url
   latest_url="$(curl -fsSLI -o /dev/null -w '%{url_effective}' \
-    "https://github.com/storytold/$slug/releases/latest")" \
+    "https://github.com/$owner/$slug/releases/latest")" \
     || die "could not query the latest release for $slug (check your network connection)"
   local tag="${latest_url##*/}"
   [[ "$tag" =~ ^v[0-9] ]] || die "unexpected latest-release URL for $slug: $latest_url"
@@ -197,7 +207,8 @@ for i in "${!SLUGS[@]}"; do
 
   VERSION="${TAG#v}"
   ASSET="${slug}-web-${VERSION}.zip"
-  BASE_URL="https://github.com/storytold/$slug/releases/download/$TAG"
+  OWNER="$(app_owner "$slug")"
+  BASE_URL="https://github.com/$OWNER/$slug/releases/download/$TAG"
 
   log "[$slug] Downloading $ASSET ($TAG)"
   curl -fL --retry 3 --retry-delay 2 --progress-bar \
@@ -263,27 +274,47 @@ for i in "${!SLUGS[@]}"; do
     done
   fi
 
-  if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.webp" \
-      "https://getartcraft.com/images/apps/$slug/icon.webp" 2>/dev/null; then
-    :
+  if [[ "$slug" == "solidcraft" ]]; then
+    if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.svg" \
+        "https://solidcraft.io/brand/solidcraft.svg" 2>/dev/null; then
+      :
+    else
+      warn "could not download icon for $slug"
+      rm -f "$STAGE_PUBLIC/icons/$slug.svg"
+    fi
   else
-    warn "could not download icon for $slug"
-    rm -f "$STAGE_PUBLIC/icons/$slug.webp"
+    if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.webp" \
+        "https://getartcraft.com/images/apps/$slug/icon.webp" 2>/dev/null; then
+      :
+    else
+      warn "could not download icon for $slug"
+      rm -f "$STAGE_PUBLIC/icons/$slug.webp"
+    fi
   fi
 
-  mkdir -p "$STAGE_PUBLIC/images/apps/$slug"
-  hero_ok=false
-  for hero_name in hero.webp color.webp; do
-    if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/images/apps/$slug/hero.webp" \
-        "https://getartcraft.com/images/apps/$slug/$hero_name" 2>/dev/null; then
-      hero_ok=true
-      break
+  if [[ "$slug" != "solidcraft" ]]; then
+    mkdir -p "$STAGE_PUBLIC/images/apps/$slug"
+    hero_ok=false
+    for hero_name in hero.webp color.webp; do
+      if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/images/apps/$slug/hero.webp" \
+          "https://getartcraft.com/images/apps/$slug/$hero_name" 2>/dev/null; then
+        hero_ok=true
+        break
+      fi
+    done
+    if ! $hero_ok; then
+      warn "could not download hero image for $slug"
+      rm -f "$STAGE_PUBLIC/images/apps/$slug/hero.webp"
+      rmdir "$STAGE_PUBLIC/images/apps/$slug" 2>/dev/null || true
     fi
-  done
-  if ! $hero_ok; then
-    warn "could not download hero image for $slug"
-    rm -f "$STAGE_PUBLIC/images/apps/$slug/hero.webp"
-    rmdir "$STAGE_PUBLIC/images/apps/$slug" 2>/dev/null || true
+  else
+    mkdir -p "$STAGE_PUBLIC/images/apps/$slug"
+    if ! curl -fsSL --retry 2 -o "$STAGE_PUBLIC/images/apps/$slug/hero.jpg" \
+        "https://solidcraft.io/media/enclosure-poster.jpg" 2>/dev/null; then
+      warn "could not download hero image for $slug"
+      rm -f "$STAGE_PUBLIC/images/apps/$slug/hero.jpg"
+      rmdir "$STAGE_PUBLIC/images/apps/$slug" 2>/dev/null || true
+    fi
   fi
 
   META_LINES+=("$slug=$TAG sha256=$SHA256")
@@ -464,14 +495,14 @@ INDEX="$STAGE_PUBLIC/index.html"
       <div class="s1-row">
         <div class="s1-text">
           <p class="eyebrow"><span class="num">01</span> Crafting Apps</p>
-          <h1>Thirteen apps. <span class="accent">One craft.</span></h1>
+          <h1>Fourteen apps. <span class="accent">One craft.</span></h1>
           <p class="lead">Image editing, vector illustration, video, photography, PDFs, motion graphics,
             page layout, interface design, word processing, audio, presentations, CAD and spreadsheets.
-            Native, open-source apps from the ArtCraft team, built in Rust and free to use.
+            Native, open-source apps, built in Rust and free to use.
             This page launches the web builds.</p>
           <div class="btns">
-            <a class="btn" href="https://discord.gg/artcraft" target="_blank" rel="noopener">Join Discord</a>
-            <a class="btn" href="https://github.com/storytold" target="_blank" rel="noopener">Browse on GitHub</a>
+            <a class="btn" href="https://github.com/storytold" target="_blank" rel="noopener">ArtCraft on GitHub</a>
+            <a class="btn" href="https://github.com/tangency-labs/solidcraft" target="_blank" rel="noopener">SolidCraft on GitHub</a>
           </div>
         </div>
         <div class="icon-grid">
@@ -479,7 +510,8 @@ HTML
   for i in "${!SLUGS[@]}"; do
     slug="${SLUGS[$i]}"
     name="${NAMES[$i]}"
-    printf '          <a class="icon-tile" href="./%s/"><img src="./icons/%s.webp" alt="%s" onerror="this.outerHTML='\''<div class=&quot;fallback&quot;>%s</div>'\''"><span>%s</span></a>\n' "$slug" "$slug" "$name" "${name:0:1}" "$name"
+    if [[ -f "$STAGE_PUBLIC/icons/$slug.webp" ]]; then icon_file="$slug.webp"; elif [[ -f "$STAGE_PUBLIC/icons/$slug.svg" ]]; then icon_file="$slug.svg"; else icon_file="$slug.webp"; fi
+    printf '          <a class="icon-tile" href="./%s/"><img src="./icons/%s" alt="%s" onerror="this.outerHTML='\''<div class=&quot;fallback&quot;>%s</div>'\''"><span>%s</span></a>\n' "$slug" "$icon_file" "$name" "${name:0:1}" "$name"
   done
   cat <<'HTML'
         </div>
@@ -513,10 +545,13 @@ HTML
     printf '        <div class="card-hero">'
     if [[ -f "$STAGE_PUBLIC/images/apps/$slug/hero.webp" ]]; then
       printf '<img src="./images/apps/%s/hero.webp" alt="%s" loading="lazy">' "$slug" "$name"
+    elif [[ -f "$STAGE_PUBLIC/images/apps/$slug/hero.jpg" ]]; then
+      printf '<img src="./images/apps/%s/hero.jpg" alt="%s" loading="lazy">' "$slug" "$name"
     fi
     printf '</div>\n'
     printf '        <div class="card-body">\n'
-    printf '          <img class="card-icon" src="./icons/%s.webp" alt="%s" onerror="this.style.display='\''none'\''">\n' "$slug" "$name"
+    if [[ -f "$STAGE_PUBLIC/icons/$slug.webp" ]]; then icon_file="$slug.webp"; elif [[ -f "$STAGE_PUBLIC/icons/$slug.svg" ]]; then icon_file="$slug.svg"; else icon_file="$slug.webp"; fi
+    printf '          <img class="card-icon" src="./icons/%s" alt="%s" onerror="this.style.display='\''none'\''">\n' "$icon_file" "$name"
     printf '          <h3 class="card-title">%s <span class="card-version">%s</span></h3>\n' "$name" "$tag"
     printf '          <p class="card-desc">%s</p>\n' "$long"
     printf '          <div class="badges"><span class="badge status">%s</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>\n' "$status_label"
