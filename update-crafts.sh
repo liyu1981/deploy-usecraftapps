@@ -274,6 +274,17 @@ for i in "${!SLUGS[@]}"; do
     done
   fi
 
+  # Fix missing commas in upstream PWA manifests (type -> purpose).
+  if [[ -f "$DEST/manifest.json" ]]; then
+    python3 - "$DEST/manifest.json" <<'PY2'
+import re, sys
+p = sys.argv[1]
+s = open(p).read()
+s = re.sub(r'("type": "image/png")\n(\s*"purpose")', r'\1,\n\2', s)
+open(p, "w").write(s)
+PY2
+  fi
+
   if [[ "$slug" == "solidcraft" ]]; then
     if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.svg" \
         "https://solidcraft.io/brand/solidcraft.svg" 2>/dev/null; then
