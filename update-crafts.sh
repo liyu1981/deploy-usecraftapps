@@ -274,6 +274,12 @@ for i in "${!SLUGS[@]}"; do
     done
   fi
 
+  # Photocraft's app/ chunk imports snippets relative to app/, so mirror them there.
+  if [[ "$slug" == "photocraft" && -d "$DEST/snippets" && -d "$DEST/app" ]]; then
+    rm -rf "$DEST/app/snippets"
+    cp -a "$DEST/snippets" "$DEST/app/snippets"
+  fi
+
   # Fix missing commas in upstream PWA manifests (type -> purpose).
   if [[ -f "$DEST/manifest.json" ]]; then
     python3 - "$DEST/manifest.json" <<'PY2'
