@@ -54,9 +54,18 @@
     }
 
     try {
-      // Sequential fetch keeps peak memory lower than Promise.all.
-      const buffers = [];
-      for (const name of chunkNames) {
+      // Concurrency scales with device memory: more RAM -> more parallel
+      // chunk downloads, while staying conservative on low-end devices.
+      const deviceMemory = (navigator.deviceMemory && navigator.deviceMemory > 0)
+        ? navigator.deviceMemory
+        : 4;
+      const concurrency = Math.max(
+        1,
+        Math.min(chunkNames.length, Math.floor(deviceMemory) || 2, 6)
+      );
+
+      const buffers = new Array(chunkNames.length);
+      const fetchChunk = async (name) => {
         const chunkUrl = new URL(name, manifestUrl);
         const response = await originalFetch(chunkUrl);
         if (!response.ok) {
@@ -64,7 +73,15 @@
             "Failed to fetch WASM chunk: " + chunkUrl.href + " (" + response.status + ")"
           );
         }
-        buffers.push(await response.arrayBuffer());
+        return response.arrayBuffer();
+      };
+
+      for (let i = 0; i < chunkNames.length; i += concurrency) {
+        const batch = chunkNames.slice(i, i + concurrency);
+        const results = await Promise.all(batch.map(fetchChunk));
+        for (let j = 0; j < results.length; j++) {
+          buffers[i + j] = results[j];
+        }
       }
 
       const totalLength = buffers.reduce((acc, buf) => acc + buf.byteLength, 0);
