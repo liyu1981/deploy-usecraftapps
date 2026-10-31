@@ -690,6 +690,7 @@ if $BUMPED; then
   if git -C "$ROOT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     if git -C "$ROOT_DIR" remote get-url origin >/dev/null 2>&1; then
       ( cd "$ROOT_DIR" && \
+        git lfs install --local >/dev/null 2>&1 || true; \
         git add -A -- public .craft-versions crafts.txt 2>/dev/null || true; \
         if ! git diff --cached --quiet 2>/dev/null; then \
           git commit -m "Update Craft apps web" >/dev/null 2>&1 || true; \
