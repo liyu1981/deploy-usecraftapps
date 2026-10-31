@@ -10,8 +10,8 @@
 <link rel="manifest" href="manifest.json">
   
 <script type="module">
-import init, * as bindings from './designcraft-web-78e075b017f8e581.js';
-const wasm = await init({ module_or_path: './designcraft-web-78e075b017f8e581_bg.wasm' });
+import init, * as bindings from './designcraft-web-64839791dcdbeb23.js';
+const wasm = await init({ module_or_path: './designcraft-web-64839791dcdbeb23_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -26,7 +26,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #designcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
   </style>
-<link rel="modulepreload" href="./designcraft-web-78e075b017f8e581.js" crossorigin="anonymous" integrity="sha384-HV6p8PQzSOS1c/uQqzfY0BIoP3jp5aCzklUOl5xUtQvXtaNbDxQr64oohoyEajV2"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./designcraft-web-78e075b017f8e581_bg.wasm" crossorigin="anonymous" integrity="sha384-B3o7vAHCjXq3uIQzKmoJ/dzjEwal35qZpi8H/YYyPdeHKuKXvyvA/Sq8STtpo1zO" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./designcraft-web-64839791dcdbeb23.js" crossorigin="anonymous" integrity="sha384-i8KvayM/BeTk5CnkW5JROB7TTunm/ucJaTmZgbz3gUSV0UPWMMi4X9DyRX7A7I9b"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./designcraft-web-64839791dcdbeb23_bg.wasm" crossorigin="anonymous" integrity="sha384-1rbujWQy4hTeEwX2YeZMjhHSxiBb1aU1m4R5hVZ2kzF7dKyUxfYm28DV5jugcxJn" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="designcraft_canvas"></canvas>
   <div id="designcraft_loading">Loading DesignCraft&hellip;</div>

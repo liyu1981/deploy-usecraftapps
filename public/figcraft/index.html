@@ -10,8 +10,8 @@
 <link rel="manifest" href="manifest.json">
     
 <script type="module">
-import init, * as bindings from './figcraft-web-44d2aabb268291d5.js';
-const wasm = await init({ module_or_path: './figcraft-web-44d2aabb268291d5_bg.wasm' });
+import init, * as bindings from './figcraft-web-e8693ef48e438d68.js';
+const wasm = await init({ module_or_path: './figcraft-web-e8693ef48e438d68_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -25,12 +25,16 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #figcraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
     #figcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: #6b6b6b; font: 14px system-ui, sans-serif; pointer-events: none; }
+    /* Shown once the page stopped on an internal error (web.rs: show_stopped). */
+    #figcraft_stopped { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box;
+      padding: 16px; text-align: center; color: #1e1e1e; background: rgba(245, 245, 245, 0.92); font: 14px/1.5 system-ui, sans-serif; }
     @media (prefers-color-scheme: dark) {
       html, body { background: #2c2c2c; }
       #figcraft_loading { color: #b8b8b8; }
+      #figcraft_stopped { color: #f0f0f0; background: rgba(44, 44, 44, 0.92); }
     }
   </style>
-<link rel="modulepreload" href="./figcraft-web-44d2aabb268291d5.js" crossorigin="anonymous" integrity="sha384-M3WX0a3xFgTLw02kA2hxWdPzn/kE12U1kll0f4T6e97LoNKkjgGjZPK10vtA+bot"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./figcraft-web-44d2aabb268291d5_bg.wasm" crossorigin="anonymous" integrity="sha384-F4uwVsQwgXLAMZQwn3P7V8Cs0PQIdy2UVCqEvrTBgrYz9JVIVWjankPcu0ysg9o0" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./figcraft-web-e8693ef48e438d68.js" crossorigin="anonymous" integrity="sha384-W8TahXz5Uws7Eclj2xGJY1bvAaa+PY6kVcg2+gVIJuuUR3NA0LzbfwtHXJkzr46D"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./figcraft-web-e8693ef48e438d68_bg.wasm" crossorigin="anonymous" integrity="sha384-/KiKC6Qp6U+r8MssyzoyTuOouWbhGhPs1CBvRFQ5Xnyl/oPM2acnPN6DDZlnARJo" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="figcraft_canvas"></canvas>
   <div id="figcraft_loading">Loading FigCraft&hellip;</div>
