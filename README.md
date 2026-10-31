@@ -12,6 +12,11 @@ A static, self-hosted copy of the web builds of the [Craft Apps](https://getartc
 suite (PhotoCraft, VectorCraft, LightCraft, …), kept up to date from the official GitHub
 releases and ready to self host or deploy on cloud (Vercel, Netlify, Cloudflare Pages, …).
 
+> **Auto-synced daily.** This repository automatically syncs with upstream every day to
+> keep the craft apps on their newest versions, and creates a new GitHub release in this
+> repository whenever any craft app is updated — so you always have a tagged, reproducible
+> snapshot to deploy or roll back to.
+
 Each craft app's web build runs entirely in the browser (WebAssembly), so there is no
 backend, database, or build step. Vercel only has to serve the files in `public/`. The
 landing page at `/` links to each app under its own subfolder (e.g. `/photocraft/`).
