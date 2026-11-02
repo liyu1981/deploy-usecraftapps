@@ -512,7 +512,7 @@ INDEX="$STAGE_PUBLIC/index.html"
       <div class="s1-row">
         <div class="s1-text">
           <p class="eyebrow"><span class="num">01</span> Crafting Apps</p>
-          <h1>Fourteen apps. <span class="accent">One craft.</span></h1>
+          <h1>Sixteen apps. <span class="accent">One craft.</span></h1>
           <p class="lead">Image editing, vector illustration, video, photography, PDFs, motion graphics,
             page layout, interface design, word processing, audio, presentations, CAD and spreadsheets.
             Native, open-source apps, built in Rust and free to use.
