@@ -1,0 +1,27 @@
+TextureCraft
+Copyright (c) 2026 ArtCraft Team and the TextureCraft contributors.
+Licensed under the MIT License or the Apache License, Version 2.0, at your option
+(LICENSE-MIT, LICENSE-APACHE).
+
+The ArtCraft name, wordmark and logos in docs/brand/ are trademarks of the ArtCraft Team. They are
+not open source and are not covered by the license above; their terms are in
+docs/brand/LICENSE-brand.txt.
+
+Third-party material
+
+This product bundles third-party material under its own licenses, listed below. The per-file
+list (author, source, license) is in ATTRIBUTION.md.
+
+Phosphor Icons (compiled in through the egui-phosphor crate) — MIT.
+egui default fonts (compiled in through the epaint_default_fonts crate): Ubuntu-Light — Ubuntu
+Font Licence 1.0; Hack — MIT and Bitstream Vera License; Noto Emoji — SIL Open Font License 1.1;
+emoji-icon-font — MIT.
+
+Every other bundled asset is original to TextureCraft (generated in code or drawn for this
+project).
+
+Builds made with craft-fonts (CRAFT_FONTS_DIR; all official releases) also embed the fonts listed
+in https://github.com/storytold/craft-fonts/blob/main/ATTRIBUTION.md (Inter
+and BIZ UDPGothic on desktop and web, Noto Sans CJK SC on desktop), under the SIL Open Font License
+1.1. Their licence texts ship
+with the package as OFL-<family>.txt.

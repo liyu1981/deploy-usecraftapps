@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="color-scheme" content="dark">
+  <title>TextureCraft</title>
+  
+<script type="module">
+import init, * as bindings from './texturecraft-web-bb47d93e4380f8c3.js';
+const wasm = await init({ module_or_path: './texturecraft-web-bb47d93e4380f8c3_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; background: #1c1c1c; }
+    /* Touch and pen strokes paint and orbit; the browser must not scroll, zoom or select. */
+    #texturecraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; outline: none;
+      touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+    #texturecraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; padding: 0 16px; text-align: center; color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; background: #1c1c1c; }
+    #texturecraft_loading h1 { margin: 0; color: #f2f2f2; font-size: 20px; font-weight: 600; letter-spacing: 0.02em; }
+    #texturecraft_loading p { margin: 0; max-width: 420px; line-height: 1.5; }
+    #texturecraft_loading a { color: #e0e0e0; pointer-events: auto; }
+    /* Indeterminate while the WebAssembly downloads (the page has no script to measure it); the
+       app sets its value through the startup steps once it runs. */
+    #texturecraft_progress { width: min(280px, 70vw); height: 4px; border: 0; border-radius: 2px; background: #333; color: #2f86eb; accent-color: #2f86eb; }
+    #texturecraft_progress::-webkit-progress-bar { background: #333; border-radius: 2px; }
+    #texturecraft_progress::-webkit-progress-value { background: #2f86eb; border-radius: 2px; }
+    #texturecraft_progress::-moz-progress-bar { background: #2f86eb; border-radius: 2px; }
+    /* Styled progress bars lose the native "busy" animation: a sweep stands in while downloading. */
+    #texturecraft_progress:indeterminate { background: linear-gradient(90deg, #333 0%, #2f86eb 50%, #333 100%) 0 0 / 300% 100%;
+      animation: texturecraft-busy 1.4s linear infinite; }
+    #texturecraft_progress:indeterminate::-webkit-progress-bar { background: transparent; }
+    #texturecraft_progress:indeterminate::-moz-progress-bar { background: transparent; }
+    @keyframes texturecraft-busy { from { background-position: 100% 0; } to { background-position: -50% 0; } }
+    #texturecraft_status { font-size: 12px; color: #969696; }
+    /* The app removes this element once it runs. If the WebAssembly never downloads or doesn't match
+       this page, no Rust runs to say so, so the page itself shows what to do after a while. */
+    #texturecraft_stalled { color: #8c8c8c; visibility: hidden; animation: texturecraft-stalled 0s 30s forwards; }
+    @keyframes texturecraft-stalled { to { visibility: visible; } }
+  </style>
+<link rel="modulepreload" href="./texturecraft-web-bb47d93e4380f8c3.js" crossorigin="anonymous" integrity="sha384-QrkFel8fQYzo8Bfl1fluYWwcWYlUpVKyaNp8uRMUG3k2jKW1KLLNSvuIyKBkJVmL"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./texturecraft-web-bb47d93e4380f8c3_bg.wasm" crossorigin="anonymous" integrity="sha384-uqr0iJA1P5Qw3c4jMQ9nSclDDFQCq8//2EuWNtAoefgapQcANZnRv1vLBkFSPN6j" as="fetch" type="application/wasm"></head>
+<body>
+  <canvas id="texturecraft_canvas"></canvas>
+  <div id="texturecraft_loading" role="status" aria-live="polite">
+    <h1>TextureCraft</h1>
+    <progress id="texturecraft_progress" max="1" aria-label="Loading TextureCraft"></progress>
+    <p id="texturecraft_status">Downloading&hellip;</p>
+    <p id="texturecraft_stalled">This is taking longer than usual. If TextureCraft doesn't start, its files may have failed to
+      download or come from a different version of this page. <a href="">Reload</a> to try again; the browser
+      console lists what failed.</p>
+  </div>
+</body>
+</html>
