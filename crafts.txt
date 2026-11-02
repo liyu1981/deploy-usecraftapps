@@ -14,3 +14,5 @@ deckcraft DeckCraft "Presentations & slide shows" "Build and deliver dynamic sli
 cadcraft CADCraft "Computer-aided design & drafting" "Fast, open-source computer-aided design and drafting in pure Rust." dev
 gridcraft GridCraft "Spreadsheets & data analysis" "Fast, open-source spreadsheets and data analysis, rebuilt in pure Rust." dev
 solidcraft SolidCraft "Parametric 3D CAD" "Open-source parametric 3D CAD, built in Rust." dev
+craft-anything Craft Anything "Software exploration & creation" "Understand how software works, then craft your own. - ArtCraft." early
+texturecraft TextureCraft "3D texture painting" "3D texture painting, rebuilt in pure Rust. - ArtCraft." dev
