@@ -7,8 +7,8 @@
   <link rel="icon" href="./gridcraft-45f84b7721cb79a9.ico" integrity="sha384-FzBCWcgv5VqBLEPSBvyC78gOs2HMh3hKu2LSLSXU01NgL5yKLk/nHdINuu0Ztky1"/>
   
 <script type="module">
-import init, * as bindings from './gridcraft-web-7d721fa0754b75b9.js';
-const wasm = await init({ module_or_path: './gridcraft-web-7d721fa0754b75b9_bg.wasm' });
+import init, * as bindings from './gridcraft-web-bcef4812c788a13d.js';
+const wasm = await init({ module_or_path: './gridcraft-web-bcef4812c788a13d_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -23,7 +23,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #gridcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: #555; font: 14px system-ui, sans-serif; pointer-events: none; }
   </style>
-<link rel="modulepreload" href="./gridcraft-web-7d721fa0754b75b9.js" crossorigin="anonymous" integrity="sha384-7I0WKng3MehAltgEBZv9hNR846CNyQnKkVGSV8t2huKPANTWUWHnexnpWzsO6UgO"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./gridcraft-web-7d721fa0754b75b9_bg.wasm" crossorigin="anonymous" integrity="sha384-qdT/L+SrEtExOIw7syxkF0uTrc0Do+pkiLte3KWC842FgqZtQ4C1tJ28wZMXTltb" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./gridcraft-web-bcef4812c788a13d.js" crossorigin="anonymous" integrity="sha384-fbj7S2xQuOKGxV5Rt926RmAc30l3yvvbeokPaaenWoSnkCf7r3Cu72vXrwkw8Ssv"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./gridcraft-web-bcef4812c788a13d_bg.wasm" crossorigin="anonymous" integrity="sha384-xvR4yAIrFuvtLj4MJ7vu7V+C4pjTBTmlp65/EHO0j/VIDUaBQvSCLBaMy1cNjULQ" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="gridcraft_canvas"></canvas>
   <div id="gridcraft_loading">Loading GridCraft&hellip;</div>
