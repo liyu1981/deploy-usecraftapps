@@ -14,6 +14,10 @@
 <h1 align="center">Craft Anything</h1>
 
 <p align="center">
+  <b>English</b> · <a href="README.ja.md">日本語</a> · <a href="README.zh.md">简体中文</a> · <a href="README.ko.md">한국어</a>
+</p>
+
+<p align="center">
   <b>See how any website, app or game works, then have AI build your own version; an open-source, clean-room engine in pure Rust.</b><br>
   Point it at a target, say what you want, and it studies the original with real inspection tools,<br>
   has a coding agent build a new project, checks the result against the original and refines it.
@@ -79,7 +83,7 @@
     </td>
     <td width="25%" valign="top">
       <h3>🤖 Agent-ready</h3>
-      284 tools, each one a CLI command and an MCP tool, so any agent can drive the same engine the app uses. No AI is needed to inspect.
+      314 tools, each one a CLI command and an MCP tool, so any agent can drive the same engine the app uses. No AI is needed to inspect.
     </td>
   </tr>
 </table>
@@ -168,7 +172,7 @@ connects Craft Anything to coding-agent apps.
 
 ## Under the hood
 
-A pure-Rust reverse-engineering engine with 284 tools (271 in the engine, the rest from the AI and
+A pure-Rust reverse-engineering engine with 314 tools (298 in the engine, the rest from the AI and
 setup layers) for native programs, .NET, Java, Android, Apple, Electron/JavaScript, websites,
 firmware, packet captures, databases and game files. Its own decoders, disassembler and
 decompiler work without any outside program; Deep mode uses them all, and Ghidra when it's
@@ -258,7 +262,29 @@ Installers and executables are code-signed. The portable zip keeps its settings 
 | Build | File | Notes |
 |---|---|---|
 | App, universal (Apple silicon + Intel) | `craft-anything-<ver>-macos-universal.dmg` | Signed and notarized |
-| Command-line tool, universal | `craft-anything-cli-<ver>-macos-universal.zip` | Signed and notarized |
+| Command-line tool, universal | `craft-anything-cli-<ver>-macos-universal.zip` | Signed and notarized; see below if macOS blocks it |
+
+Versions after 0.2.0 include the command-line tool in the app, so builds don't need the separate
+zip. You only need it to use the command line without the app.
+
+A browser download of the zip can stop with "Apple could not verify craft-anything-cli" (a lone
+program can't carry its notarization with it, so macOS has to look it up online). A download from
+the terminal isn't checked this way, so use this instead:
+
+```sh
+ver=0.2.0   # change this to the version you want
+curl -fLO "https://github.com/storytold/craft-anything/releases/download/v$ver/craft-anything-cli-$ver-macos-universal.zip"
+ditto -x -k "craft-anything-cli-$ver-macos-universal.zip" .
+mkdir -p ~/.local/bin
+mv "craft-anything-cli-$ver-macos-universal/craft-anything-cli" ~/.local/bin/
+~/.local/bin/craft-anything-cli --version
+```
+
+To run it as just `craft-anything-cli`, add `~/.local/bin` to your `PATH`.
+
+If you already have the blocked copy, press Done (not Move to Bin), then run
+`xattr -d com.apple.quarantine <path to craft-anything-cli>`, or allow it in System Settings →
+Privacy & Security → Open Anyway.
 
 ### Linux
 
@@ -307,6 +333,28 @@ RISC-V (riscv64): `craft-anything-<ver>-linux-riscv64.tar.gz`, a tarball only.
 </p>
 
 ---
+
+## The Craft App Suite
+
+| | App | What it's for | Code | Learn more |
+|:-:|---|---|---|---|
+| <img src="https://raw.githubusercontent.com/storytold/photocraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.photocraft.png" alt="" width="32" height="32"> | **PhotoCraft** | Image editing: layers, masks, type and real PSD files | [GitHub](https://github.com/storytold/photocraft) | [Website](https://getartcraft.com/apps/photocraft) |
+| <img src="https://raw.githubusercontent.com/storytold/vectorcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.vectorcraft.png" alt="" width="32" height="32"> | **VectorCraft** | Vector illustration | [GitHub](https://github.com/storytold/vectorcraft) | [Website](https://getartcraft.com/apps/vectorcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/filmcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.filmcraft.png" alt="" width="32" height="32"> | **FilmCraft** | Video editing, color and sound | [GitHub](https://github.com/storytold/filmcraft) | [Website](https://getartcraft.com/apps/filmcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/lightcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.lightcraft.png" alt="" width="32" height="32"> | **LightCraft** | Photo library and raw development | [GitHub](https://github.com/storytold/lightcraft) | [Website](https://getartcraft.com/apps/lightcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/pdfcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.pdfcraft.png" alt="" width="32" height="32"> | **PdfCraft** | Reading, organizing and protecting PDFs | [GitHub](https://github.com/storytold/pdfcraft) | [Website](https://getartcraft.com/apps/pdfcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/effectcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.effectcraft.png" alt="" width="32" height="32"> | **EffectCraft** | Motion graphics and visual effects | [GitHub](https://github.com/storytold/effectcraft) | [Website](https://getartcraft.com/apps/effectcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/designcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.designcraft.png" alt="" width="32" height="32"> | **DesignCraft** | Page layout and publishing | [GitHub](https://github.com/storytold/designcraft) | [Website](https://getartcraft.com/apps/designcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/figcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.figcraft.png" alt="" width="32" height="32"> | **FigCraft** | Interface design and prototyping | [GitHub](https://github.com/storytold/figcraft) | [Website](https://getartcraft.com/apps/figcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/wordcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.wordcraft.png" alt="" width="32" height="32"> | **WordCraft** | Word processing and documents | [GitHub](https://github.com/storytold/wordcraft) | [Website](https://getartcraft.com/apps/wordcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/soundcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.soundcraft.png" alt="" width="32" height="32"> | **SoundCraft** | Audio recording and editing | [GitHub](https://github.com/storytold/soundcraft) | [Website](https://getartcraft.com/apps/soundcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/deckcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.deckcraft.png" alt="" width="32" height="32"> | **DeckCraft** | Presentations and slide decks | [GitHub](https://github.com/storytold/deckcraft) | [Website](https://getartcraft.com/apps/deckcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/cadcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.cadcraft.png" alt="" width="32" height="32"> | **CADCraft** | Computer-aided design | [GitHub](https://github.com/storytold/cadcraft) | [Website](https://getartcraft.com/apps/cadcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/gridcraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.gridcraft.png" alt="" width="32" height="32"> | **GridCraft** | Spreadsheets and data | [GitHub](https://github.com/storytold/gridcraft) | [Website](https://getartcraft.com/apps/gridcraft) |
+| <img src="https://raw.githubusercontent.com/storytold/texturecraft/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.texturecraft.png" alt="" width="32" height="32"> | **TextureCraft** | 3D texture painting | [GitHub](https://github.com/storytold/texturecraft) | [Website](https://getartcraft.com/apps/texturecraft) |
+| <img src="https://raw.githubusercontent.com/storytold/craft-anything/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.craft-anything.png" alt="" width="32" height="32"> | **Craft Anything** | See how any software works, then build your own | [GitHub](https://github.com/storytold/craft-anything) | [Website](https://getartcraft.com/apps/craft-anything) |
+| <img src="https://raw.githubusercontent.com/tangency-labs/solidcraft/main/assets/icons/app/linux/exports/hicolor/64x64/apps/io.tangencylabs.solidcraft.png" alt="" width="32" height="32"> | **SolidCraft** | Parametric 3D CAD by Tangency Labs (community app) | [GitHub](https://github.com/tangency-labs/solidcraft) | |
+
 
 ## License and credits
 

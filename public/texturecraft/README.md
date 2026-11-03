@@ -48,7 +48,7 @@
 <br>
 
 <p align="center">
-  <img src="docs/images/texturecraft-workspace.png" alt="The TextureCraft workspace: the material library on the left; the 3D viewport and the 2D UV view of a material ball in chipped red paint with grime and a hand-painted gold stripe, on a rusted iron base; and the texture set list, layer stack and brush properties on the right" width="100%">
+  <img src="docs/images/texturecraft-workspace.png" alt="The TextureCraft workspace: the material library on the left; the 3D viewport and the 2D UV view of a 1970s portable TV in aged cream plastic with a hand-drawn crayon flower; and the texture set list, the layer stack with its Crayon doodle and Wear and dirt folders, and the fill layer properties on the right" width="100%">
   <br><sub><b>The workspace</b>: asset shelf, 3D viewport, 2D UV view, texture sets, layer stack and properties</sub>
 </p>
 
@@ -73,7 +73,7 @@
 <table>
 <tr>
 <td width="50%" valign="top">
-  <img src="docs/images/texturecraft-bake.png" alt="Bake mode: the texture sets and mesh map bakers on the left, the common bake parameters below them, and the Bake selected textures button under the viewport" width="100%">
+  <img src="docs/images/texturecraft-bake.png" alt="Bake mode on the portable TV: its seven texture sets and the mesh map bakers on the left, the common bake parameters below them, and the Bake selected textures button under the viewport" width="100%">
   <p align="center"><sub><b>Bake mesh maps</b>: ambient occlusion, curvature, thickness and more, ray traced on the GPU</sub></p>
 </td>
 <td width="50%" valign="top">
@@ -83,7 +83,7 @@
 </tr>
 <tr>
 <td width="50%" valign="top">
-  <img src="docs/images/texturecraft-rendering.png" alt="Rendering mode: the material ball path traced on the GPU at 256 samples with denoising, the gold stripe catching the studio light, and the render settings in a card over the viewport" width="100%">
+  <img src="docs/images/texturecraft-rendering.png" alt="Rendering mode: the portable TV path traced on the GPU at 256 samples with denoising, the curved screen catching the studio light, and the render settings in a card over the viewport" width="100%">
   <p align="center"><sub><b>Rendering mode</b> (F10): your textures path traced on the GPU, with a denoiser</sub></p>
 </td>
 <td width="50%" valign="top">
@@ -95,18 +95,19 @@
 
 ## Made in TextureCraft
 
-Both pieces below were textured with TextureCraft's procedural materials and smart materials (no
-textures or models from anywhere else) and path traced on the GPU by `texturecraft-cli render`.
+Two original props, modelled procedurally by contributors, textured layer by layer with TextureCraft's
+own materials, masks and mesh-map generators (no textures or models from anywhere else) and path
+traced on the GPU by `texturecraft-cli render`.
 
 <table>
 <tr>
 <td width="50%" valign="top">
-  <img src="docs/images/texturecraft-crate.png" alt="A path-traced crate: teal paint chipping off wooden planks, a rusted iron lid and a tarnished brass handle" width="100%">
-  <p align="center"><sub><b>Crate</b>: chipped paint on wood, rusted iron and tarnished brass smart materials, one per texture set</sub></p>
+  <img src="docs/images/texturecraft-lantern.png" alt="A path-traced storm lantern on a dark stage: red enamel chipped to bare steel on the edges, rust and grime in the seams, a cream pinstripe, a tarnished brass burner and knob, rusty guard wires and a glowing flame behind the glass globe" width="100%">
+  <p align="center"><sub><b>Storm lantern</b>: chipped enamel, rust, soot and a lit flame over eight texture sets</sub></p>
 </td>
 <td width="50%" valign="top">
-  <img src="docs/images/texturecraft-materials.png" alt="Three path-traced material balls: glossy red car paint with a clear coat, purple velvet with sheen, and brushed steel with anisotropic highlights" width="100%">
-  <p align="center"><sub><b>Shading lobes</b>: car paint (clear coat), velvet (sheen) and brushed steel (anisotropy)</sub></p>
+  <img src="docs/images/texturecraft-camera.png" alt="A path-traced vintage rangefinder camera: black enamel worn through to brass along the edges and corners of the top plate, cognac leatherette, knurled chrome dials, a black lens barrel with an engraved distance scale and a coated front element" width="100%">
+  <p align="center"><sub><b>Rangefinder camera</b>: black paint brassing, leatherette, chrome and coated glass</sub></p>
 </td>
 </tr>
 </table>
@@ -124,8 +125,13 @@ textures or models from anywhere else) and path traced on the GPU by `texturecra
 - **Robust.** No panics in shipped code, every command tested with hostile input, unlimited undo
   from copy-on-write snapshots, and lossless `.tcraft` projects.
 - **Open.** glTF/GLB, FBX, COLLADA, USD, Alembic, OBJ, PLY and STL in; PNG, JPEG, TGA, TIFF, BMP,
-  WEBP, EXR and HDR textures out at 8, 16 or 32 bits, with UDIM tiles; OBJ, textured GLB and USD
+  WEBP, EXR and HDR textures out at 8, 16 or 32 bits, with UDIM tiles; textured OBJ, GLB and USD
   mesh export. Every material, environment, brush alpha and built-in mesh is procedural.
+- **Works with MaterialCraft.** Node-based materials from
+  [MaterialCraft](https://github.com/storytold/materialcraft) (`.mcmat`, sent straight to the
+  shelf) paint and fill like any material, and their graph inputs stay sliders, colors and
+  presets here: each change re-cooks the material at the texture set's resolution, with this
+  mesh's baked maps feeding the graph.
 - **Agent-native.** Every menu item and tool is a command you can drive from the CLI, a JSON
   control channel or an **MCP server**, so Claude and other agents can paint, bake and export the
   way a person does.
@@ -150,13 +156,18 @@ cd apps/texturecraft-web && trunk serve                      # web build
 cargo xtask ci                                               # fmt, clippy, tests, layering, wasm
 ```
 
-You need Rust 1.95 or newer. The app opens with a baked sample project; **File ▸ New project** starts
+You need Rust 1.95 or newer. The app opens with a baked sample project and a start window (new project, open, recent projects); **File ▸ New project** starts
 from a built-in mesh, a project template or your own mesh file (UVs are generated if it has none).
 
-Japanese, Chinese and Korean interface text uses the fonts of
+Japanese, Chinese, Korean and Arabic interface text uses the fonts of
 [storytold/craft-fonts](https://github.com/storytold/craft-fonts) where it has them, an optional
 build input (releases always use it): `CRAFT_FONTS_DIR="$PWD/../craft-fonts" cargo run --release -p texturecraft`
 (an absolute path). Without it, the desktop app uses the installed system fonts.
+
+If the app cannot start (no usable GPU, say) or has to close, it says why in a message box and
+appends the details to `errors.log` beside its settings (`%APPDATA%\TextureCraft\data` on Windows,
+`~/Library/Application Support/TextureCraft` on macOS, `~/.local/share/texturecraft` on Linux).
+On a machine with several GPUs, `--gpu <part of the name>` or `--power-pref high` picks one.
 
 ### Use it from Claude Code and other agents
 
@@ -183,13 +194,14 @@ area, the remaining work and what's next.
 to end, weighted by how much of the day each area carries: importing meshes, texture sets and UDIM
 tiles, the layer stack with masks, effects and smart materials, every painting tool, baking, the PBR
 viewport and Rendering mode, export presets and templates, and the full menu set. The interface
-speaks English, French, German, Spanish, Portuguese, Italian, Japanese, Chinese and Korean;
+speaks English, French, German, Spanish, Portuguese, Italian, Japanese, Chinese, Korean and Arabic;
 [localization-parity.md](docs/localization-parity.md) has the details. The scores are self-assessed
 from our code against public documentation.
 
 **What's missing:**
 - hardware ray tracing in Rendering mode;
-- pen tilt (the windowing layer doesn't report it yet);
+- pen tilt, and pen pressure on Linux, macOS and desktop browsers (the windowing layer doesn't
+  report them yet);
 - Alembic files in the older HDF5 container, and Alembic animation (the first sample is read);
 - a native-speaker review of the translations;
 - the first signed release on every platform.

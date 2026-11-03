@@ -10,8 +10,8 @@
 <link rel="manifest" href="manifest.json">
   
 <script type="module">
-import init, * as bindings from './photocraft-web-boot-b68a147646565488.js';
-const wasm = await init({ module_or_path: './photocraft-web-boot-b68a147646565488_bg.wasm' });
+import init, * as bindings from './photocraft-web-boot-191ac384523731b7.js';
+const wasm = await init({ module_or_path: './photocraft-web-boot-191ac384523731b7_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -32,7 +32,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #photocraft_stalled { color: #8c8c8c; visibility: hidden; animation: photocraft-stalled 0s 20s forwards; }
     @keyframes photocraft-stalled { to { visibility: visible; } }
   </style>
-<link rel="modulepreload" href="./photocraft-web-boot-b68a147646565488.js" crossorigin="anonymous" integrity="sha384-tTXWE4GriiJf9cdiPLOovLmPA+b0Ejtsx8rp52w9BKhkVw66n+kfOFY1L//mxHvP"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./photocraft-web-boot-b68a147646565488_bg.wasm" crossorigin="anonymous" integrity="sha384-EdDOWrDS7zygGTY0vDPS+mn+/+Y08y1MaLhSv21Am8S4txmJR11Teo7l++14CPZr" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./photocraft-web-boot-191ac384523731b7.js" crossorigin="anonymous" integrity="sha384-7MOGmBA9DYFydWcIMEQrzulzc+J31nVh9puQ0uzEXicy0xMsBz3Qu3KmD5OijC4i"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./photocraft-web-boot-191ac384523731b7_bg.wasm" crossorigin="anonymous" integrity="sha384-PNml+visJxa6etE0TBto3m/AKmAkijG6PPuc80IfFcnqO1vEU8bWCO4s8b1514on" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="photocraft_canvas"></canvas>
   <div id="photocraft_loading">
