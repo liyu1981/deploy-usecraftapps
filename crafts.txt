@@ -16,3 +16,4 @@ gridcraft GridCraft "Spreadsheets & data analysis" "Fast, open-source spreadshee
 solidcraft SolidCraft "Parametric 3D CAD" "Open-source parametric 3D CAD, built in Rust." dev
 craft-anything Craft Anything "Software exploration & creation" "Understand how software works, then craft your own. - ArtCraft." early
 texturecraft TextureCraft "3D texture painting" "3D texture painting, rebuilt in pure Rust. - ArtCraft." dev
+materialcraft MaterialCraft "Procedural materials" "Procedural materials, node by node. - ArtCraft." dev
