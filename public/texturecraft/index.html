@@ -7,8 +7,8 @@
   <title>TextureCraft</title>
   
 <script type="module">
-import init, * as bindings from './texturecraft-web-fbb46c8c6a473e2.js';
-const wasm = await init({ module_or_path: './texturecraft-web-fbb46c8c6a473e2_bg.wasm' });
+import init, * as bindings from './texturecraft-web-adf5e1d56c051891.js';
+const wasm = await init({ module_or_path: './texturecraft-web-adf5e1d56c051891_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -45,7 +45,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #texturecraft_stalled { color: #8c8c8c; visibility: hidden; animation: texturecraft-stalled 0s 30s forwards; }
     @keyframes texturecraft-stalled { to { visibility: visible; } }
   </style>
-<link rel="modulepreload" href="./texturecraft-web-fbb46c8c6a473e2.js" crossorigin="anonymous" integrity="sha384-JCIXPI7g6Z56DFbJV1c9GGiqe58NREvoUZGivwgfpo9awwvVYSwUZo1pKkKP3Cq5"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./texturecraft-web-fbb46c8c6a473e2_bg.wasm" crossorigin="anonymous" integrity="sha384-YELaEvI6WA28j+JHnoea1tWdveUwVYkQxaYledZ63V47ou6cTQFwc9rELIXS5s8x" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./texturecraft-web-adf5e1d56c051891.js" crossorigin="anonymous" integrity="sha384-7/YGiIKypyQVHy9aBu68jZzdx9A7oZBG0hGFLrJwUtE17aOUWpsIeg/oI6h0DHFI"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./texturecraft-web-adf5e1d56c051891_bg.wasm" crossorigin="anonymous" integrity="sha384-Mcsuhyo1PLOpmwGMCqmbZdA/21BTyEwRQyYSPlah2/Efkaou8U3AgF5VEkIDNUOR" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="texturecraft_canvas"></canvas>
   <div id="texturecraft_loading" role="status" aria-live="polite">
