@@ -11,8 +11,8 @@
     
     
 <script type="module">
-import init, * as bindings from './pdfcraft-web-812ccfc72d266126.js';
-const wasm = await init({ module_or_path: './pdfcraft-web-812ccfc72d266126_bg.wasm' });
+import init, * as bindings from './pdfcraft-web-87352eb54998b79.js';
+const wasm = await init({ module_or_path: './pdfcraft-web-87352eb54998b79_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -26,7 +26,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
       canvas { width: 100%; height: 100%; display: block; outline: none; }
       @media (prefers-color-scheme: dark) { html, body { background: #19191c; } }
     </style>
-  <link rel="modulepreload" href="./pdfcraft-web-812ccfc72d266126.js" crossorigin="anonymous" integrity="sha384-XMqaEp8GtESkfiM1IzuT6OhXBhx3u8HPA7IDHIrAELXPFSZo3aSA7IGfaQH1hxJR"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./pdfcraft-web-812ccfc72d266126_bg.wasm" crossorigin="anonymous" integrity="sha384-zmyFue9GEjyb1EQG7y0SZ3+uyTq0nrukLMZMuZlDsruZTaDrwBbaoh+yQ26aootK" as="fetch" type="application/wasm"></head>
+  <link rel="modulepreload" href="./pdfcraft-web-87352eb54998b79.js" crossorigin="anonymous" integrity="sha384-Z++CJfxVybE/NeDpzebUrpTXzicXGHBYFKORXnixtzljJfXbZllQRX1+/W9ImxqU"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./pdfcraft-web-87352eb54998b79_bg.wasm" crossorigin="anonymous" integrity="sha384-HLsemB60WEJcmhV9G+GRiMLIewMIkQGmugiKNBoY1hWWe4p1O6i1sNE+oI0cqzSd" as="fetch" type="application/wasm"></head>
   <body>
     <canvas id="pdfcraft"></canvas>
   </body>

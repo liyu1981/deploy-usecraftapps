@@ -113,7 +113,7 @@ ray-traced ambient occlusion and a shadowed key light).
 - **Tileable by design.** Noises and patterns live on whole-number lattices, so everything tiles
   seamlessly at any resolution, from 16 px to 8K.
 - **Robust.** No panics in shipped code, every command tested with hostile input, every node cooked
-  with odd inputs in tests, unlimited undo from snapshots, and lossless `.mcraft` packages.
+  with odd inputs in tests, unlimited undo from snapshots, and lossless project files.
 - **Open.** Export base color, normal, roughness, metallic, height and ambient occlusion as PNG,
   JPEG, TGA, TIFF, BMP, WEBP, EXR or HDR at 8, 16 or 32 bits, with your own file name pattern.
 - **Works with TextureCraft.** **File ▸ Send to TextureCraft** puts a material on TextureCraft's
@@ -131,20 +131,20 @@ ray-traced ambient occlusion and a shadowed key light).
 git clone https://github.com/storytold/materialcraft
 cd materialcraft
 
-cargo run --release -p materialcraft                          # desktop app (opens the brick wall sample)
-cargo run --release -p materialcraft -- package.mcraft        # open a package
+cargo run --release -p materialcraft                          # desktop app
+cargo run --release -p materialcraft -- package.sbs           # open a package (.sbs or .mcraft)
 cargo run --release -p materialcraft -- --control 7878        # + JSON control channel
 cargo run --release -p materialcraft-cli -- mcp               # MCP server (stdio)
-cargo run --release -p materialcraft-cli -- new wood wood.mcraft
-cargo run --release -p materialcraft-cli -- render wood.mcraft wood.png --scene sphere --full --hq
-cargo run --release -p materialcraft-cli -- export wood.mcraft textures --format png --depth 16
-cargo run --release -p materialcraft-cli -- export my.mcraft out --set wear=0.7    # with a graph input "wear" set first
-cargo run --release -p materialcraft-cli -- run my.mcraft file.exportMaterial '{"path": "my.mcmat", "size": 2048}'   # for TextureCraft
+cargo run --release -p materialcraft-cli -- new wood wood.sbs
+cargo run --release -p materialcraft-cli -- render wood.sbs wood.png --scene sphere --full --hq
+cargo run --release -p materialcraft-cli -- export wood.sbs textures --format png --depth 16
+cargo run --release -p materialcraft-cli -- export my.sbs out --set wear=0.7    # with a graph input "wear" set first
+cargo run --release -p materialcraft-cli -- run my.sbs file.exportMaterial '{"path": "my.mcmat", "size": 2048}'   # for TextureCraft
 cd apps/materialcraft-web && trunk serve                      # web build
 cargo xtask ci                                                # fmt, clippy, tests, layering, wasm
 ```
 
-You need Rust 1.95 or newer. The app opens with the brick wall sample; **File ▸ New ▸ Graph...**
+You need Rust 1.95 or newer. The app opens with an empty graph in a new package; **File ▸ New ▸ Graph...**
 starts from a PBR template or one of the sample materials.
 
 ### Use it from Claude Code and other agents
@@ -172,7 +172,7 @@ area, the remaining work and what's next.
 SVG and Text, noises including tileable 3D ones, patterns, filters, the flood fill family,
 whole-material blending and weathering), function graphs with a visual editor and dynamic
 parameters, sub-graphs with exposed inputs and presets, the full editor (graph, library,
-properties, 2D view with histogram, 3D view with your own OBJ/glTF meshes), `.mcraft` packages,
+properties, 2D view with histogram, 3D view with your own OBJ/glTF meshes), SBS project files (`.mcraft` too),
 texture export, portable `.mcmat` materials that TextureCraft paints with (inputs stay editable
 there), the browser build with file I/O, the CLI, the control channel and the MCP server
 all work today. We estimate about two thirds (≈ 67%) of a material artist's daily workflow works
