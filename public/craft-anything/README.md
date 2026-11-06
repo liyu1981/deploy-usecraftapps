@@ -83,7 +83,7 @@
     </td>
     <td width="25%" valign="top">
       <h3>🤖 Agent-ready</h3>
-      314 tools, each one a CLI command and an MCP tool, so any agent can drive the same engine the app uses. No AI is needed to inspect.
+      320 tools, each one a CLI command and an MCP tool, so any agent can drive the same engine the app uses. No AI is needed to inspect.
     </td>
   </tr>
 </table>
@@ -137,6 +137,12 @@ Both modes drive the same engine.
   built-in engines (and Ghidra when it's installed), a website's JavaScript is read and its start
   page watched, and the builder may use all of them.
 
+Clean room is a rule about what Craft Anything offers and refuses. It is not an operating-system
+sandbox: it doesn't isolate your computer. A coding agent you run still acts as you, and what it can
+read, write or run depends on its own permissions. Which of an agent's own tools Craft Anything can
+refuse differs by agent; for Claude Code's tools in chats and questions, see
+[`docs/claude-code.md`](docs/claude-code.md).
+
 Switch in the title bar or Settings, with `settings_set deep_mode true`, or for one CLI run with
 `--deep` (or `--clean-room`).
 
@@ -152,7 +158,10 @@ Building needs a coding agent on your computer. **Claude Code** is supported fir
 Anything runs your own, unmodified `claude` program, which uses your own sign-in; Craft Anything
 never sees or handles your account. Your use of it falls under your own agreement with
 Anthropic. See [docs/claude-code.md](docs/claude-code.md) for how and why. A Codex adapter
-exists but hasn't been verified on a real install yet. Anthropic, OpenAI, OpenRouter and local
+exists but hasn't been verified on a real install yet. **GitHub Copilot** can use your installed
+Copilot CLI through ACP: sign in separately with `copilot login`. Other agents that speak ACP (Gemini CLI,
+Qwen Code, opencode, goose, Hermes, Maki) can be switched to it per backend; of those, only Maki has
+been run live. Anthropic, OpenAI, OpenRouter and local
 OpenAI-compatible servers are available for questions and analysis (Settings → AI).
 
 ## Built for agents
@@ -172,7 +181,7 @@ connects Craft Anything to coding-agent apps.
 
 ## Under the hood
 
-A pure-Rust reverse-engineering engine with 314 tools (298 in the engine, the rest from the AI and
+A pure-Rust reverse-engineering engine with 320 tools (300 in the engine, the rest from the AI and
 setup layers) for native programs, .NET, Java, Android, Apple, Electron/JavaScript, websites,
 firmware, packet captures, databases and game files. Its own decoders, disassembler and
 decompiler work without any outside program; Deep mode uses them all, and Ghidra when it's
@@ -230,8 +239,10 @@ only takes it off the list.
 >   servers, and WASM components in builds with the `wasm-plugins` option).
 > - **Partly there:** building with API keys and other coding agents (built, not yet run live),
 >   behaviour checks for apps and games, a few engine tools tested only against stand-ins.
-> - **Next:** the first public release (installers for Windows, macOS, Linux and FreeBSD, and the
->   browser viewer are set up in CI), then the managed tier.
+> - **Released:** public releases with installers for Windows, macOS, Linux and FreeBSD are
+>   published on the [Releases page](https://github.com/storytold/craft-anything/releases); they are
+>   still alpha.
+> - **Next:** the managed tier.
 >
 > [docs/STATUS.md](docs/STATUS.md) has the detail and how each part was checked,
 > [docs/tool-status.md](docs/tool-status.md) the tool-by-tool checklist, and
@@ -242,6 +253,14 @@ only takes it off the list.
 bypasses DRM, logins or anti-cheat. Rebuilds recreate layout, style and behaviour from evidence;
 the agent is told not to copy logos, photos or text unless you confirm you own them or have
 permission.
+
+**Installing dependencies runs code.** When a builder installs a project's dependencies, the commands
+run on your computer, and the packages can run code while they install. npm runs each package's
+install scripts by default, and Rust build scripts and Python source packages run their own setup
+code. Craft Anything asks before a command of a kind it hasn't seen in this project (`npm`, `cargo`…).
+Choosing "always allow" for `npm` lets every later npm command run without asking, so only do that
+for a project whose dependencies you trust. To install npm packages without their install scripts,
+run `npm install --ignore-scripts`.
 
 ## Downloads
 
@@ -286,6 +305,29 @@ If you already have the blocked copy, press Done (not Move to Bin), then run
 `xattr -d com.apple.quarantine <path to craft-anything-cli>`, or allow it in System Settings →
 Privacy & Security → Open Anyway.
 
+#### Checking that a Mac download is signed and notarized
+
+Each Mac release is signed with a Developer ID certificate and notarized by Apple. To check a download
+yourself, run these in Terminal (replace `<ver>` with the version and the paths with yours):
+
+```sh
+# The disk image: "accepted" and "source=Notarized Developer ID" mean it passed
+spctl --assess --type open --context context:primary-signature -v "craft-anything-<ver>-macos-universal.dmg"
+# The notarization ticket is attached: prints "The validate action worked!"
+xcrun stapler validate "craft-anything-<ver>-macos-universal.dmg"
+
+# The app, after you open the disk image: the signature must verify
+codesign --verify --deep --strict --verbose=2 "/Volumes/<disk image name>/Craft Anything.app"
+spctl --assess --type execute --verbose "/Volumes/<disk image name>/Craft Anything.app"
+
+# The command-line tool: a bare program can't carry a ticket, so macOS checks it online
+codesign --verify --strict --verbose=2 ~/.local/bin/craft-anything-cli
+codesign -dv --verbose=4 ~/.local/bin/craft-anything-cli 2>&1 | grep Authority
+```
+
+The `Authority` lines should name a "Developer ID Application" certificate. If a check fails, don't
+run the file; report it with the output and the release tag.
+
 ### Linux
 
 | Format | x86_64 | aarch64 (ARM64) | Notes |
@@ -297,6 +339,10 @@ Privacy & Security → Open Anyway.
 | Tarball | `craft-anything-<ver>-linux-x86_64.tar.gz` | `craft-anything-<ver>-linux-aarch64.tar.gz` | Unpack anywhere |
 
 RISC-V (riscv64): `craft-anything-<ver>-linux-riscv64.tar.gz`, a tarball only.
+
+The AppImage carries the CLI too: run `<AppImage> --cli <command>` (for example
+`<AppImage> --cli mcp` for an MCP client), or make a link to the AppImage named
+`craft-anything-cli` and run that.
 
 ### FreeBSD
 
