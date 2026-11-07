@@ -6,8 +6,8 @@
   <title>DeckCraft</title>
   
 <script type="module">
-import init, * as bindings from './deckcraft-web-795cd55361f835bc.js';
-const wasm = await init({ module_or_path: './deckcraft-web-795cd55361f835bc_bg.wasm' });
+import init, * as bindings from './deckcraft-web-669d056ba01b5e25.js';
+const wasm = await init({ module_or_path: './deckcraft-web-669d056ba01b5e25_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -23,7 +23,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #deckcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
   </style>
-<link rel="modulepreload" href="./deckcraft-web-795cd55361f835bc.js" crossorigin="anonymous" integrity="sha384-pf/IQCqFTu0WG7bw3cOmWhmG8VtvgsVNdMEL1W8YMDW4HUQqPOfxoAnJvlUTPJYP"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./deckcraft-web-795cd55361f835bc_bg.wasm" crossorigin="anonymous" integrity="sha384-v4E3JlItbg2dmr1R/EvB0Ph7x0F0zKGJhwQ6rGxh2QcvLGCPVa0yUDC8Qyky9lWF" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./deckcraft-web-669d056ba01b5e25.js" crossorigin="anonymous" integrity="sha384-/ysm8cbjO9g9ywN3tLB35zRHXvJkRhI/t2ivAzSDzvNIrroRi3c82Z87pdhoL64V"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./deckcraft-web-669d056ba01b5e25_bg.wasm" crossorigin="anonymous" integrity="sha384-wn8bWnUIm/KnMLaRTfFJsUBRnwme3plfqQ3uiVA4fA724h/DErwhVjtl1SDtYyLH" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="deckcraft_canvas"></canvas>
   <div id="deckcraft_loading">Loading DeckCraft&hellip;</div>

@@ -10,8 +10,8 @@
 <link rel="manifest" href="manifest.json">
   
 <script type="module">
-import init, * as bindings from './photocraft-web-boot-5628c7872bcd4605.js';
-const wasm = await init({ module_or_path: './photocraft-web-boot-5628c7872bcd4605_bg.wasm' });
+import init, * as bindings from './photocraft-web-boot-3455ac01d0e6aadf.js';
+const wasm = await init({ module_or_path: './photocraft-web-boot-3455ac01d0e6aadf_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -31,8 +31,17 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
        this page, no Rust runs to say so, so the page itself shows what to do after a while. */
     #photocraft_stalled { color: #8c8c8c; visibility: hidden; animation: photocraft-stalled 0s 20s forwards; }
     @keyframes photocraft-stalled { to { visibility: visible; } }
+    /* Revealed by the app when the module traps (an allocation it could not satisfy, or a panic):
+       the page would otherwise sit on the last frame, frozen. Static text, so it shows even if Rust
+       can no longer build any. */
+    #photocraft_stopped { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 0 16px; text-align: center; color: #e0e0e0; background: rgba(38, 38, 38, 0.92); font: 14px system-ui, sans-serif; pointer-events: auto; }
+    #photocraft_stopped[hidden] { display: none; }
+    #photocraft_stopped p { margin: 0 0 8px; max-width: 460px; line-height: 1.5; }
+    #photocraft_stopped a { color: #ffffff; }
+    #photocraft_stopped_detail { color: #b8b8b8; }
   </style>
-<link rel="modulepreload" href="./photocraft-web-boot-5628c7872bcd4605.js" crossorigin="anonymous" integrity="sha384-46CzFj6n53IsEpgsN4BAaxKnOqbPsCgVJBg6ZFBCStpCN4MiQMmUPnFHY1vKoP2L"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./photocraft-web-boot-5628c7872bcd4605_bg.wasm" crossorigin="anonymous" integrity="sha384-qVtzF1RWWU0nESHpnk7XgaPml3DimLQ+uKeaaAwhyfVsbxUNpPrguzP6lONAqhlF" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./photocraft-web-boot-3455ac01d0e6aadf.js" crossorigin="anonymous" integrity="sha384-cecX2qYgmM+yRZJXTDyewCg7imIVaBv7HDzMdwKjxeGBaiHyG/sYfrx2yECMpgew"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./photocraft-web-boot-3455ac01d0e6aadf_bg.wasm" crossorigin="anonymous" integrity="sha384-Qyj1/ymMb/qHH7cTfTGJE5qCxAcmTIabiJXCh/PGAuCKTXlcT9uaqyPZfxwHBqXg" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="photocraft_canvas"></canvas>
   <div id="photocraft_loading">
@@ -40,6 +49,11 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     <p id="photocraft_stalled">This is taking longer than usual. If PhotoCraft doesn't start, its files may have failed to
       download or come from a different version of this page. <a href="">Reload</a> to try again; the browser
       console lists what failed.</p>
+  </div>
+  <div id="photocraft_stopped" hidden role="alert">
+    <p><strong>PhotoCraft stopped.</strong></p>
+    <p>Changes since the last save in this tab can't be recovered. <a href="">Reload</a> to start again.</p>
+    <p id="photocraft_stopped_detail"></p>
   </div>
 </body>
 </html>
