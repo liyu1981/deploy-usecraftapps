@@ -6,8 +6,8 @@
   <title>Craft Anything</title>
   
 <script type="module">
-import init, * as bindings from './craft-anything-web-9feb9b24f1873177.js';
-const wasm = await init({ module_or_path: './craft-anything-web-9feb9b24f1873177_bg.wasm' });
+import init, * as bindings from './craft-anything-web-deb4062ce6b1509d.js';
+const wasm = await init({ module_or_path: './craft-anything-web-deb4062ce6b1509d_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -22,7 +22,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #craft_anything_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: #a9a9b2; font: 14px system-ui, sans-serif; pointer-events: none; }
   </style>
-<link rel="modulepreload" href="./craft-anything-web-9feb9b24f1873177.js" crossorigin="anonymous" integrity="sha384-bsialHeM0Bol3KsvSEpTOhJeYyQFqX82kXkuUFxcA0D1XaB5hnB++5hmo8Rndp7h"><link rel="preload" href="./craft-anything-web-9feb9b24f1873177_bg.wasm" crossorigin="anonymous" integrity="sha384-/TjAeonDNRzNQj6WARNUoZP8PuX29Vwmepd3/4JD6jsVnBLw3Qb5//72duFhYSvZ" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./craft-anything-web-deb4062ce6b1509d.js" crossorigin="anonymous" integrity="sha384-X0n9oSGa1XPYOVMah5FWdWYJSvlgeVSw9vVEznDxyTu1gZNmrPHzimqs6q1onGWM"><link rel="preload" href="./craft-anything-web-deb4062ce6b1509d_bg.wasm" crossorigin="anonymous" integrity="sha384-e9jCRKhqCNG68SgDo4nAXeSU9KXCcCIWbaRDt6fnnltus9PApGzO9s3ldtbY73AB" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="craft_anything_canvas"></canvas>
   <div id="craft_anything_loading">Loading Craft Anything&hellip;</div>

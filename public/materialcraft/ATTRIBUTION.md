@@ -26,9 +26,13 @@ images, materials, sample graphs, presets, environments) may ever be added.
 | `docs/images/materialcraft-lava.png` | README screenshot: the lava rock template | MaterialCraft contributors | Offscreen render of MaterialCraft's UI | MIT OR Apache-2.0 |
 | `docs/images/materialcraft-ground.png` | README screenshot: the mossy ground template | MaterialCraft contributors | Offscreen render of MaterialCraft's UI | MIT OR Apache-2.0 |
 | `docs/images/materialcraft-new-graph.png` | README screenshot: the New graph dialog | MaterialCraft contributors | Offscreen render of MaterialCraft's UI | MIT OR Apache-2.0 |
+| `docs/images/materialcraft-alpha-transparency.png` | Docs screenshot: a cut-out material in the 3D view and a reroute dot on a wire | MaterialCraft contributors | Offscreen render of MaterialCraft's UI (`crates/ui-egui/tests/snapshot.rs`) | MIT OR Apache-2.0 |
+| `docs/images/materialcraft-alpha-channel.png` | Docs screenshot: the 3D view's alpha channel view | MaterialCraft contributors | Offscreen render of MaterialCraft's UI (`crates/ui-egui/tests/snapshot.rs`) | MIT OR Apache-2.0 |
 | `docs/images/materialcraft-materials.png` | README render: eight sample materials on spheres | MaterialCraft contributors | `materialcraft-cli render --scene sphere --full --hq` of the templates, eight renders in a grid | MIT OR Apache-2.0 |
+| `docs/images/materialcraft-levels-editor.png` | Docs screenshot: the Levels editor with the input histogram | MaterialCraft contributors | Offscreen render of MaterialCraft's UI (`crates/ui-egui/tests/snapshot.rs`) | MIT OR Apache-2.0 |
 | `docs/brand/artcraft-*.svg`, `docs/brand/artcraft-*.png` | ArtCraft logo and mark | ArtCraft Team | storytold/craftrules `assets/brand/` | ArtCraft brand terms, not open source ([`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt)) |
-| `crates/nodes/src/text.rs` (`GLYPHS`) | Single-stroke vector font of the Text node (A–Z, a–z, 0–9, punctuation) | MaterialCraft contributors | Original, designed as stroke data in code | MIT OR Apache-2.0 |
+| `crates/nodes/src/atomic/text.rs` (`GLYPHS`) | Single-stroke vector font of the Text node (A–Z, a–z, 0–9, punctuation) | MaterialCraft contributors | Original, designed as stroke data in code | MIT OR Apache-2.0 |
+| `examples/atomic_sample.sbs` | Atomic sample graph | MaterialCraft contributors | Original graph built by `crates/engine/src/atomic_sample.rs` | MIT OR Apache-2.0 |
 
 ## Third-party assets compiled into the binary
 
@@ -41,10 +45,10 @@ These come from Rust crate dependencies (not files in this repository) and keep 
 
 ## Procedural content (no asset files)
 
-The node library's noises and patterns (`crates/nodes`), the sample materials and graph templates
+The node library's primitives (`crates/nodes`), the sample materials and graph templates
 (`crates/engine/src/samples.rs`), the 3D view's environments (`crates/render/src/ibl.rs`, procedural
 HDR skies and soft boxes), the built-in meshes (`crates/geom/src/primitives.rs`), the library's node
-previews (`crates/ui-egui/src/thumbs.rs`, each node cooked on sample noise) and the New graph
+previews (`crates/ui-egui/src/thumbs.rs`, each node cooked on sample waves) and the New graph
 dialog's template spheres (`crates/ui-egui/src/windows.rs`) are generated in code by MaterialCraft
 contributors (MIT OR Apache-2.0). None of them is derived from another product's presets,
 shaders, materials, sample graphs or images.

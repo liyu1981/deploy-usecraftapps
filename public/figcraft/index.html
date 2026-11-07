@@ -10,8 +10,8 @@
 <link rel="manifest" href="manifest.json">
     
 <script type="module">
-import init, * as bindings from './figcraft-web-56d0d893e701ad25.js';
-const wasm = await init({ module_or_path: './figcraft-web-56d0d893e701ad25_bg.wasm' });
+import init, * as bindings from './figcraft-web-bbb0936dcda06852.js';
+const wasm = await init({ module_or_path: './figcraft-web-bbb0936dcda06852_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -34,7 +34,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
       #figcraft_stopped { color: #f0f0f0; background: rgba(44, 44, 44, 0.92); }
     }
   </style>
-<link rel="modulepreload" href="./figcraft-web-56d0d893e701ad25.js" crossorigin="anonymous" integrity="sha384-IhKE/LmQclNzBxbkNcFduu8exmo+cJPNqiJ2l+D0BG1QM+kOLojEauYpRvjNBoIN"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./figcraft-web-56d0d893e701ad25_bg.wasm" crossorigin="anonymous" integrity="sha384-Csrq+Rlsef+GWDPmh8S8Bg/r1+B0e3U9l6kV5NrkwAIn+RYpSAYKUk+Ri+3qKVwT" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./figcraft-web-bbb0936dcda06852.js" crossorigin="anonymous" integrity="sha384-Xu5U/B18R0Ihem/+jzOouMFhiXboyWygOpA38W+HLbi+k0+CvtMumk8jPLqE6HJI"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./figcraft-web-bbb0936dcda06852_bg.wasm" crossorigin="anonymous" integrity="sha384-gJJrSlhkbSYgpOznX+EUrsQqIOYGFRGJJ80Lg+tlN79I0sQCUqzNxMeoUtg4I9/k" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="figcraft_canvas"></canvas>
   <div id="figcraft_loading">Loading FigCraft&hellip;</div>

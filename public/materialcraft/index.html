@@ -7,8 +7,8 @@
   <title>MaterialCraft</title>
   
 <script type="module">
-import init, * as bindings from './materialcraft-web-adb38310b9eec614.js';
-const wasm = await init({ module_or_path: './materialcraft-web-adb38310b9eec614_bg.wasm' });
+import init, * as bindings from './materialcraft-web-ae795be2f0d311e0.js';
+const wasm = await init({ module_or_path: './materialcraft-web-ae795be2f0d311e0_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -45,7 +45,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #materialcraft_stalled { color: #8c8c8c; visibility: hidden; animation: materialcraft-stalled 0s 30s forwards; }
     @keyframes materialcraft-stalled { to { visibility: visible; } }
   </style>
-<link rel="modulepreload" href="./materialcraft-web-adb38310b9eec614.js" crossorigin="anonymous" integrity="sha384-uQ5wpYOdh0q6qWDHK+u3ktWHbjhaNzCXgPwpgiuhevEJn3uwtStX46vMAZvIJygy"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./materialcraft-web-adb38310b9eec614_bg.wasm" crossorigin="anonymous" integrity="sha384-GfRZEP4cv9XMq0s36oBEmPaSfWzJaPDpcKuYxZDMSiz7GYnoiWm97DqFe22q3lU7" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./materialcraft-web-ae795be2f0d311e0.js" crossorigin="anonymous" integrity="sha384-xDkVa+LvI8nZleHJLbZZ1xj2h5v6lx3StR2SO4KKXpp/h/4rMMU1QJZtV+xlE4qI"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./materialcraft-web-ae795be2f0d311e0_bg.wasm" crossorigin="anonymous" integrity="sha384-mRxa36FC3MzFlcV6In92Nf6Kmg2IQ2ARX70UxGJk8qK10FebM5NGvtqUZgtKF7RI" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="materialcraft_canvas"></canvas>
   <div id="materialcraft_loading" role="status" aria-live="polite">

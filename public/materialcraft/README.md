@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  Build tileable PBR materials from noises, patterns and filters in a node graph, watch them
+  Build procedural materials from primitives and functions in a node graph, watch them
   update live in 2D and on a 3D model, and export the maps for any engine. It runs natively on
   macOS, Windows, Linux and FreeBSD, and in the browser via WebAssembly. Built by the ArtCraft team.
 </p>
@@ -67,6 +67,9 @@
 
 ## A look around
 
+These screenshots show the earlier procedural library. The current build uses the primitive
+catalog described in [the primitive workflow](docs/atomic-workflow.md).
+
 <table>
 <tr>
 <td width="50%" valign="top">
@@ -92,7 +95,8 @@
 
 ## Made in MaterialCraft
 
-Every material below is a node graph that ships with MaterialCraft as a template, built only from
+These historical renders used the former Rust library and are no longer bundled as templates.
+They were built from
 its own procedural nodes (no photos, scans or textures from anywhere else) and rendered by
 `materialcraft-cli render --scene sphere --full --hq` (the height output displaces the mesh, with
 ray-traced ambient occlusion and a shadowed key light).
@@ -106,14 +110,16 @@ ray-traced ambient occlusion and a shadowed key light).
 
 - **Familiar.** The layout, panels, menus and gestures material artists already know: a package
   explorer, a library of nodes with previews, the node graph with live thumbnails, a 3D view, a 2D
-  view and a properties panel with base and specific parameters. Space opens the node search.
+  view and a properties panel with base and specific parameters (Levels is edited over a
+  histogram of its input, see [docs/levels-editor.md](docs/levels-editor.md)). Space opens the
+  node search.
 - **Fast.** Every node cooks on every CPU core, and a content-addressed cache means an edit
-  re-cooks only what lies downstream: the brick wall sample cooks in about 40 ms at preview size.
+  re-cooks only what lies downstream.
   Cooking runs on a worker thread, so the UI never waits.
 - **Tileable by design.** Noises and patterns live on whole-number lattices, so everything tiles
   seamlessly at any resolution, from 16 px to 8K.
 - **Robust.** No panics in shipped code, every command tested with hostile input, every node cooked
-  with odd inputs in tests, unlimited undo from snapshots, and lossless project files.
+  with odd inputs in tests, undo from snapshots, and native SBS project files.
 - **Open.** Export base color, normal, roughness, metallic, height and ambient occlusion as PNG,
   JPEG, TGA, TIFF, BMP, WEBP, EXR or HDR at 8, 16 or 32 bits, with your own file name pattern.
 - **Works with TextureCraft.** **File ▸ Send to TextureCraft** puts a material on TextureCraft's
@@ -132,7 +138,7 @@ git clone https://github.com/storytold/materialcraft
 cd materialcraft
 
 cargo run --release -p materialcraft                          # desktop app
-cargo run --release -p materialcraft -- package.sbs           # open a package (.sbs or .mcraft)
+cargo run --release -p materialcraft -- package.sbs           # open an SBS package
 cargo run --release -p materialcraft -- --control 7878        # + JSON control channel
 cargo run --release -p materialcraft-cli -- mcp               # MCP server (stdio)
 cargo run --release -p materialcraft-cli -- new wood wood.sbs
@@ -168,19 +174,12 @@ The details are in [`docs/control-protocol.md`](docs/control-protocol.md).
 MaterialCraft is under active development. [**ROADMAP.md**](ROADMAP.md) has the parity estimate by
 area, the remaining work and what's next.
 
-**Where we are (2026-11-02):** the node engine and 227 nodes (the atomic nodes including FX-Map,
-SVG and Text, noises including tileable 3D ones, patterns, filters, the flood fill family,
-whole-material blending and weathering), function graphs with a visual editor and dynamic
-parameters, sub-graphs with exposed inputs and presets, the full editor (graph, library,
-properties, 2D view with histogram, 3D view with your own OBJ/glTF meshes), SBS project files (`.mcraft` too),
-texture export, portable `.mcmat` materials that TextureCraft paints with (inputs stay editable
-there), the browser build with file I/O, the CLI, the control channel and the MCP server
-all work today. We estimate about two thirds (≈ 67%) of a material artist's daily workflow works
-end to end; [docs/target-app-parity.md](docs/target-app-parity.md) has the breakdown.
+**Current focus (2026-11-05):** primitive editing and native SBS save/load. The old Rust
+procedural library has been removed. The replacement includes 30 main-graph entries, 85 function
+operations and three pattern node kinds. Start with **File → New → Atomic sample**.
 
-**What's missing:** the rest of the node library, a GPU 3D view with tessellation and lights,
-mesh-based nodes, translations and the first signed release. The ranked list is in
-[`docs/gaps.md`](docs/gaps.md).
+See [the primitive workflow](docs/atomic-workflow.md) for usage, validation scope and limitations.
+Reference-app rendering parity and full SBS library loading are still pending.
 
 **Workspace:** `crates/{core, image, geom, nodes, eval, formats, engine, render, automation, ui-egui}`
 and `apps/{materialcraft, materialcraft-cli, materialcraft-web}`. The egui frontend is its own
