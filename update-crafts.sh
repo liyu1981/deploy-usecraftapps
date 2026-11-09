@@ -31,6 +31,42 @@ log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33mwarning:\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 
+# Store the large web binaries (WebAssembly and split parts) in Git LFS.
+#
+# ./public is replaced wholesale on every update, so a plain `git add` already
+# runs the LFS clean filter for new files.  Files that were previously
+# committed as raw bytes, or whose stat cache makes Git think they are
+# unchanged, are only converted by `git add --renormalize`.  Run both and then
+# verify that the staged blobs really are LFS pointers.
+ensure_lfs_public() {
+  git -C "$ROOT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
+  if ! command -v git-lfs >/dev/null 2>&1; then
+    warn "git-lfs is not installed; large web binaries will not be stored in Git LFS"
+    return 0
+  fi
+  git -C "$ROOT_DIR" lfs install --local >/dev/null 2>&1 || true
+  git -C "$ROOT_DIR" add -A -- public >/dev/null 2>&1 || true
+  git -C "$ROOT_DIR" add --renormalize -- public >/dev/null 2>&1 || true
+
+  local f blob_size raw=0
+  while IFS= read -r -d '' f; do
+    case "$f" in
+      *.wasm|*.part-*) ;;
+      *) continue ;;
+    esac
+    blob_size="$(git -C "$ROOT_DIR" cat-file -s ":$f" 2>/dev/null || printf '0')"
+    # LFS pointers are ~130 bytes; anything larger is the raw binary.
+    if [[ "$blob_size" =~ ^[0-9]+$ ]] && (( blob_size > 1024 )); then
+      warn "large binary is not a Git LFS pointer: $f ($blob_size bytes)"
+      raw=1
+    fi
+  done < <(git -C "$ROOT_DIR" ls-files -z -- public)
+  if (( raw )); then
+    warn "run 'git lfs migrate import --include=\"*.wasm,*.part-*\"' to convert history, then retry"
+  fi
+  return 0
+}
+
 for cmd in curl unzip find cp mv rm mkdir grep sed python3 patch; do
   command -v "$cmd" >/dev/null 2>&1 || die "required command not found: $cmd"
 done
@@ -677,6 +713,13 @@ if [[ -n "$OLD_DIR" ]]; then
 fi
 OLD_DIR=""
 
+# Make sure the freshly downloaded .wasm / .part-* files are staged as LFS
+# pointers, and convert any that are still raw bytes in the index.
+if git -C "$ROOT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  log "Storing large web binaries in Git LFS"
+  ensure_lfs_public
+fi
+
 NEW_VERSIONS="$(cat "$VERSIONS_FILE")"
 BUMPED=false
 if [[ "$OLD_VERSIONS" != "$NEW_VERSIONS" ]]; then
@@ -690,8 +733,8 @@ if $BUMPED; then
   if git -C "$ROOT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     if git -C "$ROOT_DIR" remote get-url origin >/dev/null 2>&1; then
       ( cd "$ROOT_DIR" && \
-        git lfs install --local >/dev/null 2>&1 || true; \
         git add -A -- public .craft-versions crafts.txt 2>/dev/null || true; \
+        git add --renormalize -- public 2>/dev/null || true; \
         if ! git diff --cached --quiet 2>/dev/null; then \
           git commit -m "Update Craft apps web" >/dev/null 2>&1 || true; \
         fi; \
@@ -710,6 +753,7 @@ fi
 log "All Craft apps are now in public/"
 log "Recorded release details in .craft-versions"
 printf '\nNext steps:\n'
-printf '  git add public .craft-versions crafts.txt\n'
+printf '  git add -A public .craft-versions crafts.txt\n'
+printf '  git add --renormalize public   # keep *.wasm / *.part-* as Git LFS pointers\n'
 printf '  git commit -m "Update Craft apps web"\n'
-printf '  git push    # Vercel redeploys automatically if the repo is connected\n'
+printf '  git push    # also uploads LFS objects; Vercel redeploys automatically\n'

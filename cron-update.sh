@@ -70,7 +70,9 @@ if [[ -z "$(git status --porcelain --untracked-files=no)" ]]; then
   exit 0
 fi
 
+git lfs install --local >/dev/null 2>&1 || true
 git add -A -- public .craft-versions
+git add --renormalize -- public
 if git diff --cached --quiet; then
   log "Already up to date; nothing to commit."
   exit 0
