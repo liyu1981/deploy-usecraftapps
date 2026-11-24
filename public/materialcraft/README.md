@@ -29,6 +29,9 @@
   <img alt="Runs on macOS, Windows, Linux, FreeBSD and the web" src="https://img.shields.io/badge/runs%20on-macOS%20%C2%B7%20Windows%20%C2%B7%20Linux%20%C2%B7%20FreeBSD%20%C2%B7%20Web-555555?style=flat-square">
   <img alt="MCP server for agents" src="https://img.shields.io/badge/agents-MCP%20server-555555?style=flat-square">
   <img alt="License: MIT OR Apache-2.0" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-555555?style=flat-square">
+  <br>
+  <a href="https://sonarcloud.io/project/overview?id=storytold_materialcraft"><img alt="Scanned by SonarCloud" src="https://img.shields.io/badge/Scanned_by-SonarCloud-4b9fd5?style=flat-square&logo=sonarqubecloud&logoColor=white"></a>
+  <a href="https://coderabbit.ai"><img alt="Reviewed by CodeRabbit" src="https://img.shields.io/coderabbit/prs/github/storytold/materialcraft?style=flat-square&label=Reviewed%20by%20CodeRabbit&logo=coderabbit"></a>
 </p>
 
 <p align="center">
@@ -119,9 +122,10 @@ ray-traced ambient occlusion and a shadowed key light).
 - **Tileable by design.** Noises and patterns live on whole-number lattices, so everything tiles
   seamlessly at any resolution, from 16 px to 8K.
 - **Robust.** No panics in shipped code, every command tested with hostile input, every node cooked
-  with odd inputs in tests, undo from snapshots, and native SBS project files.
+  with odd inputs in tests, undo from snapshots, and native SBS project files. Save `.sbs` with an
+  adjacent `resources/` folder, or a self-contained `.mcraft` ZIP with `package.sbs` and `resources/`.
 - **Open.** Export base color, normal, roughness, metallic, height and ambient occlusion as PNG,
-  JPEG, TGA, TIFF, BMP, WEBP, EXR or HDR at 8, 16 or 32 bits, with your own file name pattern.
+  JPEG, TGA, BMP, WEBP, EXR or HDR at 8, 16 or 32 bits, with your own file name pattern.
 - **Works with TextureCraft.** **File ▸ Send to TextureCraft** puts a material on TextureCraft's
   shelf as a portable `.mcmat`; painted onto a mesh there, its graph inputs stay live sliders and
   colors, re-cooked by MaterialCraft at the texture set's resolution with the mesh's baked maps

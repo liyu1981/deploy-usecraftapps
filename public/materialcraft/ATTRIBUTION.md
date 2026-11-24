@@ -32,7 +32,6 @@ images, materials, sample graphs, presets, environments) may ever be added.
 | `docs/images/materialcraft-levels-editor.png` | Docs screenshot: the Levels editor with the input histogram | MaterialCraft contributors | Offscreen render of MaterialCraft's UI (`crates/ui-egui/tests/snapshot.rs`) | MIT OR Apache-2.0 |
 | `docs/brand/artcraft-*.svg`, `docs/brand/artcraft-*.png` | ArtCraft logo and mark | ArtCraft Team | storytold/craftrules `assets/brand/` | ArtCraft brand terms, not open source ([`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt)) |
 | `crates/nodes/src/atomic/text.rs` (`GLYPHS`) | Single-stroke vector font of the Text node (A–Z, a–z, 0–9, punctuation) | MaterialCraft contributors | Original, designed as stroke data in code | MIT OR Apache-2.0 |
-| `examples/atomic_sample.sbs` | Atomic sample graph | MaterialCraft contributors | Original graph built by `crates/engine/src/atomic_sample.rs` | MIT OR Apache-2.0 |
 
 ## Third-party assets compiled into the binary
 
@@ -42,13 +41,3 @@ These come from Rust crate dependencies (not files in this repository) and keep 
 |---|---|---|---|---|
 | Phosphor Icons (regular), via the `egui-phosphor` crate (vendored in `vendor/egui-phosphor` for egui 0.37) | Every UI icon (toolbars, panels, node quick-insert buttons) | Phosphor Icons (Helena Zhang, Tobias Fried) | https://phosphoricons.com, https://github.com/amPerl/egui-phosphor | MIT (icons); crate MIT OR Apache-2.0 |
 | egui default fonts (Ubuntu-Light, Hack, Noto Emoji, emoji-icon-font), via `epaint_default_fonts` | UI text | Canonical / Source Foundry / Google / Jessie Jung | https://github.com/emilk/egui | Ubuntu Font Licence 1.0, MIT + Bitstream Vera License, OFL 1.1, MIT |
-
-## Procedural content (no asset files)
-
-The node library's primitives (`crates/nodes`), the sample materials and graph templates
-(`crates/engine/src/samples.rs`), the 3D view's environments (`crates/render/src/ibl.rs`, procedural
-HDR skies and soft boxes), the built-in meshes (`crates/geom/src/primitives.rs`), the library's node
-previews (`crates/ui-egui/src/thumbs.rs`, each node cooked on sample waves) and the New graph
-dialog's template spheres (`crates/ui-egui/src/windows.rs`) are generated in code by MaterialCraft
-contributors (MIT OR Apache-2.0). None of them is derived from another product's presets,
-shaders, materials, sample graphs or images.

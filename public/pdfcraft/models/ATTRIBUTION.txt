@@ -1,0 +1,13 @@
+PdfCraft's text recognition (Scan & OCR) uses these models, unmodified.
+
+text-detection.onnx
+  Ocrs text detection model
+  by Robert Knight (ocrs-models; trained on HierText, CC-BY-SA-4.0)
+  from https://github.com/robertknight/ocrs/blob/0c826441362a701c55560fefc17bf356b6d1037e/ocrs/examples/download-models.sh (author-published ONNX models; model card: https://huggingface.co/robertknight/ocrs/blob/df0edd170279ab971b53e094c627255a87e1a503/README.md, cc-by-sa-4.0)
+  licence: CC-BY-SA-4.0 (https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt; full text in text-detection.onnx.LICENCE.txt)
+
+text-recognition.onnx
+  Ocrs text recognition model
+  by Robert Knight (ocrs-models; trained on HierText, CC-BY-SA-4.0)
+  from https://github.com/robertknight/ocrs/blob/0c826441362a701c55560fefc17bf356b6d1037e/ocrs/examples/download-models.sh (author-published ONNX models; model card: https://huggingface.co/robertknight/ocrs/blob/df0edd170279ab971b53e094c627255a87e1a503/README.md, cc-by-sa-4.0)
+  licence: CC-BY-SA-4.0 (https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt; full text in text-recognition.onnx.LICENCE.txt)

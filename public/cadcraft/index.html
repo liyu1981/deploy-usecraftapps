@@ -10,8 +10,8 @@
 <link rel="manifest" href="manifest.json">
   
 <script type="module">
-import init, * as bindings from './cadcraft-web-d875c3c223026021.js';
-const wasm = await init({ module_or_path: './cadcraft-web-d875c3c223026021_bg.wasm' });
+import init, * as bindings from './cadcraft-web-a91fdcd993cc5580.js';
+const wasm = await init({ module_or_path: './cadcraft-web-a91fdcd993cc5580_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -26,7 +26,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #cadcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
   </style>
-<link rel="modulepreload" href="./cadcraft-web-d875c3c223026021.js" crossorigin="anonymous" integrity="sha384-jeFBZXStTcVVttphA0QdWIKynl4jMysvBMI9EihbEOI5++FgSClPgll+eU57pNdA"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./cadcraft-web-d875c3c223026021_bg.wasm" crossorigin="anonymous" integrity="sha384-z4qSPVKWm9al23MvrS1RfMrrKiw6bDGiKTTdFNNFuodKv+7R0hINkvVLN5NXiAvK" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./cadcraft-web-a91fdcd993cc5580.js" crossorigin="anonymous" integrity="sha384-FwaNYGMvo9m9A+RVmXy2LVSgfpK3H75vN+2yRi8MuUrMHs556nUHNFzbYWk/0P7k"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./cadcraft-web-a91fdcd993cc5580_bg.wasm" crossorigin="anonymous" integrity="sha384-zzrO43yN37Y6m0RnnWmtRUUx7TjLT9HrVcJyMtIpqGdqA8R3Da/Qgn8sDunJMNnT" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="cadcraft_canvas"></canvas>
   <div id="cadcraft_loading">Loading CADCraft&hellip;</div>

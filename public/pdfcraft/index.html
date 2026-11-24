@@ -11,8 +11,8 @@
     
     
 <script type="module">
-import init, * as bindings from './pdfcraft-web-479fd1d14d164a34.js';
-const wasm = await init({ module_or_path: './pdfcraft-web-479fd1d14d164a34_bg.wasm' });
+import init, * as bindings from './pdfcraft-web-c0a95e1af84f3780.js';
+const wasm = await init({ module_or_path: './pdfcraft-web-c0a95e1af84f3780_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -21,12 +21,15 @@ window.wasmBindings = bindings;
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
+    <!-- Recognises text off the page's thread (crates/ui-egui/src/workflows/ocr_web.rs). -->
+    
     <style>
       html, body { margin: 0; height: 100%; overflow: hidden; background: #f1f1f3; }
       canvas { width: 100%; height: 100%; display: block; outline: none; }
       @media (prefers-color-scheme: dark) { html, body { background: #19191c; } }
     </style>
-  <link rel="modulepreload" href="./pdfcraft-web-479fd1d14d164a34.js" crossorigin="anonymous" integrity="sha384-9dX3Z3SKd/BVK5Jvv1MX1vJdn87aEozjSZ/FdE9Au14FrvQpE4lBbVew+0wt2BGI"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./pdfcraft-web-479fd1d14d164a34_bg.wasm" crossorigin="anonymous" integrity="sha384-jv4fNnD2YqOS7NWF7oqEnaRrXkQPxIOszlBo7W1fQ1qjM+gn6QyBbrJls9cqFGoS" as="fetch" type="application/wasm"></head>
+  <link rel="modulepreload" href="./pdfcraft-web-c0a95e1af84f3780.js" crossorigin="anonymous" integrity="sha384-636W61yrmLNUj+BhtUd8nJ0NPlGXdZd0/t/F3XPWlaFG4podAgZDvPCivHU3qy/T"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./pdfcraft-web-c0a95e1af84f3780_bg.wasm" crossorigin="anonymous" integrity="sha384-H/U05HQ6UufQtcVCiEQ/o3pb4cErTf0gLeljVPRn6S9wPC1H+CMRMYjot+pJHGAT" as="fetch" type="application/wasm">  <meta name="pdfcraft-ocr-worker" content="./pdfcraft-ocr-worker-87760711b21afa24_loader.js" />
+  </head>
   <body>
     <canvas id="pdfcraft"></canvas>
   </body>
