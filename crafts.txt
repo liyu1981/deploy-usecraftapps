@@ -6,6 +6,7 @@ filmcraft FilmCraft "Video editor" "Professional, open-source video editing, reb
 lightcraft LightCraft "Photo library & raw developer" "An open-source photo library and raw developer that runs on your machine." dev
 pdfcraft PdfCraft "PDF workbench" "The open-source PDF workbench: read, organize, combine, split and secure." early
 effectcraft EffectCraft "Motion graphics & VFX" "Open-source motion graphics and visual effects, built in pure Rust." dev
+anicraft AniCraft "2D vector animation" "Vector animation on a timeline you know. - ArtCraft." early
 designcraft DesignCraft "Page layout & publishing" "Open-source page layout and publishing, rebuilt in pure Rust." dev
 figcraft FigCraft "Interface design" "Open-source interface design and prototyping, rebuilt in pure Rust." early
 wordcraft WordCraft "Word processing" "Fast, open-source word processing, rebuilt in pure Rust." dev

@@ -145,6 +145,14 @@
       display: inline-flex; align-items: center; gap: 6px; }
     .card:hover .launch { color: var(--ink); }
 
+    /* Apps without a web build yet stay visible, but are not clickable. */
+    .icon-tile.disabled, .card.disabled { opacity: .5; cursor: default; }
+    .icon-tile.disabled img, .card.disabled .card-hero img { filter: grayscale(1); }
+    .icon-tile.disabled:hover img, .card.disabled:hover .card-hero img { transform: none; }
+    .icon-tile.disabled:hover span { color: var(--muted); }
+    .card.disabled .card-num { background: var(--line-strong); }
+    .badge.unavailable { border-color: var(--line-strong); color: var(--faint); }
+
     footer { border-top: 1px solid var(--line); padding: 32px 24px; text-align: center;
       color: var(--faint); font-size: 13px; }
     footer a { color: var(--ink); }
@@ -166,7 +174,7 @@
       <div class="s1-row">
         <div class="s1-text">
           <p class="eyebrow"><span class="num">01</span> Crafting Apps</p>
-          <h1>Sixteen apps. <span class="accent">One craft.</span></h1>
+          <h1>Eighteen apps. <span class="accent">One craft.</span></h1>
           <p class="lead">Image editing, vector illustration, video, photography, PDFs, motion graphics,
             page layout, interface design, word processing, audio, presentations, CAD and spreadsheets.
             Native, open-source apps, built in Rust and free to use.
@@ -177,23 +185,24 @@
           </div>
         </div>
         <div class="icon-grid">
-          <a class="icon-tile" href="./photocraft/"><img src="./icons/photocraft.webp" alt="PhotoCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>P</div>'"><span>PhotoCraft</span></a>
-          <a class="icon-tile" href="./vectorcraft/"><img src="./icons/vectorcraft.webp" alt="VectorCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>V</div>'"><span>VectorCraft</span></a>
-          <a class="icon-tile" href="./filmcraft/"><img src="./icons/filmcraft.webp" alt="FilmCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>F</div>'"><span>FilmCraft</span></a>
-          <a class="icon-tile" href="./lightcraft/"><img src="./icons/lightcraft.webp" alt="LightCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>L</div>'"><span>LightCraft</span></a>
-          <a class="icon-tile" href="./pdfcraft/"><img src="./icons/pdfcraft.webp" alt="PdfCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>P</div>'"><span>PdfCraft</span></a>
-          <a class="icon-tile" href="./effectcraft/"><img src="./icons/effectcraft.webp" alt="EffectCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>E</div>'"><span>EffectCraft</span></a>
-          <a class="icon-tile" href="./designcraft/"><img src="./icons/designcraft.webp" alt="DesignCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>D</div>'"><span>DesignCraft</span></a>
-          <a class="icon-tile" href="./figcraft/"><img src="./icons/figcraft.webp" alt="FigCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>F</div>'"><span>FigCraft</span></a>
-          <a class="icon-tile" href="./wordcraft/"><img src="./icons/wordcraft.webp" alt="WordCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>W</div>'"><span>WordCraft</span></a>
-          <a class="icon-tile" href="./soundcraft/"><img src="./icons/soundcraft.webp" alt="SoundCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>S</div>'"><span>SoundCraft</span></a>
-          <a class="icon-tile" href="./deckcraft/"><img src="./icons/deckcraft.webp" alt="DeckCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>D</div>'"><span>DeckCraft</span></a>
-          <a class="icon-tile" href="./cadcraft/"><img src="./icons/cadcraft.webp" alt="CADCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>C</div>'"><span>CADCraft</span></a>
-          <a class="icon-tile" href="./gridcraft/"><img src="./icons/gridcraft.webp" alt="GridCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>G</div>'"><span>GridCraft</span></a>
-          <a class="icon-tile" href="./solidcraft/"><img src="./icons/solidcraft.svg" alt="SolidCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>S</div>'"><span>SolidCraft</span></a>
-          <a class="icon-tile" href="./craft-anything/"><img src="./icons/craft-anything.webp" alt="Craft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>C</div>'"><span>Craft</span></a>
-          <a class="icon-tile" href="./texturecraft/"><img src="./icons/texturecraft.webp" alt="TextureCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>T</div>'"><span>TextureCraft</span></a>
-          <a class="icon-tile" href="./materialcraft/"><img src="./icons/materialcraft.webp" alt="MaterialCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>M</div>'"><span>MaterialCraft</span></a>
+          <a class="icon-tile" href="./photocraft/" title="Launch PhotoCraft"><img src="./icons/photocraft.webp" alt="PhotoCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>P</div>'"><span>PhotoCraft</span></a>
+          <a class="icon-tile" href="./vectorcraft/" title="Launch VectorCraft"><img src="./icons/vectorcraft.webp" alt="VectorCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>V</div>'"><span>VectorCraft</span></a>
+          <a class="icon-tile" href="./filmcraft/" title="Launch FilmCraft"><img src="./icons/filmcraft.webp" alt="FilmCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>F</div>'"><span>FilmCraft</span></a>
+          <a class="icon-tile" href="./lightcraft/" title="Launch LightCraft"><img src="./icons/lightcraft.webp" alt="LightCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>L</div>'"><span>LightCraft</span></a>
+          <a class="icon-tile" href="./pdfcraft/" title="Launch PdfCraft"><img src="./icons/pdfcraft.webp" alt="PdfCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>P</div>'"><span>PdfCraft</span></a>
+          <a class="icon-tile" href="./effectcraft/" title="Launch EffectCraft"><img src="./icons/effectcraft.webp" alt="EffectCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>E</div>'"><span>EffectCraft</span></a>
+          <span class="icon-tile disabled" aria-disabled="true" title="Web build not available yet"><img src="./icons/anicraft.webp" alt="AniCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>A</div>'"><span>AniCraft</span></span>
+          <a class="icon-tile" href="./designcraft/" title="Launch DesignCraft"><img src="./icons/designcraft.webp" alt="DesignCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>D</div>'"><span>DesignCraft</span></a>
+          <a class="icon-tile" href="./figcraft/" title="Launch FigCraft"><img src="./icons/figcraft.webp" alt="FigCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>F</div>'"><span>FigCraft</span></a>
+          <a class="icon-tile" href="./wordcraft/" title="Launch WordCraft"><img src="./icons/wordcraft.webp" alt="WordCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>W</div>'"><span>WordCraft</span></a>
+          <a class="icon-tile" href="./soundcraft/" title="Launch SoundCraft"><img src="./icons/soundcraft.webp" alt="SoundCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>S</div>'"><span>SoundCraft</span></a>
+          <a class="icon-tile" href="./deckcraft/" title="Launch DeckCraft"><img src="./icons/deckcraft.webp" alt="DeckCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>D</div>'"><span>DeckCraft</span></a>
+          <a class="icon-tile" href="./cadcraft/" title="Launch CADCraft"><img src="./icons/cadcraft.webp" alt="CADCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>C</div>'"><span>CADCraft</span></a>
+          <a class="icon-tile" href="./gridcraft/" title="Launch GridCraft"><img src="./icons/gridcraft.webp" alt="GridCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>G</div>'"><span>GridCraft</span></a>
+          <a class="icon-tile" href="./solidcraft/" title="Launch SolidCraft"><img src="./icons/solidcraft.svg" alt="SolidCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>S</div>'"><span>SolidCraft</span></a>
+          <a class="icon-tile" href="./craft-anything/" title="Launch Craft"><img src="./icons/craft-anything.webp" alt="Craft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>C</div>'"><span>Craft</span></a>
+          <a class="icon-tile" href="./texturecraft/" title="Launch TextureCraft"><img src="./icons/texturecraft.webp" alt="TextureCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>T</div>'"><span>TextureCraft</span></a>
+          <a class="icon-tile" href="./materialcraft/" title="Launch MaterialCraft"><img src="./icons/materialcraft.webp" alt="MaterialCraft" onerror="this.outerHTML='<div class=&quot;fallback&quot;>M</div>'"><span>MaterialCraft</span></a>
         </div>
       </div>
     </div>
@@ -276,8 +285,19 @@
           <span class="launch">Launch EffectCraft →</span>
         </div>
       </a>
+      <div class="card disabled" aria-disabled="true">
+        <div class="card-head"><span class="card-num">07</span><span class="card-cat">2D vector animation</span></div>
+        <div class="card-hero"><img src="./images/apps/anicraft/hero.webp" alt="AniCraft" loading="lazy"></div>
+        <div class="card-body">
+          <img class="card-icon" src="./icons/anicraft.webp" alt="AniCraft" onerror="this.style.display='none'">
+          <h3 class="card-title">AniCraft <span class="card-version">Web soon</span></h3>
+          <p class="card-desc">Vector animation on a timeline you know. - ArtCraft.</p>
+          <div class="badges"><span class="badge status">Early alpha</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge unavailable">Web build unavailable</span></div>
+          <span class="launch">Web build coming soon</span>
+        </div>
+      </div>
       <a class="card" href="./designcraft/">
-        <div class="card-head"><span class="card-num">07</span><span class="card-cat">Page layout & publishing</span></div>
+        <div class="card-head"><span class="card-num">08</span><span class="card-cat">Page layout & publishing</span></div>
         <div class="card-hero"><img src="./images/apps/designcraft/hero.webp" alt="DesignCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/designcraft.webp" alt="DesignCraft" onerror="this.style.display='none'">
@@ -288,7 +308,7 @@
         </div>
       </a>
       <a class="card" href="./figcraft/">
-        <div class="card-head"><span class="card-num">08</span><span class="card-cat">Interface design</span></div>
+        <div class="card-head"><span class="card-num">09</span><span class="card-cat">Interface design</span></div>
         <div class="card-hero"><img src="./images/apps/figcraft/hero.webp" alt="FigCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/figcraft.webp" alt="FigCraft" onerror="this.style.display='none'">
@@ -299,7 +319,7 @@
         </div>
       </a>
       <a class="card" href="./wordcraft/">
-        <div class="card-head"><span class="card-num">09</span><span class="card-cat">Word processing</span></div>
+        <div class="card-head"><span class="card-num">10</span><span class="card-cat">Word processing</span></div>
         <div class="card-hero"><img src="./images/apps/wordcraft/hero.webp" alt="WordCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/wordcraft.webp" alt="WordCraft" onerror="this.style.display='none'">
@@ -310,7 +330,7 @@
         </div>
       </a>
       <a class="card" href="./soundcraft/">
-        <div class="card-head"><span class="card-num">10</span><span class="card-cat">Digital audio workstation</span></div>
+        <div class="card-head"><span class="card-num">11</span><span class="card-cat">Digital audio workstation</span></div>
         <div class="card-hero"><img src="./images/apps/soundcraft/hero.webp" alt="SoundCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/soundcraft.webp" alt="SoundCraft" onerror="this.style.display='none'">
@@ -321,7 +341,7 @@
         </div>
       </a>
       <a class="card" href="./deckcraft/">
-        <div class="card-head"><span class="card-num">11</span><span class="card-cat">Presentations & slide shows</span></div>
+        <div class="card-head"><span class="card-num">12</span><span class="card-cat">Presentations & slide shows</span></div>
         <div class="card-hero"><img src="./images/apps/deckcraft/hero.webp" alt="DeckCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/deckcraft.webp" alt="DeckCraft" onerror="this.style.display='none'">
@@ -332,7 +352,7 @@
         </div>
       </a>
       <a class="card" href="./cadcraft/">
-        <div class="card-head"><span class="card-num">12</span><span class="card-cat">Computer-aided design & drafting</span></div>
+        <div class="card-head"><span class="card-num">13</span><span class="card-cat">Computer-aided design & drafting</span></div>
         <div class="card-hero"><img src="./images/apps/cadcraft/hero.webp" alt="CADCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/cadcraft.webp" alt="CADCraft" onerror="this.style.display='none'">
@@ -343,7 +363,7 @@
         </div>
       </a>
       <a class="card" href="./gridcraft/">
-        <div class="card-head"><span class="card-num">13</span><span class="card-cat">Spreadsheets & data analysis</span></div>
+        <div class="card-head"><span class="card-num">14</span><span class="card-cat">Spreadsheets & data analysis</span></div>
         <div class="card-hero"><img src="./images/apps/gridcraft/hero.webp" alt="GridCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/gridcraft.webp" alt="GridCraft" onerror="this.style.display='none'">
@@ -354,7 +374,7 @@
         </div>
       </a>
       <a class="card" href="./solidcraft/">
-        <div class="card-head"><span class="card-num">14</span><span class="card-cat">Parametric 3D CAD</span></div>
+        <div class="card-head"><span class="card-num">15</span><span class="card-cat">Parametric 3D CAD</span></div>
         <div class="card-hero"><img src="./images/apps/solidcraft/hero.jpg" alt="SolidCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/solidcraft.svg" alt="SolidCraft" onerror="this.style.display='none'">
@@ -365,7 +385,7 @@
         </div>
       </a>
       <a class="card" href="./craft-anything/">
-        <div class="card-head"><span class="card-num">15</span><span class="card-cat">Anything </span></div>
+        <div class="card-head"><span class="card-num">16</span><span class="card-cat">Anything </span></div>
         <div class="card-hero"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/craft-anything.webp" alt="Craft" onerror="this.style.display='none'">
@@ -376,7 +396,7 @@
         </div>
       </a>
       <a class="card" href="./texturecraft/">
-        <div class="card-head"><span class="card-num">16</span><span class="card-cat">3D texture painting</span></div>
+        <div class="card-head"><span class="card-num">17</span><span class="card-cat">3D texture painting</span></div>
         <div class="card-hero"><img src="./images/apps/texturecraft/hero.webp" alt="TextureCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/texturecraft.webp" alt="TextureCraft" onerror="this.style.display='none'">
@@ -387,7 +407,7 @@
         </div>
       </a>
       <a class="card" href="./materialcraft/">
-        <div class="card-head"><span class="card-num">17</span><span class="card-cat">Procedural materials</span></div>
+        <div class="card-head"><span class="card-num">18</span><span class="card-cat">Procedural materials</span></div>
         <div class="card-hero"><img src="./images/apps/materialcraft/hero.webp" alt="MaterialCraft" loading="lazy"></div>
         <div class="card-body">
           <img class="card-icon" src="./icons/materialcraft.webp" alt="MaterialCraft" onerror="this.style.display='none'">

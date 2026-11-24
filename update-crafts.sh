@@ -31,6 +31,9 @@ log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33mwarning:\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 
+APP_COUNT_WORDS=(Zero One Two Three Four Five Six Seven Eight Nine Ten Eleven
+  Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen Twenty)
+
 # Store the large web binaries (WebAssembly and split parts) in Git LFS.
 #
 # ./public is replaced wholesale on every update, so a plain `git add` already
@@ -186,6 +189,14 @@ done < "$CONFIG_FILE"
 
 [[ ${#SLUGS[@]} -gt 0 ]] || die "no apps found in $CONFIG_FILE"
 
+# WEB_OK tracks which apps actually produced a web build; apps without one are
+# still listed on the landing page, but rendered as disabled.
+WEB_OK=()
+for i in "${!SLUGS[@]}"; do
+  WEB_OK[$i]=0
+  TAGS[$i]=""
+done
+
 
 app_index() {
   local target="$1" i
@@ -222,6 +233,54 @@ resolve_tag() {
   printf '%s' "$tag"
 }
 
+# Icons and hero images come from the ArtCraft site, not from the release zip,
+# so fetch them even for apps that do not have a web build yet.
+fetch_app_media() {
+  local slug="$1"
+  if [[ "$slug" == "solidcraft" ]]; then
+    if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.svg" \
+        "https://solidcraft.io/brand/solidcraft.svg" 2>/dev/null; then
+      :
+    else
+      warn "could not download icon for $slug"
+      rm -f "$STAGE_PUBLIC/icons/$slug.svg"
+    fi
+  else
+    if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.webp" \
+        "https://getartcraft.com/images/apps/$slug/icon.webp" 2>/dev/null; then
+      :
+    else
+      warn "could not download icon for $slug"
+      rm -f "$STAGE_PUBLIC/icons/$slug.webp"
+    fi
+  fi
+
+  if [[ "$slug" != "solidcraft" ]]; then
+    mkdir -p "$STAGE_PUBLIC/images/apps/$slug"
+    local hero_ok=false hero_name
+    for hero_name in hero.webp color.webp; do
+      if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/images/apps/$slug/hero.webp" \
+          "https://getartcraft.com/images/apps/$slug/$hero_name" 2>/dev/null; then
+        hero_ok=true
+        break
+      fi
+    done
+    if ! $hero_ok; then
+      warn "could not download hero image for $slug"
+      rm -f "$STAGE_PUBLIC/images/apps/$slug/hero.webp"
+      rmdir "$STAGE_PUBLIC/images/apps/$slug" 2>/dev/null || true
+    fi
+  else
+    mkdir -p "$STAGE_PUBLIC/images/apps/$slug"
+    if ! curl -fsSL --retry 2 -o "$STAGE_PUBLIC/images/apps/$slug/hero.jpg" \
+        "https://solidcraft.io/media/enclosure-poster.jpg" 2>/dev/null; then
+      warn "could not download hero image for $slug"
+      rm -f "$STAGE_PUBLIC/images/apps/$slug/hero.jpg"
+      rmdir "$STAGE_PUBLIC/images/apps/$slug" 2>/dev/null || true
+    fi
+  fi
+}
+
 if [[ -z "$PIN_APP" && -f "$VERSIONS_FILE" ]]; then
   log "Checking for new releases"
   ALL_CURRENT=true
@@ -243,6 +302,7 @@ META_LINES=()
 for i in "${!SLUGS[@]}"; do
   slug="${SLUGS[$i]}"
   name="${NAMES[$i]}"
+  fetch_app_media "$slug"
 
   if [[ -n "$PIN_APP" && "$slug" == "$PIN_APP" && -n "$PIN_TAG" ]]; then
     TAG="$PIN_TAG"
@@ -256,9 +316,23 @@ for i in "${!SLUGS[@]}"; do
   BASE_URL="https://github.com/$OWNER/$slug/releases/download/$TAG"
 
   log "[$slug] Downloading $ASSET ($TAG)"
-  curl -fL --retry 3 --retry-delay 2 --progress-bar \
-    -o "$STAGE_TMP/$ASSET" "$BASE_URL/$ASSET" \
-    || die "download failed for $slug: $BASE_URL/$ASSET"
+  if ! curl -fL --retry 3 --retry-delay 2 --progress-bar \
+      -o "$STAGE_TMP/$ASSET" "$BASE_URL/$ASSET"; then
+    rm -f "$STAGE_TMP/$ASSET"
+    TAGS[$i]="$TAG"
+    # A missing web asset (404) means the app ships native builds only.
+    # Record it as unavailable so cron does not retry on every run; when a
+    # web build is published in a later release the tag changes and we retry.
+    asset_status="$(curl -sSIL -o /dev/null -w '%{http_code}' --max-time 30 \
+      "$BASE_URL/$ASSET" 2>/dev/null || printf '000')"
+    if [[ "$asset_status" == "404" ]]; then
+      log "[$slug] No web release asset $ASSET yet; disabling its web link"
+      META_LINES+=("$slug=$TAG sha256=unavailable")
+    else
+      warn "download failed for $slug (HTTP $asset_status); skipping this app"
+    fi
+    continue
+  fi
 
   SHA256="unknown"
   if curl -fsSL --retry 3 -o "$STAGE_TMP/SHA256SUMS.txt" \
@@ -336,51 +410,9 @@ open(p, "w").write(s)
 PY2
   fi
 
-  if [[ "$slug" == "solidcraft" ]]; then
-    if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.svg" \
-        "https://solidcraft.io/brand/solidcraft.svg" 2>/dev/null; then
-      :
-    else
-      warn "could not download icon for $slug"
-      rm -f "$STAGE_PUBLIC/icons/$slug.svg"
-    fi
-  else
-    if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/icons/$slug.webp" \
-        "https://getartcraft.com/images/apps/$slug/icon.webp" 2>/dev/null; then
-      :
-    else
-      warn "could not download icon for $slug"
-      rm -f "$STAGE_PUBLIC/icons/$slug.webp"
-    fi
-  fi
-
-  if [[ "$slug" != "solidcraft" ]]; then
-    mkdir -p "$STAGE_PUBLIC/images/apps/$slug"
-    hero_ok=false
-    for hero_name in hero.webp color.webp; do
-      if curl -fsSL --retry 2 -o "$STAGE_PUBLIC/images/apps/$slug/hero.webp" \
-          "https://getartcraft.com/images/apps/$slug/$hero_name" 2>/dev/null; then
-        hero_ok=true
-        break
-      fi
-    done
-    if ! $hero_ok; then
-      warn "could not download hero image for $slug"
-      rm -f "$STAGE_PUBLIC/images/apps/$slug/hero.webp"
-      rmdir "$STAGE_PUBLIC/images/apps/$slug" 2>/dev/null || true
-    fi
-  else
-    mkdir -p "$STAGE_PUBLIC/images/apps/$slug"
-    if ! curl -fsSL --retry 2 -o "$STAGE_PUBLIC/images/apps/$slug/hero.jpg" \
-        "https://solidcraft.io/media/enclosure-poster.jpg" 2>/dev/null; then
-      warn "could not download hero image for $slug"
-      rm -f "$STAGE_PUBLIC/images/apps/$slug/hero.jpg"
-      rmdir "$STAGE_PUBLIC/images/apps/$slug" 2>/dev/null || true
-    fi
-  fi
-
   META_LINES+=("$slug=$TAG sha256=$SHA256")
-  TAGS+=("$TAG")
+  TAGS[$i]="$TAG"
+  WEB_OK[$i]=1
   rm -f "$STAGE_TMP/$ASSET" "$STAGE_TMP/SHA256SUMS.txt"
 done
 
@@ -536,6 +568,14 @@ INDEX="$STAGE_PUBLIC/index.html"
       display: inline-flex; align-items: center; gap: 6px; }
     .card:hover .launch { color: var(--ink); }
 
+    /* Apps without a web build yet stay visible, but are not clickable. */
+    .icon-tile.disabled, .card.disabled { opacity: .5; cursor: default; }
+    .icon-tile.disabled img, .card.disabled .card-hero img { filter: grayscale(1); }
+    .icon-tile.disabled:hover img, .card.disabled:hover .card-hero img { transform: none; }
+    .icon-tile.disabled:hover span { color: var(--muted); }
+    .card.disabled .card-num { background: var(--line-strong); }
+    .badge.unavailable { border-color: var(--line-strong); color: var(--faint); }
+
     footer { border-top: 1px solid var(--line); padding: 32px 24px; text-align: center;
       color: var(--faint); font-size: 13px; }
     footer a { color: var(--ink); }
@@ -557,7 +597,16 @@ INDEX="$STAGE_PUBLIC/index.html"
       <div class="s1-row">
         <div class="s1-text">
           <p class="eyebrow"><span class="num">01</span> Crafting Apps</p>
-          <h1>Sixteen apps. <span class="accent">One craft.</span></h1>
+HTML
+  APP_COUNT="${#SLUGS[@]}"
+  if (( APP_COUNT <= ${#APP_COUNT_WORDS[@]} )); then
+    APP_COUNT_TEXT="${APP_COUNT_WORDS[$APP_COUNT]}"
+  else
+    APP_COUNT_TEXT="$APP_COUNT"
+  fi
+  if (( APP_COUNT == 1 )); then APP_COUNT_NOUN="app"; else APP_COUNT_NOUN="apps"; fi
+  printf '          <h1>%s %s. <span class="accent">One craft.</span></h1>\n' "$APP_COUNT_TEXT" "$APP_COUNT_NOUN"
+  cat <<'HTML'
           <p class="lead">Image editing, vector illustration, video, photography, PDFs, motion graphics,
             page layout, interface design, word processing, audio, presentations, CAD and spreadsheets.
             Native, open-source apps, built in Rust and free to use.
@@ -573,7 +622,12 @@ HTML
     slug="${SLUGS[$i]}"
     name="${NAMES[$i]}"
     if [[ -f "$STAGE_PUBLIC/icons/$slug.webp" ]]; then icon_file="$slug.webp"; elif [[ -f "$STAGE_PUBLIC/icons/$slug.svg" ]]; then icon_file="$slug.svg"; else icon_file="$slug.webp"; fi
-    printf '          <a class="icon-tile" href="./%s/"><img src="./icons/%s" alt="%s" onerror="this.outerHTML='\''<div class=&quot;fallback&quot;>%s</div>'\''"><span>%s</span></a>\n' "$slug" "$icon_file" "$name" "${name:0:1}" "$name"
+    icon_img="<img src=\"./icons/$icon_file\" alt=\"$name\" onerror=\"this.outerHTML='<div class=&quot;fallback&quot;>${name:0:1}</div>'\">"
+    if (( WEB_OK[$i] )); then
+      printf '          <a class="icon-tile" href="./%s/" title="Launch %s">%s<span>%s</span></a>\n' "$slug" "$name" "$icon_img" "$name"
+    else
+      printf '          <span class="icon-tile disabled" aria-disabled="true" title="Web build not available yet">%s<span>%s</span></span>\n' "$icon_img" "$name"
+    fi
   done
   cat <<'HTML'
         </div>
@@ -602,7 +656,13 @@ HTML
     tag="${TAGS[$i]}"
     if [[ "$status_code" == "early" ]]; then status_label="Early alpha"; else status_label="In development"; fi
     num=$(printf '%02d' $((i+1)))
-    printf '      <a class="card" href="./%s/">\n' "$slug"
+    if (( WEB_OK[$i] )); then
+      printf '      <a class="card" href="./%s/">\n' "$slug"
+      version_text="$tag"
+    else
+      printf '      <div class="card disabled" aria-disabled="true">\n'
+      version_text="Web soon"
+    fi
     printf '        <div class="card-head"><span class="card-num">%s</span><span class="card-cat">%s</span></div>\n' "$num" "$cat"
     printf '        <div class="card-hero">'
     if [[ -f "$STAGE_PUBLIC/images/apps/$slug/hero.webp" ]]; then
@@ -614,12 +674,17 @@ HTML
     printf '        <div class="card-body">\n'
     if [[ -f "$STAGE_PUBLIC/icons/$slug.webp" ]]; then icon_file="$slug.webp"; elif [[ -f "$STAGE_PUBLIC/icons/$slug.svg" ]]; then icon_file="$slug.svg"; else icon_file="$slug.webp"; fi
     printf '          <img class="card-icon" src="./icons/%s" alt="%s" onerror="this.style.display='\''none'\''">\n' "$icon_file" "$name"
-    printf '          <h3 class="card-title">%s <span class="card-version">%s</span></h3>\n' "$name" "$tag"
+    printf '          <h3 class="card-title">%s <span class="card-version">%s</span></h3>\n' "$name" "$version_text"
     printf '          <p class="card-desc">%s</p>\n' "$long"
-    printf '          <div class="badges"><span class="badge status">%s</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>\n' "$status_label"
-    printf '          <span class="launch">Launch %s →</span>\n' "$name"
+    if (( WEB_OK[$i] )); then
+      printf '          <div class="badges"><span class="badge status">%s</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge">Web</span></div>\n' "$status_label"
+      printf '          <span class="launch">Launch %s →</span>\n' "$name"
+    else
+      printf '          <div class="badges"><span class="badge status">%s</span><span class="badge">Installers ready</span><span class="badge">macOS</span><span class="badge">Windows</span><span class="badge">Linux</span><span class="badge unavailable">Web build unavailable</span></div>\n' "$status_label"
+      printf '          <span class="launch">Web build coming soon</span>\n'
+    fi
     printf '        </div>\n'
-    printf '      </a>\n'
+    if (( WEB_OK[$i] )); then printf '      </a>\n'; else printf '      </div>\n'; fi
   done
   cat <<'HTML'
     </div>
