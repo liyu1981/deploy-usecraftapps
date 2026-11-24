@@ -78,6 +78,17 @@ if command -v python3 >/dev/null 2>&1; then
   python3 - "$CONFIG_FILE" <<'PY'
 import html, re, sys, urllib.request
 config_path = sys.argv[1]
+
+# getartcraft.com is behind Cloudflare, which rejects Python-urllib's default
+# User-Agent with HTTP 403 (error code 1010). Send a normal browser UA.
+USER_AGENT = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+              "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+def fetch(url):
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.read().decode("utf-8", "replace")
+
 try:
     with open(config_path) as f:
         existing = f.read()
@@ -90,8 +101,7 @@ for line in existing.splitlines():
         existing_slugs.add(line.split()[0])
 
 try:
-    with urllib.request.urlopen("https://getartcraft.com/apps", timeout=30) as r:
-        index_html = r.read().decode("utf-8", "replace")
+    index_html = fetch("https://getartcraft.com/apps")
 except Exception as e:
     print(f"warning: could not fetch app index: {e}", file=sys.stderr)
     sys.exit(0)
@@ -102,8 +112,7 @@ for slug in remote_slugs:
     if slug in existing_slugs:
         continue
     try:
-        with urllib.request.urlopen(f"https://getartcraft.com/apps/{slug}", timeout=30) as r:
-            page = html.unescape(r.read().decode("utf-8", "replace"))
+        page = html.unescape(fetch(f"https://getartcraft.com/apps/{slug}"))
     except Exception as e:
         print(f"warning: could not fetch app page for {slug}: {e}", file=sys.stderr)
         continue
