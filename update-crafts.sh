@@ -5,6 +5,7 @@
 #
 #   ./update-crafts.sh                       # latest upstream releases
 #   ./update-crafts.sh photocraft v0.16.0    # pin PhotoCraft, others latest
+#   ./update-crafts.sh --force               # re-download all apps even when versions are unchanged
 #
 # The upstream repositories are https://github.com/storytold/<app>.
 # No build tools are required: each release zip already contains a static site.
@@ -141,8 +142,25 @@ if not added and not remote_slugs:
 PY
 fi
 
-PIN_APP="${1:-}"
-PIN_TAG="${2:-}"
+# Optional --force/-f flag (anywhere in the arguments) skips the "already up to
+# date" check so every app is downloaded and staged again.
+FORCE=false
+POSITIONAL=()
+for arg in "$@"; do
+  case "$arg" in
+    -f|--force) FORCE=true ;;
+    -*) die "unknown option: $arg (valid options: -f, --force)" ;;
+    *) POSITIONAL+=("$arg") ;;
+  esac
+done
+if (( ${#POSITIONAL[@]} > 2 )); then
+  die "too many arguments (usage: $0 [-f|--force] [app-slug] [tag])"
+fi
+PIN_APP="${POSITIONAL[0]:-}"
+PIN_TAG="${POSITIONAL[1]:-}"
+if $FORCE; then
+  log "Force requested; re-downloading all apps"
+fi
 if [[ -n "$PIN_APP" ]]; then
   [[ "$PIN_APP" =~ ^[a-z0-9-]+$ ]] || die "invalid app slug: $PIN_APP"
 fi
@@ -281,7 +299,7 @@ fetch_app_media() {
   fi
 }
 
-if [[ -z "$PIN_APP" && -f "$VERSIONS_FILE" ]]; then
+if ! $FORCE && [[ -z "$PIN_APP" && -f "$VERSIONS_FILE" ]]; then
   log "Checking for new releases"
   ALL_CURRENT=true
   for i in "${!SLUGS[@]}"; do

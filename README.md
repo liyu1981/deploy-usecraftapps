@@ -264,6 +264,7 @@ Requirements: `bash`, `curl`, `unzip`, and `sha256sum` (or `shasum`).
 ```sh
 ./update-crafts.sh                       # latest upstream releases
 ./update-crafts.sh photocraft v0.16.0    # pin one app to a specific release
+./update-crafts.sh --force               # re-download everything, even when versions are unchanged
 ```
 
 The script:
