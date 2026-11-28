@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>SolidCraft</title>
   <meta name="description" content="Open-source parametric CAD built in Rust. Desktop, browser, and MCP for AI agents.">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://solidcraft.io/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SolidCraft">
   <meta property="og:title" content="SolidCraft: try it in your browser">
@@ -21,8 +23,8 @@
   <meta name="twitter:image:alt" content="SolidCraft: open-source parametric CAD built in Rust">
   
 <script type="module">
-import init, * as bindings from './solidcraft-web-af884e01f574ab8.js';
-const wasm = await init({ module_or_path: './solidcraft-web-af884e01f574ab8_bg.wasm' });
+import init, * as bindings from './solidcraft-web-42351228ae6f36c1.js';
+const wasm = await init({ module_or_path: './solidcraft-web-42351228ae6f36c1_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -60,7 +62,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
   
   
   
-<link rel="modulepreload" href="./solidcraft-web-af884e01f574ab8.js" crossorigin="anonymous" integrity="sha384-Vj+TtsqkP0r3Z8GtDso7LHIId4GNztpWY7xzaYwyiuGeSuJOEgL8anGPClllJD/E"><link rel="preload" href="./solidcraft-web-af884e01f574ab8_bg.wasm" crossorigin="anonymous" integrity="sha384-wQ9Ervuio/kXAmsKuqq/djE6zIuv9oMmS9hIYxMUXPW8LEXrVFqhZAWuNKvp5wk0" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./solidcraft-web-42351228ae6f36c1.js" crossorigin="anonymous" integrity="sha384-8QE9Drimx74N49Zmf2DI6hxeie+2W/VyNcOIGouD4EOvoX/ILr+rZCKYQn42QuMC"><link rel="preload" href="./solidcraft-web-42351228ae6f36c1_bg.wasm" crossorigin="anonymous" integrity="sha384-N7B2hPBwdEpU6tIlgBzB00CiHpV7whkYD5fCxRlz4BHxNru3lyQbIiUJDqrXyT1Z" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="solidcraft_canvas"></canvas>
   <div id="solidcraft_loading" role="status"><img src="loading-logo.svg" alt=""><span class="sr-only">Loading SolidCraft&hellip;</span></div>
